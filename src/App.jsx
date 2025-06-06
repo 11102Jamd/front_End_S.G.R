@@ -1,35 +1,90 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+// import RoleBasedControl from './components/RoleBasedControl';
+import Sidebar from './layout/Sidebar';
+import Header from './layout/Header';
+import MainContent from './layout/MainContent';
+import Footer from './layout/Footer';
+import Login from './pages/auth/Login';
+import Welcome from './pages/welcome/Welcome';
+// import Usuarios from './components/usuarios/UserList';
+// import Supplier from './components/proveedores/SupplierList';
+// import Inputs from './components/insumos/InputsList';
+// import Products from './components/productos/ProductsList';
+// import Pedidos from './components/pedidos/OrderList';
+// import Compras from './components/compras/PurchaseList';
+// import Fabricacion from './components/fabricacion/ManufacturingList';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          
+          <Route element={
+            <PrivateRoute>
+              <div className="app-container">
+                <Sidebar />
+                <div className="main-content-wrapper">
+                  <Header />
+                  <MainContent>
+                    <Outlet />
+                  </MainContent>
+                  <Footer/>
+                </div>
+              </div>
+            </PrivateRoute>
+          }>
+            <Route index element={<Navigate to="/welcome" replace />} />
+            <Route path="/welcome" element={<Welcome />} />
+            
+            {/* <Route path='/usuarios' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Usuarios/>
+              </RoleBasedControl>
+            }/>
+            
+            <Route path='/proveedores' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Supplier/>
+              </RoleBasedControl>
+            }/>
+            
+            <Route path='/insumos' element={
+              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
+                <Inputs/>
+              </RoleBasedControl>
+            }/>
+            
+            <Route path='/productos' element={<Products/>}/>
+            
+            <Route path='/pedidos' element={
+              <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
+                <Pedidos/>
+              </RoleBasedControl>
+            }/>
+            
+            <Route path='/compras' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Compras/>
+              </RoleBasedControl>
+            }/>
+            
+            <Route path='/fabricacion' element={
+              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
+                <Fabricacion/>
+              </RoleBasedControl>
+            }/> */}
+          </Route>
+          
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
