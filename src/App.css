@@ -31,7 +31,7 @@ html, body, #root {
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background: #2d3436;
+  background: #3E608C;
   color: white;
   padding: 20px 0;
   display: flex;
@@ -52,24 +52,27 @@ html, body, #root {
 .sidebar-brand-icon {
   font-size: 24px;
   margin-right: 10px;
+  color: #F2CB05;
 }
 
 .sidebar-brand-text {
   font-size: 18px;
   font-weight: bold;
+  color: #F2CB05;
 }
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   padding: 0 15px;
+  color: #F2CB05;
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
   padding: 12px 15px;
-  color: white;
+  color: #F2CB05;
   text-decoration: none;
   border-radius: 5px;
   margin-bottom: 5px;
