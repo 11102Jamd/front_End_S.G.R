@@ -1,4 +1,4 @@
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
 
 const RoleBasedControl = ({ allowedRoles, children, hideContent = false }) => {
   const { user, hasAnyRole } = useAuth();

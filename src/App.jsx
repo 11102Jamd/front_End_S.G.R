@@ -1,13 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
-// import RoleBasedControl from './components/RoleBasedControl';
+import RoleBasedControl from './components/RoleBasedControl';
 import Sidebar from './layout/Sidebar';
 import Header from './layout/Header';
 import MainContent from './layout/MainContent';
 import Footer from './layout/Footer';
 import Login from './pages/auth/Login';
 import Welcome from './pages/welcome/Welcome';
+import Supplier from './pages/supplier/SupplierList';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 // import Usuarios from './components/usuarios/UserList';
 // import Supplier from './components/proveedores/SupplierList';
 // import Inputs from './components/insumos/InputsList';
@@ -45,7 +48,7 @@ function App() {
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Usuarios/>
               </RoleBasedControl>
-            }/>
+            }/> */}
             
             <Route path='/proveedores' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
@@ -53,7 +56,7 @@ function App() {
               </RoleBasedControl>
             }/>
             
-            <Route path='/insumos' element={
+            {/* <Route path='/insumos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
                 <Inputs/>
               </RoleBasedControl>
