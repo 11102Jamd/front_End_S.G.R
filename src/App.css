@@ -15,7 +15,9 @@
 }
 
 /* Estructura Base */
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -28,6 +30,15 @@ html, body, #root {
   min-height: 100vh;
 }
 
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar.collapsed .sidebar-brand-text,
+.sidebar.collapsed .sidebar-link span {
+  display: none;
+}
+
 /* Sidebar */
 .sidebar {
   width: 250px;
@@ -36,6 +47,7 @@ html, body, #root {
   padding: 20px 0;
   display: flex;
   flex-direction: column;
+  transition: width 0.3s ease;
   align-items: center;
 }
 
@@ -49,6 +61,15 @@ html, body, #root {
   width: 100%;
 }
 
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: #F2CB05;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
 .sidebar-brand-icon {
   font-size: 24px;
   margin-right: 10px;
@@ -59,6 +80,7 @@ html, body, #root {
   font-size: 18px;
   font-weight: bold;
   color: #F2CB05;
+  transition: opacity 0.3s ease;
 }
 
 .sidebar-menu {
@@ -99,12 +121,14 @@ html, body, #root {
   color: var(--text-light);
   padding: 1rem;
   box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.15);
+  background: #3E608C;
 }
-.header h4
-{
+
+.header h4 {
   text-align: center;
   justify-content: center;
 }
+
 .header-content {
   display: flex;
   justify-content: space-between;
@@ -129,7 +153,7 @@ html, body, #root {
   .sidebar {
     width: 80px;
   }
-  
+
   .sidebar-brand-text,
   .sidebar-link span {
     display: none;
