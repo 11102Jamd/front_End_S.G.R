@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../utils/axiosConfig";
 import DataTable, { Alignment } from "react-data-table-component";
+import CreateSupplierModal from "./CreateSupplierModal";
 
 
 function Supplier(){
@@ -161,14 +162,15 @@ function Supplier(){
                     />
                 </div>
             </div>
-            {/* {showModal && (
+            
+            {showModal && (
                 <CreateSupplierModal
                 onClose={() => setShowModal(false)}
                 onSupplierCreated={getSupplier}
                 />
             )}
 
-            {supplierSelected && (
+            {/* {supplierSelected && (
                 <EditSupplierModal
                     supplier={supplierSelected}
                     onClose={() => setSupplierSelected(null)}
