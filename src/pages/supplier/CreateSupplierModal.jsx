@@ -100,4 +100,4 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
     );
 
 }
-export default CreateSupplierModal
+export default CreateSupplierModal;
