@@ -11,13 +11,13 @@ import Welcome from './pages/welcome/Welcome';
 import Supplier from './pages/supplier/SupplierList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import Manufacturing from './pages/manufacturing/ManufacturingList';
 // import Usuarios from './components/usuarios/UserList';
 // import Supplier from './components/proveedores/SupplierList';
 // import Inputs from './components/insumos/InputsList';
 // import Products from './components/productos/ProductsList';
 // import Pedidos from './components/pedidos/OrderList';
 // import Compras from './components/compras/PurchaseList';
-// import Fabricacion from './components/fabricacion/ManufacturingList';
 import './App.css';
 
 function App() {
@@ -74,13 +74,13 @@ function App() {
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Compras/>
               </RoleBasedControl>
-            }/>
+            }/>*/
             
             <Route path='/fabricacion' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Fabricacion/>
+                <Manufacturing/>
               </RoleBasedControl>
-            }/> */}
+            }/> }
           </Route>
           
           <Route path="*" element={<Navigate to="/login" replace />} />
