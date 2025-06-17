@@ -4,6 +4,7 @@ import DataTable, { Alignment } from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
 import EditSupplierModal from "./EditSupplierModal";
 import customStyles from "../styles/styleList";
+import paginationOptions from "../styles/paginationOptions";
 
 
 function Supplier(){
@@ -84,15 +85,6 @@ function Supplier(){
             center: true,
         }
     ];
-
-    const paginationOptions = {
-        rowsPerPageText: 'Registros por página:',
-        rangeSeparatorText: 'de',
-        selectAllRowsItem: true,
-        selectAllRowsItemText: 'Todos',
-        noRowsPerPage: false,
-    };
-
 
     return(
         <div className='container-fluid mt-4'>
