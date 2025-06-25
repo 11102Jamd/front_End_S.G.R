@@ -3,8 +3,8 @@ import api from "../../utils/axiosConfig";
 import DataTable, { Alignment } from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
 import EditSupplierModal from "./EditSupplierModal";
-import customStyles from "../styles/styleList";
-import paginationOptions from "../styles/paginationOptions";
+import customStyles from "../../utils/styles/customStyles";
+import paginationOptions from "../../utils/styles/paginationOptions";
 
 
 function Supplier(){
@@ -82,7 +82,6 @@ function Supplier(){
                 </div>
             ),
             ignoreRowClick: true,
-            center: true,
         }
     ];
 
