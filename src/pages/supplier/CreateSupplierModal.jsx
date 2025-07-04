@@ -14,7 +14,7 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
 
     const createSupplier = async () => {
         try {
-            await api.post('/suppliers', newSupplier);
+            await api.post('/supplier', newSupplier);
             await Swal.fire('Éxito', 'Proveedor creado', 'success');
             onSupplierCreated();
             onClose();

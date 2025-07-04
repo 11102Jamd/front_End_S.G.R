@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api', 
+    baseURL: 'http://localhost:8000/api',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -12,13 +12,13 @@ const api = axios.create({
 // Interceptor para adjuntar token automáticamente
 api.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
-        if (token) {
+    if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        }
+    }
     return config;
 }, error => Promise.reject(error));
-  
-  // Interceptor para manejar errores de sesión
+
+// Interceptor para manejar errores de sesión
 api.interceptors.response.use(
     response => response,
     error => {

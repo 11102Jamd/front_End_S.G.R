@@ -18,7 +18,7 @@ function Supplier(){
     const getSupplier = async () => {
         try {
             setPending(true);
-            const response = await api.get('/suppliers');
+            const response = await api.get('/supplier');
             setSupplier(response.data);
             setPending(false);
         } catch (error) {
@@ -144,7 +144,7 @@ function Supplier(){
                     <DataTable
                         title="Lista de Proveedores"
                         columns={columns}
-                        data={supplier}
+                        data={supplier} 
                         pagination
                         paginationPerPage={5} 
                         paginationRowsPerPageOptions={[5, 10, 15, 20]} 

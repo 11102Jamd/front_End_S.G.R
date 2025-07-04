@@ -16,7 +16,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 // import Inputs from './components/insumos/InputsList';
 // import Products from './components/productos/ProductsList';
 // import Pedidos from './components/pedidos/OrderList';
-// import Compras from './components/compras/PurchaseList';
+import Purchase from './pages/purchase/PurchaseOrder';
 // import Fabricacion from './components/fabricacion/ManufacturingList';
 import './App.css';
 
@@ -26,7 +26,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          
+
           <Route element={
             <PrivateRoute>
               <div className="app-container">
@@ -36,26 +36,32 @@ function App() {
                   <MainContent>
                     <Outlet />
                   </MainContent>
-                  <Footer/>
+                  <Footer />
                 </div>
               </div>
             </PrivateRoute>
           }>
             <Route index element={<Navigate to="/welcome" replace />} />
             <Route path="/welcome" element={<Welcome />} />
-            
+
             {/* <Route path='/usuarios' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Usuarios/>
               </RoleBasedControl>
             }/> */}
-            
+
             <Route path='/proveedores' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <Supplier/>
+                <Supplier />
               </RoleBasedControl>
-            }/>
-            
+            } />
+
+            <Route path='/compras' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Purchase />
+              </RoleBasedControl>
+            } />
+
             {/* <Route path='/insumos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
                 <Inputs/>
@@ -82,7 +88,7 @@ function App() {
               </RoleBasedControl>
             }/> */}
           </Route>
-          
+
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
