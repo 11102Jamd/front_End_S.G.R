@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../../utils/axiosConfig";
+import { getSuppliers } from "../../utils/api/supplier";
 import DataTable, { Alignment } from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
 import EditSupplierModal from "./EditSupplierModal";
@@ -15,21 +15,21 @@ function Supplier(){
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        getSupplier();
+        fetchSupplier();
     }, []);
 
-    const getSupplier = async () => {
+    const fetchSupplier = async () => {
         try {
             setPending(true);
-            const response = await api.get('/suppliers');
-            setSupplier(response.data);
+            const data = await getSuppliers();
+            setSupplier(data);
             setPending(false);
         } catch (error) {
-            console.error("Error al obtener la lista de Proveedores: ", error);
+            console.error("Error:", error);
+        } finally {
             setPending(false);
         }
-    }
-
+    };
 
     const columns = [
         {
@@ -127,7 +127,7 @@ function Supplier(){
             {showModal && (
                 <CreateSupplierModal
                 onClose={() => setShowModal(false)}
-                onSupplierCreated={getSupplier}
+                onSupplierCreated={fetchSupplier}
                 />
             )}
 
@@ -135,7 +135,7 @@ function Supplier(){
                 <EditSupplierModal
                     supplier={supplierSelected}
                     onClose={() => setSupplierSelected(null)}
-                    onSupplierUpdated={getSupplier}
+                    onSupplierUpdated={fetchSupplier}
                 />
             )}
         </div>

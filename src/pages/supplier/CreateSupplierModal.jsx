@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { createSupplier } from "../../utils/api/supplier";
 import Swal from "sweetalert2";
-import api from "../../utils/axiosConfig";
 import { validateName ,validateAddress, validateEmail, validatePhone } from "../../utils/validations/validationFields";
 
 function CreateSupplierModal({onClose, onSupplierCreated}){
@@ -56,15 +56,14 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
     };
 
 
-    const createSupplier = async () => {
+    const createSupplierHandler = async () => {
         if (!validateForm()) {
-            // Mostrar error general si hay campos inválidos
             await Swal.fire('¡Error!', 'Por favor corrige los errores en el formulario', 'error');
             return;
         }
 
         try {
-            await api.post('/suppliers', newSupplier);
+            await createSupplier(newSupplier);
             await Swal.fire('Éxito', 'Proveedor creado', 'success');
             onSupplierCreated();
             onClose();
@@ -139,7 +138,7 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-primary" onClick={createSupplier} style={{backgroundColor:' #176FA6'}}>
+                        <button type="button" className="btn btn-primary" onClick={createSupplierHandler} style={{backgroundColor:' #176FA6'}}>
                             Guardar Proveedor
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={onClose}>
