@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
-import api from "../../utils/axiosConfig";
+import { getPurchase } from '../../utils/api/Purchase';
 import CreatePurchaseModal from './CreatePurchaseModal';
 import DataTable from "react-data-table-component";
 import PurchaseDetailsModal from './PurchaseDetailsModal';
+import { getSuppliers } from '../../utils/api/supplier';
+import customStyles from '../../utils/styles/customStyles';
+import paginationOptions from '../../utils/styles/paginationOptions';
 
 function Purchase() {
     const [purchase, setPurchase] = useState([]);
@@ -21,42 +24,44 @@ function Purchase() {
     };
 
     useEffect(() => {
-        getPurchase();
-        getSupplier();
+        fetchPurchase();
+        fetchSuppliers();
     }, []);
 
-    const getPurchase = async () => {
+    const fetchPurchase = async () => {
         try {
             setPending(true);
-            const response = await api.get('/purchaseorder');
-            setPurchase(response.data);
+            const data = await getPurchase();
+            setPurchase(data);
             setPending(false);
         } catch (error) {
             console.error("Error al obtener lista de Compras", error);
+        } finally {
             setPending(false);
         }
     };
 
-    const getSupplier = async () => {
+    const fetchSuppliers = async () => {
         try {
-            const response = await api.get('/supplier');
-            setSuppliers(response.data);
+            const data = await getSuppliers();
+            setSuppliers(data);
         } catch (error) {
             console.error("No se encontró proveedor", error);
+
         }
     };
 
     const handleDelete = async (id) => {
         try {
             // Realizar la solicitud DELETE a la API
-            await api.delete(`/purchaseorder/${id}`);
-
+            await deletePurchase(id);
             // Actualizar el estado local para reflejar la eliminación
             setPurchase(purchase.filter(p => p.id !== id));
         } catch (error) {
             console.error("Error al eliminar la compra", error);
         }
     };
+
     // Combina las compras con el nombre del proveedor
     const purchaseWithSupplierName = purchase.map(p => {
         const supplier = suppliers.find(s => s.id === p.ID_supplier);
@@ -116,51 +121,6 @@ function Purchase() {
         }
     ];
 
-    const customStyles = {
-        headCells: {
-            style: {
-                backgroundColor: '#343a40',
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                textAlign: 'center'
-            },
-        },
-        cells: {
-            style: {
-                fontSize: '18px',
-                padding: '12px 10px',
-                textAlign: 'center'
-            },
-        },
-        rows: {
-            style: {
-                minHeight: '60px',
-                '&:nth-child(even)': {
-                    backgroundColor: '#f8f9fa',
-                },
-                '&:hover': {
-                    backgroundColor: '#e9ecef !important',
-                },
-                textAlign: 'center',
-            },
-        },
-        pagination: {
-            style: {
-                backgroundColor: '#f8f9fa',
-                borderTop: '1px solid #dee2e6',
-            },
-        },
-    };
-
-    const paginationOptions = {
-        rowsPerPageText: 'Siguiente:',
-        rangeSeparatorText: 'de',
-        selectAllRowsItem: true,
-        selectAllRowsItemText: 'Todos',
-        noRowsPerPage: false,
-    };
-
     return (
         <div className="container-fluid mt-4">
             <div className='card'>
@@ -208,10 +168,10 @@ function Purchase() {
             {showModal && (
                 <CreatePurchaseModal
                     onClose={() => setShowModal(false)}
-                    onPurchaseCreated={getPurchase}
+                    onPurchaseCreated={fetchPurchase}
                 />
             )}
-            
+
             {selectedPurchase && (
                 <PurchaseDetailsModal
                     purchase={selectedPurchase}
@@ -224,3 +184,4 @@ function Purchase() {
 }
 
 export default Purchase;
+

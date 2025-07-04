@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import api from "../../utils/axiosConfig";
+import { getSuppliers } from "../../utils/api/supplier";
 import DataTable, { Alignment } from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
+import EditSupplierModal from "./EditSupplierModal";
+import customStyles from "../../utils/styles/customStyles";
+import paginationOptions from "../../utils/styles/paginationOptions";
 
 
 function Supplier(){
@@ -12,58 +15,21 @@ function Supplier(){
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        getSupplier();
+        fetchSupplier();
     }, []);
 
-    const getSupplier = async () => {
+    const fetchSupplier = async () => {
         try {
             setPending(true);
-            const response = await api.get('/supplier');
-            setSupplier(response.data);
+            const data = await getSuppliers();
+            setSupplier(data);
             setPending(false);
         } catch (error) {
-            console.error("Error al obtener la lista de Proveedores: ", error);
+            console.error("Error:", error);
+        } finally {
             setPending(false);
         }
-    }
-
-    const customStyles = {
-        headCells: {
-            style: {
-                backgroundColor: '#343a40', 
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                textAlign: 'center'
-            },
-        },
-        cells:{
-            style: {
-                fontSize: '18px',  // Tamaño de fuente aumentado para el contenido
-                padding: '12px 10px',  // Más espacio en celdas
-                textAlign: 'center'
-            },
-        },
-        rows: {
-            style: {
-                minHeight: '60px',
-                '&:nth-child(even)': {
-                    backgroundColor: '#f8f9fa', // Color claro alterno
-                },
-                '&:hover': {
-                    backgroundColor: '#e9ecef !important', // Color hover
-                },
-                textAlign: 'center',
-            },
-        },
-        pagination: {
-            style: {
-                backgroundColor: '#f8f9fa',
-                borderTop: '1px solid #dee2e6',
-            },
-        },
     };
-
 
     const columns = [
         {
@@ -102,27 +68,22 @@ function Supplier(){
                         <i className="bi bi-trash fs-6"></i>
                     </button>
                     <button
-                    
-                    className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
-                    title="editar"
+
+                        onClick={()=> {
+                            console.log('Editando Proveedor',row);
+                            setSupplierSelected(row);
+                        }}
+
+                        className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
+                        title="editar"
                     >
                         <i className="bi bi-pencil-square fs-6"></i>
                     </button>
                 </div>
             ),
             ignoreRowClick: true,
-            center: true,
         }
     ];
-
-    const paginationOptions = {
-        rowsPerPageText: 'Registros por página:',
-        rangeSeparatorText: 'de',
-        selectAllRowsItem: true,
-        selectAllRowsItemText: 'Todos',
-        noRowsPerPage: false,
-    };
-
 
     return(
         <div className='container-fluid mt-4'>
@@ -166,17 +127,17 @@ function Supplier(){
             {showModal && (
                 <CreateSupplierModal
                 onClose={() => setShowModal(false)}
-                onSupplierCreated={getSupplier}
+                onSupplierCreated={fetchSupplier}
                 />
             )}
 
-            {/* {supplierSelected && (
+            {supplierSelected && (
                 <EditSupplierModal
                     supplier={supplierSelected}
                     onClose={() => setSupplierSelected(null)}
-                    onSupplierUpdated={getSupplier}
+                    onSupplierUpdated={fetchSupplier}
                 />
-            )} */}
+            )}
         </div>
     );
 }

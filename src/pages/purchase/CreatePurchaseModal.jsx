@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import api from "../../utils/axiosConfig";
 import DataTable from "react-data-table-component";
+import customStyles from "../../utils/styles/customStyles";
+import { getInputs } from "../../utils/api/inputs";
+import { getSuppliers } from "../../utils/api/supplier";
+
 
 function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
     const today = new Date().toISOString().split('T')[0];
@@ -31,29 +35,31 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
 
     // Llamadas a la API para obtener proveedores e insumos
     useEffect(() => {
-        const getSuppliers = async () => {
+        const fetchInput = async () => {
             try {
-                const response = await api.get('/supplier');
-                setSuppliers(response.data);
-            } catch (error) {
-                console.error("Error al obtener proveedores:", error);
-            } finally {
-                setLoadingSuppliers(false);
-            }
-        };
-
-        const getInputs = async () => {
-            try {
-                const response = await api.get('/inputs');
-                setInputs(response.data); // Renombrado a inputs para que coincida con el valor en el formulario
+                const data = await getInputs();
+                setInputs(data); // Renombrado a inputs para que coincida con el valor en el formulario
             } catch (error) {
                 console.error("Error al obtener los insumos:", error);
             } finally {
                 setLoadingItems(false);
             }
         };
-        getSuppliers();
-        getInputs();
+        fetchInput();
+    }, []);
+
+    useEffect(() => {
+        const fetchSuppliers = async () => {
+            try {
+                const response = await getSuppliers();
+                setSuppliers(response);
+            } catch (error) {
+                console.error("Error al cargar los proveedores:", error);
+            } finally {
+                setLoadingSuppliers(false);
+            }
+        };
+        fetchSuppliers();
     }, []);
 
     const handleAddItem = () => {
@@ -216,6 +222,7 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
                                     title="Detalle de la Orden de Compra"
                                     columns={columns}
                                     data={items}
+                                    customStyles={customStyles}
                                     highlightOnHover
                                     pointerOnHover
                                     striped
