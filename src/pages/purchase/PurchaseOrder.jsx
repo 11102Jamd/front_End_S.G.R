@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { getPurchase } from '../../utils/api/Purchase';
+import { getPurchase, deletePurchase } from '../../utils/api/Purchase';
 import CreatePurchaseModal from './CreatePurchaseModal';
 import DataTable from "react-data-table-component";
 import PurchaseDetailsModal from './PurchaseDetailsModal';
 import { getSuppliers } from '../../utils/api/supplier';
 import customStyles from '../../utils/styles/customStyles';
 import paginationOptions from '../../utils/styles/paginationOptions';
+import Swal from "sweetalert2";
+
 
 function Purchase() {
     const [purchase, setPurchase] = useState([]);
@@ -22,11 +24,6 @@ function Purchase() {
     const handleCloseDetails = () => {
         setSelectedPurchase(null);
     };
-
-    useEffect(() => {
-        fetchPurchase();
-        fetchSuppliers();
-    }, []);
 
     const fetchPurchase = async () => {
         try {
@@ -47,18 +44,38 @@ function Purchase() {
             setSuppliers(data);
         } catch (error) {
             console.error("No se encontró proveedor", error);
-
         }
     };
 
+    useEffect(() => {
+        fetchPurchase();
+        fetchSuppliers();
+    }, []);
+
     const handleDelete = async (id) => {
         try {
-            // Realizar la solicitud DELETE a la API
-            await deletePurchase(id);
-            // Actualizar el estado local para reflejar la eliminación
-            setPurchase(purchase.filter(p => p.id !== id));
+            const confirmation = await
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡Esta acción eliminará la orden de compra!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Eliminar',
+                    cancelButtonText: 'Cancelar'
+                });
+
+            if (confirmation.isConfirmed === true) {
+                await deletePurchase(id);
+
+                // Actualizar el estado local para reflejar la eliminación
+                setPurchase(purchase.filter(p => p.id !== id));
+
+                Swal.fire('¡Eliminado!', 'La orden de compra fue eliminada.', 'success');
+            }
+
         } catch (error) {
             console.error("Error al eliminar la compra", error);
+            Swal.fire('Error', 'Hubo un problema al eliminar la orden', 'error');
         }
     };
 
@@ -76,25 +93,25 @@ function Purchase() {
             name: 'Numero de Compra',
             selector: row => row.id,
             sortable: true,
-            center: true
+            style: { justifyContent: 'center' }
         },
         {
             name: 'Nombre Proveedor',
             selector: row => `${row.ID_supplier} ${row.name}`,
             sortable: true,
-            center: true
+            style: { justifyContent: 'center' }
         },
         {
             name: 'Fecha de Compra',
             selector: row => row.PurchaseOrderDate,
             sortable: true,
-            center: true
+            style: { justifyContent: 'center' }
         },
         {
             name: "Total Compra",
             selector: row => `$${row.PurchaseTotal}`,
             sortable: true,
-            center: true
+            style: { justifyContent: 'center' }
         },
         {
             name: 'Acciones',
@@ -117,7 +134,7 @@ function Purchase() {
                 </div>
             ),
             ignoreRowClick: true,
-            center: true
+            style: { justifyContent: 'center' }
         }
     ];
 
@@ -164,21 +181,18 @@ function Purchase() {
                     />
                 </div>
             </div>
-
             {showModal && (
                 <CreatePurchaseModal
                     onClose={() => setShowModal(false)}
                     onPurchaseCreated={fetchPurchase}
                 />
             )}
-
             {selectedPurchase && (
                 <PurchaseDetailsModal
                     purchase={selectedPurchase}
                     onClose={handleCloseDetails}
                 />
             )}
-
         </div>
     );
 }

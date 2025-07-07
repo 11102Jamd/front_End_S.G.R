@@ -37,8 +37,8 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
     useEffect(() => {
         const fetchInput = async () => {
             try {
-                const data = await getInputs();
-                setInputs(data); // Renombrado a inputs para que coincida con el valor en el formulario
+                const response= await getInputs();
+                setInputs(response); // Renombrado a inputs para que coincida con el valor en el formulario
             } catch (error) {
                 console.error("Error al obtener los insumos:", error);
             } finally {

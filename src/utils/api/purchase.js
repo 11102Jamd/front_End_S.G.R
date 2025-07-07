@@ -9,25 +9,25 @@ export const getPurchase = async () => {
     }
 }
 
-export const createPurchase = async (purchaseData) => {
-    try {
-        const response = await api.post('/purchaseorder', purchaseData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al crear la compra", error);
-        throw error;
-    }
-};
+// export const createPurchase = async (purchaseData) => {
+//     try {
+//         const response = await api.post('/purchaseorder', purchaseData);
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error al crear la compra", error);
+//         throw error;
+//     }
+// };
 
-export const updatePurchase = async (id, purchaseData) => {
-    try {
-        const response = await api.put(`/purchaseorder/${id}`, purchaseData);
-        return response.data;
-    } catch (error) {
-        console.error("Error al actualizar la compra", error);
-        throw error;
-    }
-};
+// export const updatePurchase = async (id, purchaseData) => {
+//     try {
+//         const response = await api.put(`/purchaseorder/${id}`, purchaseData);
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error al actualizar la compra", error);
+//         throw error;
+//     }
+// };
 
 export const deletePurchase = async (id) => {
     try {
