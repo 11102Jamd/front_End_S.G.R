@@ -31,7 +31,7 @@ function ManufacturingList() {
             try {
                 await deleteManufacturing(id);
                 Swal.fire('Eliminado', 'La fabricación fue eliminada correctamente.', 'success');
-                getManufacturing();
+                fetchManufacturing();
             } catch (error) {
                 Swal.fire('Error', 'No se pudo eliminar la fabricación.', 'error');
             }

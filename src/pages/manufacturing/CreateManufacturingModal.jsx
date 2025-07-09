@@ -35,14 +35,21 @@ function CreateManufacturingModal({ onClose, onCreated }) {
     }, []);
 
     const handleAddInput = () => {
-        if (currentInput.ID_inputs && currentInput.AmountSpent) {
-            setFormData({
-                ...formData,
-                recipes: [...formData.recipes, currentInput],
-            });
-            setCurrentInput({ ID_inputs: '', AmountSpent: '', UnitMeasurement: 'g' });
+        if (!currentInput.ID_inputs || !currentInput.AmountSpent) return;
+        const alreadyExists = formData.recipes.some(
+            (item) => item.ID_inputs === currentInput.ID_inputs
+        );
+        if (alreadyExists) {
+            Swal.fire('Advertencia', 'Este insumo ya ha sido agregado.', 'warning');
+            return;
         }
+        setFormData({
+            ...formData,
+            recipes: [...formData.recipes, currentInput],
+        });
+        setCurrentInput({ ID_inputs: '', AmountSpent: '', UnitMeasurement: 'g' });
     };
+
 
     const handleRemoveInput = (index) => {
         const updated = [...formData.recipes];
