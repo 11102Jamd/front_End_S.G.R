@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getSuppliers } from "../../utils/enpoints/supplier";
+import { deleteSupplier, getSuppliers } from "../../utils/enpoints/supplier";
 import DataTable, { Alignment } from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
 import EditSupplierModal from "./EditSupplierModal";
 import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions";
+import { errorDeleteSupplier, showConfirmDeleteSupplier, successDeleteSupplier } from "../../utils/alerts/alertsSupplier";
 
 
 function Supplier(){
@@ -31,6 +32,20 @@ function Supplier(){
         }
     };
 
+    const hanleDeleteSupplier = async (id) => {
+        const result = await showConfirmDeleteSupplier();
+        if (result.isConfirmed) {
+            try {
+                await deleteSupplier(id);
+                await successDeleteSupplier();
+                await fetchSupplier();
+            } catch (error) {
+                console.error("Error al eliminar el proveedor: ",error);
+                await errorDeleteSupplier();
+            }
+        };
+    };
+    
     const columns = [
         {
             name: 'Proveedor',
@@ -61,9 +76,11 @@ function Supplier(){
             cell: row => (
                 <div className="btn-group" role="group">
                     <button
-                    
-                    className="btn btn-danger btn-sm rounded-2 p-2"
-                    title="eliminar"
+                        onClick={()=> {
+                            hanleDeleteSupplier(row.id);
+                        }}
+                        className="btn btn-danger btn-sm rounded-2 p-2"
+                        title="eliminar"
                     >
                         <i className="bi bi-trash fs-6"></i>
                     </button>

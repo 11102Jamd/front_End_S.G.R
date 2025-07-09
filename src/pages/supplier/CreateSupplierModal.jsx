@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {createSupplier} from "../../utils/enpoints/supplier";
 import Swal from "sweetalert2";
 import { validateName ,validateAddress, validateEmail, validatePhone } from "../../utils/validations/validationFields";
+import { errorCreateSupplier, errorFormSupplier, successCreateSupplier } from "../../utils/alerts/alertsSupplier";
 
 function CreateSupplierModal({onClose, onSupplierCreated}){
     const [newSupplier, setNewSupplier] = useState({
@@ -58,13 +59,13 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
 
     const createSupplierHandler = async () => {
         if (!validateForm()) {
-            await Swal.fire('¡Error!', 'Por favor corrige los errores en el formulario', 'error');
+            await errorFormSupplier();
             return;
         }
 
         try {
             await createSupplier(newSupplier);
-            await Swal.fire('Éxito', 'Proveedor creado', 'success');
+            await successCreateSupplier();
             onSupplierCreated();
             onClose();
             setNewSupplier({
@@ -75,7 +76,7 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
             });
         } catch (error) {
             console.error('Error al crear el proveedor', error);
-            await Swal.fire('¡Error!', 'Error al crear el proveedor', 'error');
+            await errorCreateSupplier();
         }
     }
 
@@ -127,7 +128,7 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
                         <div className="mb-3">
                             <label htmlFor="Phone" className="form-label">Telefono</label>
                             <input 
-                                type="text"  // Cambiado a text para permitir formatos internacionales
+                                type="number"  // Cambiado a text para permitir formatos internacionales
                                 className={`form-control form-control-lg ${errors.Phone ? 'is-invalid' : ''}`}
                                 id="Phone" 
                                 value={newSupplier.Phone} 
