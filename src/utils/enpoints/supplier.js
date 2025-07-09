@@ -7,7 +7,7 @@ export const getSuppliers = async () => {
     } catch (error) {
         console.error('Error al obtener la lista de Proveedores', error);
         throw error;
-    }
+    };
 };
 
 
@@ -18,7 +18,7 @@ export const createSupplier = async (supplierData) => {
     } catch (error) {
         console.error('Error al crear el proveedor', error);
         throw error;
-    }
+    };
 };
 
 
@@ -29,7 +29,7 @@ export const updateSupplier = async (id,supplierData) => {
     } catch (error) {
         console.error('Error al actualizar el proveedor', error);
         throw error;
-    }
+    };
 };
 
 
@@ -40,5 +40,5 @@ export const deleteSupplier = async (id) => {
     } catch (error) {
         console.error('Error al eliminar el proveeedor', error);
         throw error;
-    }
+    };
 };

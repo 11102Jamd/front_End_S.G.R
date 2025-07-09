@@ -26,7 +26,7 @@ function CreateInputModal({onClose, onInputCreated}){
         <div className="modal fade show" style={{display:'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
-                    <div className="modal-header bg-primary text-white">
+                    <div className="modal-header text-white" style={{backgroundColor:' #176FA6'}}>
                         <h5 className="modal-title">Crear Nuevo Insumo</h5>
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
@@ -44,11 +44,11 @@ function CreateInputModal({onClose, onInputCreated}){
                         </div>
                     </div>
                     <div className="modal-footer">
+                        <button type="button" className="btn btn-primary" onClick={createInput} style={{backgroundColor:' #176FA6'}}>
+                            Guardar Insumo
+                        </button>
                         <button type="button" className="btn btn-secondary" onClick={onClose}>
                             Cerrar
-                        </button>
-                        <button type="button" className="btn btn-primary" onClick={createInput}>
-                            Guardar Insumo
                         </button>
                     </div>
                 </div>

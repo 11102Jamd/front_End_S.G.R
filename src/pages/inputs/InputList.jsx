@@ -1,10 +1,11 @@
 import React, { use, useEffect, useState } from "react";
-import api from "../../utils/axiosConfig";
+import { deleteInputs, getInputs } from "../../utils/enpoints/input";
 import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import CreateInputModal from "./CreateInputModal";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import customStyles from "../../utils/styles/customStyles";
+import { errorDeleteInput, showConfirmDeleteInputs, successDeleteInput } from "../../utils/alerts/alertsInputs";
 
 function Input(){
     const [input, setInput] = useState([]);
@@ -14,21 +15,36 @@ function Input(){
 
 
     useEffect(()=>{
-        getInputs();
+        fetchInputs();
     }, []);
 
 
-    const getInputs = async () => {
+    const fetchInputs = async () => {
         try {
             setPending(true);
-            const response = await api.get('/inputs');
-            setInput(response.data);
+            const data = await getInputs();
+            setInput(data);
             setPending(false);
         } catch (error) {
             console.error('Error al mostrar todos los Insumos: ', error);
             setPending(false);
-        }
-    }
+        };
+    };
+
+    const handleDeleteInput = async (id) => {
+        const result = await showConfirmDeleteInputs();
+        if (result.isConfirmed) {
+            try {
+                await deleteInputs(id);
+                await successDeleteInput();
+                await fetchInputs();
+            } catch (error) {
+                console.error("Error al eliminar el insumo");
+                await errorDeleteInput();
+            };
+        };
+    };
+
 
     const columns = [
         {
@@ -70,7 +86,7 @@ function Input(){
             cell: row => (
                 <div className="btn-group" role="group">
                     <button 
-                        onClick={() => deleteInput(row.id)} 
+                        onClick={() => handleDeleteInput(row.id)} 
                         className='btn btn-danger btn-sm rounded-2 p-2'
                         title="Eliminar"
                     >
@@ -135,7 +151,7 @@ function Input(){
             {showModal && (
                 <CreateInputModal
                     onClose={() => setShowModal(false)}
-                    onInputCreated={getInputs}
+                    onInputCreated={fetchInputs}
                 />
             )}
 
