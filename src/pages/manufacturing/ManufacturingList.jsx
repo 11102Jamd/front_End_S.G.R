@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import api from "../../utils/axiosConfig";
 import DataTable from "react-data-table-component";
 import CreateManufacturingModal from "./CreateManufacturingModal";
+import customStyles from "../../utils/styles/customStyles";
+import { deleteManufacturing, getManufacturing } from "../../utils/enpoints/manufacturing";
+import Swal from 'sweetalert2';
+
 
 
 function ManufacturingList() {
@@ -10,14 +14,36 @@ function ManufacturingList() {
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        getManufacturing();
+        fetchManufacturing();
     }, []);
 
-    const getManufacturing = async () => {
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción no se puede deshacer.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await deleteManufacturing(id);
+                Swal.fire('Eliminado', 'La fabricación fue eliminada correctamente.', 'success');
+                getManufacturing();
+            } catch (error) {
+                Swal.fire('Error', 'No se pudo eliminar la fabricación.', 'error');
+            }
+        }
+    };
+
+
+    const fetchManufacturing = async () => {
         try {
             setPending(true);
-            const response = await api.get('/manufacturing');
-            setManufacturing(response.data);
+            const data = await getManufacturing();
+            setManufacturing(data);
             setPending(false);
         } catch (error) {
             console.error("Error al obtener la lista de fabricación: ", error);
@@ -25,42 +51,7 @@ function ManufacturingList() {
         }
     };
 
-    const customStyles = {
-        headCells: {
-            style: {
-                backgroundColor: '#343a40',
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                textAlign: 'center'
-            },
-        },
-        cells: {
-            style: {
-                fontSize: '18px',
-                padding: '12px 10px',
-                textAlign: 'center'
-            },
-        },
-        rows: {
-            style: {
-                minHeight: '60px',
-                '&:nth-child(even)': {
-                    backgroundColor: '#f8f9fa',
-                },
-                '&:hover': {
-                    backgroundColor: '#e9ecef !important',
-                },
-                textAlign: 'center',
-            },
-        },
-        pagination: {
-            style: {
-                backgroundColor: '#f8f9fa',
-                borderTop: '1px solid #dee2e6',
-            },
-        },
-    };
+
 
     const columns = [
         {
@@ -71,19 +62,31 @@ function ManufacturingList() {
         },
         {
             name: 'Producto',
-            selector: row => row.product_name,
+            selector: row => row.product?.ProductName || 'N/A',
             sortable: true,
             center: true,
         },
         {
-            name: 'Cantidad',
-            selector: row => row.quantity,
+            name: 'Tiempo de fabricacion',
+            selector: row => row.ManufacturingTime,
             sortable: true,
             center: true,
         },
         {
-            name: 'Fecha',
-            selector: row => row.date,
+            name: 'Mano de obra',
+            selector: row => row.Labour,
+            sortable: true,
+            center: true,
+        },
+        {
+            name: 'Producto toltal G',
+            selector: row => row.ManufactureProductG,
+            sortable: true,
+            center: true,
+        },
+        {
+            name: 'Total costo de produccion',
+            selector: row => row.TotalCostProduction,
             sortable: true,
             center: true,
         },
@@ -91,9 +94,14 @@ function ManufacturingList() {
             name: 'Acción',
             cell: row => (
                 <div className="btn-group" role="group">
-                    <button className="btn btn-danger btn-sm rounded-2 p-2" title="eliminar">
+                    <button
+                        className="btn btn-danger btn-sm rounded-2 p-2"
+                        title="eliminar"
+                        onClick={() => handleDelete(row.id)}
+                    >
                         <i className="bi bi-trash fs-6"></i>
                     </button>
+
                     <button className="btn btn-primary btn-sm ms-2 rounded-2 p-2" title="editar">
                         <i className="bi bi-pencil-square fs-6"></i>
                     </button>
@@ -154,7 +162,7 @@ function ManufacturingList() {
             {showModal && (
                 <CreateManufacturingModal
                     onClose={() => setShowModal(false)}
-                    onCreated={getManufacturing}
+                    onCreated={fetchManufacturing}
                 />
             )}
         </div>
