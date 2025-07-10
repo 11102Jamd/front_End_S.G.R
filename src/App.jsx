@@ -10,11 +10,10 @@ import Login from './pages/auth/Login';
 import Welcome from './pages/welcome/Welcome';
 import Supplier from './pages/supplier/SupplierList';
 import Input from './pages/inputs/InputList';
+import User from './pages/user/UserList';
+import Manufacturing from './pages/manufacturing/ManufacturingList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import Manufacturing from './pages/manufacturing/ManufacturingList';
-// import Usuarios from './components/usuarios/UserList';
-// import Supplier from './components/proveedores/SupplierList';
 // import Products from './components/productos/ProductsList';
 // import Pedidos from './components/pedidos/OrderList';
 // import Compras from './components/compras/PurchaseList';
@@ -44,11 +43,11 @@ function App() {
             <Route index element={<Navigate to="/welcome" replace />} />
             <Route path="/welcome" element={<Welcome />} />
             
-            {/* <Route path='/usuarios' element={
+            <Route path='/usuarios' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <Usuarios/>
+                <User/>
               </RoleBasedControl>
-            }/> */}
+            }/>
             
             <Route path='/proveedores' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
