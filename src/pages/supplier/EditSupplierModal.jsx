@@ -1,6 +1,4 @@
 import React, { use, useState } from "react";
-import api from "../../utils/axiosConfig";
-import Swal from "sweetalert2";
 import { updateSupplier } from "../../utils/enpoints/supplier";
 import { validateAddress, validatePhone, validateEmail, validateName } from "../../utils/validations/validationFields";
 import { errorEditSupplier, errorFormSupplier, successEditSupplier } from "../../utils/alerts/alertsSupplier";
@@ -69,7 +67,7 @@ function EditSupplierModal({supplier, onClose, onSupplierUpdated}){
         } catch (error) {
             console.error("Error al editar el proveedor: ",error);
             await errorEditSupplier();
-        }
+        };
     };
 
     return(

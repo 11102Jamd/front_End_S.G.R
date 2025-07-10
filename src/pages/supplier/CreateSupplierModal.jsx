@@ -77,8 +77,8 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
         } catch (error) {
             console.error('Error al crear el proveedor', error);
             await errorCreateSupplier();
-        }
-    }
+        };
+    };
 
     return(
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>

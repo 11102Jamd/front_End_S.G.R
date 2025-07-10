@@ -29,7 +29,7 @@ function Supplier(){
             console.error("Error:", error);
         } finally {
             setPending(false);
-        }
+        };
     };
 
     const hanleDeleteSupplier = async (id) => {
@@ -45,7 +45,7 @@ function Supplier(){
             }
         };
     };
-    
+
     const columns = [
         {
             name: 'Proveedor',

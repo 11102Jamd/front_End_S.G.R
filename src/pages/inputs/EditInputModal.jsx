@@ -1,30 +1,26 @@
 import React, { useState } from "react";
-import api from "../../utils/axiosConfig";
-import Swal from "sweetalert2";
 import { validateName } from "../../utils/validations/validationFields";
-import { createInputs } from "../../utils/enpoints/input";
-import { errorCreateInput, errorFormInput, successCreateInput } from "../../utils/alerts/alertsInputs";
+import { errorEditInput, errorFormInput, successEditInput } from "../../utils/alerts/alertsInputs";
+import { updateInputs } from "../../utils/enpoints/input";
 
-function CreateInputModal({onClose, onInputCreated}){
-    const [newInput, setNewInput] = useState({
-        InputName:''
-    });
-
+function EditInputModal({input, onClose, onInputUpdated}){
+    const [inputUpdate, setInputUpdate] = useState(input);
     const [errors, setErrors] = useState({});
 
-    const validateFormInput = () => {
+    const validateFormEditInput = () => {
         const newErrors = {
-            InputName: validateName(newInput.InputName, 'Nombre del insumo'),
+            InputName: validateName(inputUpdate.InputName, 'Nombre del insumo'),
         };
 
         setErrors(newErrors);
-
+        
         return !Object.values(newErrors).some(error => error !== null);
     };
 
+
     const handleChange = (e) => {
         const { id, value } = e.target;
-        setNewInput(prev => ({ ...prev, [id]: value }));
+        setInputUpdate(prev => ({ ...prev, [id]: value }));
         
         // Validación en tiempo real (opcional)
         if (errors[id]) {
@@ -40,31 +36,31 @@ function CreateInputModal({onClose, onInputCreated}){
         }
     };
 
-    const createInputHandler = async() => {
-        if (!validateFormInput()) {
+    const updateInputHandler = async () => {
+        if (!validateFormEditInput()) {
             await errorFormInput();
             return;
         }
+
         try {
-            await createInputs(newInput);
-            await successCreateInput();
-            onInputCreated();
-            onClose();
-            setNewInput({
-                InputName:'',
+            await updateInputs(input.id, {
+                InputName: inputUpdate.InputName,
             });
+            await successEditInput();
+            onInputUpdated();
+            onClose();
         } catch (error) {
-            console.error('Error al crear el insumo', error);
-            await errorCreateInput();
-        };
+            console.error("Error al actualizar el insumo: ", error);
+            await errorEditInput();
+        }
     };
 
-    return(
-        <div className="modal fade show" style={{display:'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+    return (
+        <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
-                    <div className="modal-header text-white" style={{backgroundColor:' #176FA6'}}>
-                        <h5 className="modal-title">Crear Nuevo Insumo</h5>
+                    <div className="modal-header text-white" style={{ backgroundColor: '#176FA6' }}>
+                        <h5 className="modal-title">Editar Insumo</h5> {/* Corregido el título */}
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
@@ -74,7 +70,7 @@ function CreateInputModal({onClose, onInputCreated}){
                                 type="text" 
                                 className={`form-control form-control-lg ${errors.InputName ? 'is-invalid' : ''}`} 
                                 id="InputName" 
-                                value={newInput.InputName} 
+                                value={inputUpdate.InputName} 
                                 onChange={handleChange} 
                                 required 
                             />
@@ -82,8 +78,13 @@ function CreateInputModal({onClose, onInputCreated}){
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-primary" onClick={createInputHandler} style={{backgroundColor:' #176FA6'}}>
-                            Guardar Insumo
+                        <button 
+                            type="button" 
+                            className="btn btn-primary" 
+                            onClick={updateInputHandler} 
+                            style={{ backgroundColor: '#176FA6' }}
+                        >
+                            Guardar Cambios
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={onClose}>
                             Cerrar
@@ -94,4 +95,5 @@ function CreateInputModal({onClose, onInputCreated}){
         </div>
     );
 }
-export default CreateInputModal;
+
+export default EditInputModal;

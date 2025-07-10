@@ -1,8 +1,8 @@
 import React, { use, useEffect, useState } from "react";
 import { deleteInputs, getInputs } from "../../utils/enpoints/input";
 import DataTable from "react-data-table-component";
-import Swal from "sweetalert2";
 import CreateInputModal from "./CreateInputModal";
+import EditInputModal from "./EditInputModal";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import customStyles from "../../utils/styles/customStyles";
 import { errorDeleteInput, showConfirmDeleteInputs, successDeleteInput } from "../../utils/alerts/alertsInputs";
@@ -155,13 +155,13 @@ function Input(){
                 />
             )}
 
-            {/* {inputSelected && (
+            {inputSelected && (
                 <EditInputModal
                     input={inputSelected}
                     onClose={() => setInputSelected(null)}
-                    onInputUpdated={getInputs}
+                    onInputUpdated={fetchInputs}
                 />
-            )} */}
+            )}
         </div>
     );
 }
