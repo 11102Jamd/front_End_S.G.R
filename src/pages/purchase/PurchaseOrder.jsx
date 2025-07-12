@@ -93,25 +93,25 @@ function Purchase() {
             name: 'Numero de Compra',
             selector: row => row.id,
             sortable: true,
-            style: { justifyContent: 'center' }
+            center:true
         },
         {
             name: 'Nombre Proveedor',
             selector: row => `${row.ID_supplier} ${row.name}`,
             sortable: true,
-            style: { justifyContent: 'center' }
+            center:true
         },
         {
             name: 'Fecha de Compra',
             selector: row => row.PurchaseOrderDate,
             sortable: true,
-            style: { justifyContent: 'center' }
+            center:true
         },
         {
             name: "Total Compra",
             selector: row => `$${row.PurchaseTotal}`,
             sortable: true,
-            style: { justifyContent: 'center' }
+            center:true
         },
         {
             name: 'Acciones',
@@ -134,7 +134,7 @@ function Purchase() {
                 </div>
             ),
             ignoreRowClick: true,
-            style: { justifyContent: 'center' }
+            center:true
         }
     ];
 

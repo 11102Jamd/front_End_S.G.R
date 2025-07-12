@@ -40,7 +40,7 @@ function PurchaseDetailsModal({ purchase, onClose }) {
 
     return (
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-            <div className="modal-dialog modal-xl"> {/* Más ancho que modal-lg */}
+            <div className="modal-dialog modal-xl">
                 <div className="modal-content">
                     <div className="modal-header text-white" style={{ backgroundColor: '#176FA6' }}>
                         <h5 className="modal-title">Detalle de la Compra</h5>
