@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createSupplier } from "../../utils/api/supplier";
+import {createSupplier} from "../../utils/enpoints/supplier";
 import Swal from "sweetalert2";
 import { validateName ,validateAddress, validateEmail, validatePhone } from "../../utils/validations/validationFields";
 

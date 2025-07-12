@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSuppliers } from "../../utils/api/supplier";
+import { getSuppliers } from "../../utils/enpoints/supplier";
 import DataTable, { Alignment } from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
 import EditSupplierModal from "./EditSupplierModal";
