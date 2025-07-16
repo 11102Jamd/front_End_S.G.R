@@ -12,12 +12,14 @@ import Supplier from './pages/supplier/SupplierList';
 import Input from './pages/inputs/InputList';
 import User from './pages/user/UserList';
 import Manufacturing from './pages/manufacturing/ManufacturingList';
+import Product from './pages/products/ProductList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 // import Products from './components/productos/ProductsList';
 // import Pedidos from './components/pedidos/OrderList';
 // import Compras from './components/compras/PurchaseList';
 import './App.css';
+
 
 function App() {
   return (
@@ -61,9 +63,9 @@ function App() {
               </RoleBasedControl>
             }/>
             
-            {/* <Route path='/productos' element={<Products/>}/>
+            <Route path='/productos' element={<Product/>}/>
             
-            <Route path='/pedidos' element={
+            {/* <Route path='/pedidos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
                 <Pedidos/>
               </RoleBasedControl>
@@ -73,13 +75,14 @@ function App() {
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Compras/>
               </RoleBasedControl>
-            }/>*/
+            }/> */}
+            
             
             <Route path='/fabricacion' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
                 <Manufacturing/>
               </RoleBasedControl>
-            }/> }
+            }/> 
           </Route>
           
           <Route path="*" element={<Navigate to="/login" replace />} />

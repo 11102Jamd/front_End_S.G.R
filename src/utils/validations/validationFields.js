@@ -27,3 +27,25 @@ export const validatePhone = (value) => {
     }
     return null;
 };
+
+
+export const validateQuantity = (value) => {
+    if (!value) return 'La cantidad es requerida';
+
+    if (!/^[0-9]{1,5}$/.test(value)) {
+        return 'Solo se permiten números enteros del 0 al 9, sin espacios ni símbolos, máximo 5 dígitos';
+    }
+
+    return null;
+};
+
+
+export const validatePrice = (value) => {
+    if (!value) return 'El precio es requerido';
+
+    if (!/^[0-9]{1,5}(,[0-9]{1,2})?$/.test(value)) {
+        return 'Formato inválido. Solo se permiten números y una coma, máximo 7 caracteres en total';
+    }
+    
+    return null;
+};
