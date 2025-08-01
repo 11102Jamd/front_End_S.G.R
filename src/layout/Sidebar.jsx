@@ -84,6 +84,14 @@ function Sidebar() {
                         {isOpen && <span>Fabricación</span>}
                     </Link>
                 )}
+
+
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/reportes" className="sidebar-link">
+                        <i className="bi bi-gear"></i>
+                        {isOpen && <span>Reportes</span>}
+                    </Link>
+                )}
             </div>
         </div>
     );

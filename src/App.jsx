@@ -13,6 +13,7 @@ import Input from './pages/inputs/InputList';
 import User from './pages/user/UserList';
 import Manufacturing from './pages/manufacturing/ManufacturingList';
 import Product from './pages/products/ProductList';
+import ReportDownloader from './pages/reports/ReportDownloader';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 // import Products from './components/productos/ProductsList';
@@ -81,6 +82,12 @@ function App() {
             <Route path='/fabricacion' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
                 <Manufacturing/>
+              </RoleBasedControl>
+            }/> 
+
+            <Route path='/reportes' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <ReportDownloader/>
               </RoleBasedControl>
             }/> 
           </Route>
