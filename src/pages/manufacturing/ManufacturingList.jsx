@@ -3,13 +3,18 @@ import api from "../../utils/axiosConfig";
 import DataTable from "react-data-table-component";
 import CreateManufacturingModal from "./CreateManufacturingModal";
 import customStyles from "../../utils/styles/customStyles";
+import ShowManufacturing from "./ShowManufacturing";
 import { deleteManufacturing, getManufacturing } from "../../utils/enpoints/manufacturing";
-import Swal from 'sweetalert2';
+import { errorLoadModalDetails } from "../../utils/alerts/alertsManufacturing";
+import paginationOptions from "../../utils/styles/paginationOptions";
+
 
 
 
 function ManufacturingList() {
     const [manufacturing, setManufacturing] = useState([]);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [selectedManufacturingId, setSelectedManufacturingId] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [pending, setPending] = useState(true);
 
@@ -49,6 +54,11 @@ function ManufacturingList() {
             console.error("Error al obtener la lista de fabricación: ", error);
             setPending(false);
         }
+    };
+
+    const handleShowDetails = async (id) => {
+        setSelectedManufacturingId(id);
+        setShowDetailsModal(true);
     };
 
 
@@ -102,8 +112,12 @@ function ManufacturingList() {
                         <i className="bi bi-trash fs-6"></i>
                     </button>
 
-                    <button className="btn btn-primary btn-sm ms-2 rounded-2 p-2" title="editar">
-                        <i className="bi bi-pencil-square fs-6"></i>
+                    <button
+                        className="btn btn-info btn-sm"
+                        onClick={() => handleShowDetails(row.id)}
+                        title="Ver detalles"
+                    >
+                        <i className="bi bi-eye"></i>
                     </button>
                 </div>
             ),
@@ -111,14 +125,6 @@ function ManufacturingList() {
             center: true,
         }
     ];
-
-    const paginationOptions = {
-        rowsPerPageText: 'Registros por página:',
-        rangeSeparatorText: 'de',
-        selectAllRowsItem: true,
-        selectAllRowsItemText: 'Todos',
-        noRowsPerPage: false,
-    };
 
     return (
         <div className='container-fluid mt-4'>
@@ -165,6 +171,12 @@ function ManufacturingList() {
                     onCreated={fetchManufacturing}
                 />
             )}
+
+            <ShowManufacturing
+                show={showDetailsModal}
+                onHide={()=> setShowDetailsModal(false)}
+                manufacturingId={selectedManufacturingId}
+            />
         </div>
     );
 }

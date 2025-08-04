@@ -29,3 +29,14 @@ export const deleteManufacturing = async (id) => {
         throw error;
     }
 };
+
+
+export const getManufacturingDetails = async (id) => {
+    try {
+        const response = await api.get(`/manufacturing/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener la fabricacion con sus detalles", error);
+        throw error
+    };
+};
