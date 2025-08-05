@@ -77,6 +77,12 @@ function ManufacturingList() {
             center: true,
         },
         {
+            name: 'Fecha de Fabricacion',
+            selector: row => row.manufacturingDate,
+            sortable: true,
+            center: true,
+        },
+        {
             name: 'Tiempo de fabricacion',
             selector: row => row.ManufacturingTime,
             sortable: true,
@@ -113,7 +119,7 @@ function ManufacturingList() {
                     </button>
 
                     <button
-                        className="btn btn-info btn-sm"
+                        className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
                         onClick={() => handleShowDetails(row.id)}
                         title="Ver detalles"
                     >

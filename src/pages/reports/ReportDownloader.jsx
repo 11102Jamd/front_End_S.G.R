@@ -3,6 +3,7 @@ import { exportPdfReportPurchase } from "../../utils/enpoints/reportPdfPurchase"
 import DatePicker from "react-datepicker";
 import { useState } from "react";
 import 'react-datepicker/dist/react-datepicker.css';
+import { exportPdfReportManufacturing } from "../../utils/enpoints/reportPdfManufacturing";
 
 const ReportDownloader = () => {
     const [reportType, setReportType] = useState('purchases');
@@ -40,8 +41,10 @@ const ReportDownloader = () => {
                 // Llamar a la función para reporte de pedidos
                 // response = await exportPdfReportOrders(...)
             } else if (reportType === 'manufacturing') {
-                // Llamar a la función para reporte de fabricación
-                // response = await exportPdfReportManufacturing(...)
+                response = await exportPdfReportManufacturing({
+                    start_date: formattedStartDate,
+                    end_date: formattedEndDate
+                });
             }
 
             const blob = new Blob([response], { type: 'application/pdf' });

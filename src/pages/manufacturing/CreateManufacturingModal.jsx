@@ -9,6 +9,7 @@ function CreateManufacturingModal({ onClose, onCreated }) {
     const [formData, setFormData] = useState({
         ID_product: '',
         ManufacturingTime: '',
+        manufacturingDate: new Date().toISOString().slice(0, 10),
         recipes: [],
     });
 
