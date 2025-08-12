@@ -1,84 +1,68 @@
-import React, { use, useEffect, useState } from "react";
-import { deleteInputs, getInputs } from "../../utils/enpoints/input";
+import React, { useEffect, useState } from "react";
+import { deleteUser, getUsers } from "../../utils/enpoints/users";
 import DataTable from "react-data-table-component";
-import CreateInputModal from "./CreateInputModal";
-import EditInputModal from "./EditInputModal";
-import paginationOptions from "../../utils/styles/paginationOptions";
 import customStyles from "../../utils/styles/customStyles";
-import { errorDeleteInput, showConfirmDeleteInputs, successDeleteInput } from "../../utils/alerts/alertsInputs";
+import paginationOptions from "../../utils/styles/paginationOptions";
+import CreateUserModal from "./CreateUserModal";
+import EditUserModal from "./EditUserModal";
+import { errorDeleteUser, showConfirmDeleteUser, successDeleteUser } from "../../utils/alerts/alertsUsers";
 
-function Input(){
-    const [input, setInput] = useState([]);
+
+function User(){
+    const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [inputSelected, setInputSelected] = useState(null);
+    const [userSelected, setUserSelected] = useState(null);
     const [pending, setPending] = useState(true);
 
-
-    useEffect(()=>{
-        fetchInputs();
+    useEffect(() => {
+        fetchUsers();
     }, []);
 
-
-    const fetchInputs = async () => {
+    const fetchUsers = async () => {
         try {
             setPending(true);
-            const data = await getInputs();
-            setInput(data);
+            const data = await getUsers();
+            setUsers(data);
             setPending(false);
         } catch (error) {
-            console.error('Error al mostrar todos los Insumos: ', error);
+            console.error("Error al obtner los uausrios", error);
             setPending(false);
         };
     };
 
-    const handleDeleteInput = async (id) => {
-        const result = await showConfirmDeleteInputs();
+    const handleDeleteUser = async (id) => {
+        const result = await showConfirmDeleteUser();
         if (result.isConfirmed) {
             try {
-                await deleteInputs(id);
-                await successDeleteInput();
-                await fetchInputs();
+                await deleteUser(id);
+                await successDeleteUser();
+                await fetchUsers();
             } catch (error) {
-                console.error("Error al eliminar el insumo");
-                await errorDeleteInput();
-            };
-        };
-    };
-
+                console.error("Error al eliminar el usuario: ",error);
+                await errorDeleteUser();
+            }
+        }
+    }
 
     const columns = [
         {
-            name: 'Insumo',
-            selector: row => row.InputName,
+            name: 'Nombres',
+            selector: row => `${row.id} ${row.name1} ${row.name2}`,
             sortable: true,
         },
         {
-            name: 'Precio Unidad',
-            selector: row => {
-                const lastOrder = row.input_orders?.[0];
-                return lastOrder ? `${lastOrder.UnityPrice}`: 'N/A'
-            },
+            name: 'Apellidos',
+            selector: row => `${row.surname1} ${row.surname2}`,
             sortable: true,
         },
         {
-            name: 'Cantidad Inicial',
-            selector: row => {
-                const lastOrder = row.input_orders?.[0];
-                return lastOrder ? `${lastOrder.InitialQuantity} ${lastOrder.UnitMeasurement}`: 'N/A'
-            },
+            name: 'Correo',
+            selector: row => row.email,
             sortable: true,
         },
         {
-            name: 'Precio Cantidad',
-            selector: row => {
-                const lastOrder = row.input_orders?.[0];
-                return lastOrder ? `${lastOrder.PriceQuantity}`: 'N/A'
-            },
-            sortable: true,
-        },
-        {
-            name: 'Stock',
-            selector: row => `${row.CurrentStock} ${row.UnitMeasurementGrams}`,
+            name: 'Rol',
+            selector: row => row.rol,
             sortable: true,
         },
         {
@@ -86,7 +70,7 @@ function Input(){
             cell: row => (
                 <div className="btn-group" role="group">
                     <button 
-                        onClick={() => handleDeleteInput(row.id)} 
+                        onClick={() => handleDeleteUser(row.id)}
                         className='btn btn-danger btn-sm rounded-2 p-2'
                         title="Eliminar"
                     >
@@ -94,8 +78,7 @@ function Input(){
                     </button>
                     <button 
                         onClick={() => {
-                            console.log('Editando insumo:', row); 
-                            setInputSelected(row);
+                            setUserSelected(row);
                         }} 
                         className='btn btn-primary btn-sm ms-2 rounded-2 p-2'
                         title="Editar"
@@ -105,15 +88,14 @@ function Input(){
                 </div>
             ),
             ignoreRowClick: true,
-        }
+        },
     ];
-
-    
     return(
+
         <div className='container-fluid mt-4'>
             <div className='card'>
                 <div className='card-header text-white' style={{background:'#176FA6'}}>
-                    <h1 className='h3'>Gestión de Insumos</h1>
+                    <h1 className='h4'>Gestión de Usuarios</h1>
                 </div>
 
                 <div className='card-body p-4'>
@@ -122,14 +104,14 @@ function Input(){
                             onClick={() => setShowModal(true)} 
                             className='btn btn-success'
                         >
-                            <i className="bi bi-plus-circle"></i> Crear Insumo
+                            <i className="bi bi-plus-circle"></i> Crear Usuario
                         </button>
                     </div>
 
                     <DataTable
-                        title="Lista de Insumos"
+                        title="Lista de Usuarios"
                         columns={columns}
-                        data={input}
+                        data={users}
                         pagination
                         paginationPerPage={5} 
                         paginationRowsPerPageOptions={[5, 10, 15, 20]} 
@@ -143,26 +125,26 @@ function Input(){
                         progressComponent={<div className="spinner-border text-primary" role="status">
                             <span className="visually-hidden">Cargando...</span>
                         </div>}
-                        noDataComponent={<div className="alert alert-info">No hay insumos registrados</div>}
+                        noDataComponent={<div className="alert alert-info">No hay usuarios registrados</div>}
                     />
                 </div>
             </div>
 
             {showModal && (
-                <CreateInputModal
+                <CreateUserModal
                     onClose={() => setShowModal(false)}
-                    onInputCreated={fetchInputs}
+                    onUserCreated={fetchUsers}
                 />
             )}
 
-            {inputSelected && (
-                <EditInputModal
-                    input={inputSelected}
-                    onClose={() => setInputSelected(null)}
-                    onInputUpdated={fetchInputs}
+            {userSelected && (
+                <EditUserModal
+                    user={userSelected}
+                    onClose={() => setUserSelected(null)}
+                    onUserUpdated={fetchUsers}
                 />
             )}
         </div>
     );
 }
-export default Input;
+export default User;

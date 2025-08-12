@@ -1,73 +1,72 @@
-import { useEffect, useState } from "react";
-import { deleteSupplier, getSuppliers } from "../../utils/enpoints/supplier";
-import DataTable, { Alignment } from "react-data-table-component";
-import CreateSupplierModal from "./CreateSupplierModal";
-import EditSupplierModal from "./EditSupplierModal";
+import React, { useEffect, useState } from "react";
+import { deleteProduct, getProducts } from "../../utils/enpoints/product";
+import DataTable from "react-data-table-component";
 import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions";
-import { errorDeleteSupplier, showConfirmDeleteSupplier, successDeleteSupplier } from "../../utils/alerts/alertsSupplier";
+import { errorDeleteProduct, showConfirmDeleteProducts, successDeleteProduct } from "../../utils/alerts/alertsProducts";
+import CreateProductModal from "./CreateProductModal";
+import EditProductModal from "./EditProductModal";
 
 
-function Supplier(){
-
-    const [supplier, setSupplier] = useState([]);
+function Product(){
+    const [product, setProduct] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [supplierSelected, setSupplierSelected] = useState(null);
+    const [productSelected, setProductSelected] = useState(null);
     const [pending, setPending] = useState(true);
 
     useEffect(() => {
-        fetchSupplier();
+        fetchProducts()
     }, []);
 
-    const fetchSupplier = async () => {
+    const fetchProducts = async () => {
         try {
             setPending(true);
-            const data = await getSuppliers();
-            setSupplier(data);
+            const data = await getProducts();
+            setProduct(data);
             setPending(false);
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error: ", error);
         } finally {
             setPending(false);
         };
     };
 
-    const hanleDeleteSupplier = async (id) => {
-        const result = await showConfirmDeleteSupplier();
+    const handleDeleteProduct = async (id) => {
+        const result = await showConfirmDeleteProducts();
         if (result.isConfirmed) {
             try {
-                await deleteSupplier(id);
-                await successDeleteSupplier();
-                await fetchSupplier();
+                await deleteProduct(id);
+                await successDeleteProduct();
+                await fetchProducts();
             } catch (error) {
-                console.error("Error al eliminar el proveedor: ",error);
-                await errorDeleteSupplier();
-            }
+                console.error("Error al eliminar al Producto", error);
+                await errorDeleteProduct();
+            };
         };
     };
 
     const columns = [
         {
-            name: 'Proveedor',
-            selector: row => `${row.id} ${row.name}`,
+            name: 'Producto',
+            selector: row => row.ProductName,
             sortable: true,
             center: true,
         },
         {
-            name: 'Correo',
-            selector: row => row.email,
+            name: 'Cantidad Inicial',
+            selector: row => row.InitialQuantity,
             sortable: true,
             center: true,
         },
         {
-            name: 'Direccion',
-            selector: row => row.Addres,
+            name: 'Stock Actual',
+            selector: row => row.CurrentStock,
             sortable: true,
             center: true,
         },
         {
-            name: 'Telefono',
-            selector: row => row.Phone,
+            name: 'Precio Unidad',
+            selector: row => row.UnityPrice,
             sortable: true,
             center: true,
         },
@@ -77,7 +76,7 @@ function Supplier(){
                 <div className="btn-group" role="group">
                     <button
                         onClick={()=> {
-                            hanleDeleteSupplier(row.id);
+                            handleDeleteProduct(row.id);
                         }}
                         className="btn btn-danger btn-sm rounded-2 p-2"
                         title="eliminar"
@@ -88,7 +87,7 @@ function Supplier(){
 
                         onClick={()=> {
                             console.log('Editando Proveedor',row);
-                            setSupplierSelected(row);
+                            setProductSelected(row);
                         }}
 
                         className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
@@ -106,23 +105,23 @@ function Supplier(){
         <div className='container-fluid mt-4'>
             <div className='card'>
                 <div className='card-header text-white' style={{background:'#176FA6'}}>
-                    <h1 className='h4'>Gestión de Proveedores</h1>
+                    <h1 className='h4'>Gestion de Productos</h1>
                 </div>
-
+                
                 <div className='card-body p-4'>
                     <div className='d-flex justify-content-between mb-3'>
-                        <button 
-                            onClick={() => setShowModal(true)} 
+                        <button
+                            onClick={() => setShowModal(true)}
                             className='btn btn-success'
                         >
-                            <i className="bi bi-plus-circle"></i> Crear Proveedor
+                            <i className='bi bi-plus-circle'></i> Crear Producto
                         </button>
                     </div>
 
                     <DataTable
-                        title="Lista de Proveedores"
+                        title="Lista de Productos"
                         columns={columns}
-                        data={supplier} 
+                        data={product}
                         pagination
                         paginationPerPage={5} 
                         paginationRowsPerPageOptions={[5, 10, 15, 20]} 
@@ -136,26 +135,25 @@ function Supplier(){
                         progressComponent={<div className="spinner-border text-primary" role="status">
                             <span className="visually-hidden">Cargando...</span>
                         </div>}
-                        noDataComponent={<div className="alert alert-info">No hay usuarios registrados</div>}
+                        noDataComponent={<div className="alert alert-info">No hay productos registrados</div>}
                     />
                 </div>
             </div>
-            
             {showModal && (
-                <CreateSupplierModal
-                onClose={() => setShowModal(false)}
-                onSupplierCreated={fetchSupplier}
-                />
-            )}
+                <CreateProductModal
+                        onClose={() => setShowModal(false)}
+                        onProductCreated={fetchProducts}
+                    />
+                )}
 
-            {supplierSelected && (
-                <EditSupplierModal
-                    supplier={supplierSelected}
-                    onClose={() => setSupplierSelected(null)}
-                    onSupplierUpdated={fetchSupplier}
+            {productSelected && (
+                <EditProductModal
+                    product={productSelected}
+                    onClose={() => setProductSelected(null)}
+                    onProductUpdate={fetchProducts}
                 />
             )}
         </div>
     );
-}
-export default Supplier;
+} 
+export default Product;
