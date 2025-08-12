@@ -127,11 +127,28 @@ function Purchase() {
                     <button
                         className="btn btn-danger btn-sm w-30 me-3 rounded-2 p-2"
                         title="eliminar"
-                        onClick={() => handleDelete(row.id)}
+                        onClick={() => {
+                            Swal.fire({
+                                title: "¿Está seguro?",
+                                text: "Esta acción no se puede deshacer",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#d33",
+                                cancelButtonColor: "#1ce74bff",
+                                background: "#e9f0f9ff",
+                                confirmButtonText: "Sí, eliminar",
+                                cancelButtonText: "Cancelar"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    handleDelete(row.id);
+                                    Swal.fire("Eliminado", "El registro ha sido eliminado.", "success");
+                                }
+                            });
+                        }}
                     >
                         <i className="bi bi-trash fs-6"></i>
                     </button>
-                </div>
+                </div >
             ),
             ignoreRowClick: true,
             center:true
