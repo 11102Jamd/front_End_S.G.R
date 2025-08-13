@@ -21,7 +21,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 // import Compras from './components/compras/PurchaseList';
 import './App.css';
 
-
 function App() {
   return (
     <AuthProvider>

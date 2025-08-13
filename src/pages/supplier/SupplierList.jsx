@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { deleteSupplier, getSuppliers } from "../../utils/enpoints/supplier";
-import DataTable, { Alignment } from "react-data-table-component";
+import DataTable from "react-data-table-component";
 import CreateSupplierModal from "./CreateSupplierModal";
 import EditSupplierModal from "./EditSupplierModal";
 import customStyles from "../../utils/styles/customStyles";
@@ -122,7 +122,7 @@ function Supplier(){
                     <DataTable
                         title="Lista de Proveedores"
                         columns={columns}
-                        data={supplier}
+                        data={supplier} 
                         pagination
                         paginationPerPage={5} 
                         paginationRowsPerPageOptions={[5, 10, 15, 20]} 
@@ -136,7 +136,7 @@ function Supplier(){
                         progressComponent={<div className="spinner-border text-primary" role="status">
                             <span className="visually-hidden">Cargando...</span>
                         </div>}
-                        noDataComponent={<div className="alert alert-info">No hay usuarios registrados</div>}
+                        noDataComponent={<div className="alert alert-info">No hay Proveedores registrados</div>}
                     />
                 </div>
             </div>

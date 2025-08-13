@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 /**
- * Intsacia preconfigurada de axios para realizar solicitudes HTTP
+ * Instacia preconfigurada de axios para realizar solicitudes HTTP
  */
 const api = axios.create({
     baseURL: 'http://localhost:8000/api', // URL base de la API
@@ -19,9 +19,9 @@ const api = axios.create({
  */
 api.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
-        if (token) {
+    if (token) {
         config.headers.Authorization = `Bearer ${token}`;
-        }
+    }
     return config;
 }, error => Promise.reject(error));
 
