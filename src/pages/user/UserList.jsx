@@ -8,16 +8,33 @@ import EditUserModal from "./EditUserModal";
 import { errorDeleteUser, showConfirmDeleteUser, successDeleteUser } from "../../utils/alerts/alertsUsers";
 
 
+/**
+ * Componente para la gestión de usuarios.
+ * - Lista usuarios en una tabla interactiva.
+ * - Permite crear, editar y eliminar usuarios.
+ * - Muestra modales para creación y edición.
+ */
 function User(){
+    // Estado que almacena la lista de Usuarios
     const [users, setUsers] = useState([]);
+
+    // Estado que controla la visibilidad del modal
     const [showModal, setShowModal] = useState(false);
+
+    // Usuario seleccionado para la edicion
     const [userSelected, setUserSelected] = useState(null);
+
+    // Indica si la tabla esta cargando datos
     const [pending, setPending] = useState(true);
 
+    // Carga inicial de usuarios al montar un componente
     useEffect(() => {
         fetchUsers();
     }, []);
 
+    /**
+     * Obtiene la lista de usuarios desde la api y actuliza el estado
+     */
     const fetchUsers = async () => {
         try {
             setPending(true);
@@ -25,11 +42,18 @@ function User(){
             setUsers(data);
             setPending(false);
         } catch (error) {
-            console.error("Error al obtner los uausrios", error);
+            console.error("Error al obtener los usuarios", error);
             setPending(false);
         };
     };
 
+    /**
+     * Maneja la eliminación de un usuario.
+     * - Confirma la acción.
+     * - Llama a la API para eliminarlo.
+     * - Refresca la lista si es exitoso.
+     * @param {number|string} id - ID del usuario a eliminar.
+     */
     const handleDeleteUser = async (id) => {
         const result = await showConfirmDeleteUser();
         if (result.isConfirmed) {
@@ -44,6 +68,7 @@ function User(){
         }
     }
 
+    // configuracion de columnas para la tabla de usuarios
     const columns = [
         {
             name: 'Nombres',
@@ -130,6 +155,7 @@ function User(){
                 </div>
             </div>
 
+            {/* Modal de creación de Usuario*/}
             {showModal && (
                 <CreateUserModal
                     onClose={() => setShowModal(false)}
@@ -137,6 +163,7 @@ function User(){
                 />
             )}
 
+            {/* Modal de Edicion de Usuario */}
             {userSelected && (
                 <EditUserModal
                     user={userSelected}

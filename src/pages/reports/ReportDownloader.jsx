@@ -5,13 +5,32 @@ import { useState } from "react";
 import 'react-datepicker/dist/react-datepicker.css';
 import { exportPdfReportManufacturing } from "../../utils/enpoints/reportPdfManufacturing";
 
+/**
+ * Componente para descargar reportes PDF de diferentes tipos (compras, pedidos, fabricación).
+ * 
+ * Permite seleccionar un tipo de reporte y un rango de fechas, y genera un archivo PDF descargable.
+ * @component
+ */
 const ReportDownloader = () => {
+    // Estado para el tipo de reporte seleccionado
     const [reportType, setReportType] = useState('purchases');
+
+    // Estado para la fecha de inicio
     const [startDate, setStartDate] = useState(null);
+
+    // Estado para la fecha de Fin
     const [endDate, setEndDate] = useState(null);
+
+    // Estado de control de carga
     const [isLoading, setIsLoading] = useState(false);
+
+    // Estado para manejar los errores
     const [error, setError] = useState(null);
 
+    /**
+     * Maneja la generación y descarga del reporte PDF según los filtros seleccionados.
+     * Valida que las fechas sean correctas y llama a la API correspondiente.
+     */
     const handleDownload = async () => {
         if (!startDate || !endDate) {
             setError('Debe seleccionar ambas fechas');
@@ -47,6 +66,7 @@ const ReportDownloader = () => {
                 });
             }
 
+            // Crear enlace para descarga del archivo PDF
             const blob = new Blob([response], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -71,6 +91,7 @@ const ReportDownloader = () => {
                 </div>
                 
                 <div className="card-body">
+                    {/* Selector de Tipo de Reporte */}
                     <div className="row">
                         <div className="col-md-12 mb-3">
                             <label className="form-label">Tipo de Reporte</label>
@@ -86,6 +107,7 @@ const ReportDownloader = () => {
                         </div>
                     </div>
 
+                    {/* Selección de fechas */}
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Fecha de Inicio: </label>

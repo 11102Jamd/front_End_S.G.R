@@ -141,3 +141,24 @@ export const errorFormUser = () => {
         color:"#ffffff"
     });
 };
+
+
+export const errorLogin = () => {
+    return Swal.fire({
+        title:"Error",
+        text:"Usuario no identificado en el sistema",
+        icon:"error",
+        showClass: {
+            popup: `
+            animate__animated
+            animate__fadeInUp
+            animate__faster
+            `
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutDown animate__faster'
+        },
+        background:"#3E608C",
+        color:"#f6f2f2"
+    });
+};

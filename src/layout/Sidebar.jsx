@@ -1,4 +1,3 @@
-// src/layout/Sidebar.jsx
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../App.css';
@@ -13,6 +12,7 @@ function Sidebar() {
         setIsOpen(!isOpen);
     };
 
+    // si no existe un usuario autenticad no rederizar el sidebar
     if (!user) return null;
 
     return (

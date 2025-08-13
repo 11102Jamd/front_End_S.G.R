@@ -4,7 +4,14 @@ import { validateEmail, validateName } from "../../utils/validations/validationF
 import { errorCreateUser, errorFormUser, successCreateUser } from "../../utils/alerts/alertsUsers";
 
 
+/**
+ * Componente modal para crear un nuevo usuario
+ * @param {function} onClose - Cierra el modal
+ * @param {function} onUserCreated - Callback para actualizar la lista de usuarios después de crear uno
+ */
 function CreateUserModal({onClose, onUserCreated}){
+
+    // Estado para almacenar los datos del nuevo usuario
     const [newUser, setNewUser] = useState({
         name1:'',
         name2:'',
@@ -15,8 +22,13 @@ function CreateUserModal({onClose, onUserCreated}){
         rol:''
     });
 
+    // Estado para manejar mensajes de error por campo
     const [errors, setErrors] = useState({});
 
+    /**
+     * Valida el formulario de creación de usuario
+     * Retorna true si todos los campos son válidos
+     */
     const validateUserForm = () => {
         const newErrors = {
             name1: validateName(newUser.name1, 'Primer Nombre del Usuario'),
@@ -29,9 +41,14 @@ function CreateUserModal({onClose, onUserCreated}){
 
         setErrors(newErrors);
 
+        // Si algún valor de error no es null, la validación falla
         return !Object.values(newErrors).some(error => error !== null);
     };
 
+    /**
+     * Maneja los cambios en los inputs del formulario
+     * Incluye validación en tiempo real si ya había errores
+     */
     const handleChange = (e) => {
         const { id, value } = e.target;
         setNewUser(prev => ({ ...prev, [id]: value }));
@@ -65,16 +82,23 @@ function CreateUserModal({onClose, onUserCreated}){
         };
     };
 
+    /**
+     * Envía la solicitud para crear un usuario
+     * Si la validación falla, muestra una alerta de error
+     */
     const createUserHandler = async () => {
         if (!validateUserForm()) {
             await errorFormUser();
             return;
         }
         try {
+             // Llamada al endpoint de creación
             await createUser(newUser);
             await successCreateUser();
-            onUserCreated();
-            onClose();
+            onUserCreated(); // Actualiza la lista de usuarios
+            onClose(); // Cierra el modal
+
+            // Resetea el formulario
             setNewUser({
                 name1:'',
                 name2:'',
@@ -100,6 +124,7 @@ function CreateUserModal({onClose, onUserCreated}){
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
+                        {/*Campo Primer Nombre */}
                         <div className="mb-3">
                             <label htmlFor="name1" className="form-label">Primer Nombre</label>
                             <input 
@@ -113,6 +138,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             {errors.name1 && <div className="invalid-feedback">{errors.name1}</div>}
                         </div>
                         
+                        {/*Campo Segundo Nombre */}
                         <div className="mb-3">
                             <label htmlFor="name2" className="form-label">Segundo Nombre</label>
                             <input 
@@ -125,6 +151,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             {errors.name2 && <div className="invalid-feedback">{errors.name2}</div>}
                         </div>
                         
+                        {/*Campo Primer Apellido */}
                         <div className="mb-3">
                             <label htmlFor="surname1" className="form-label">Primer Apellido</label>
                             <input 
@@ -138,6 +165,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             {errors.surname1 && <div className="invalid-feedback">{errors.surname1}</div>}
                         </div>
                         
+                        {/*Campo Segundo Apellido */}
                         <div className="mb-3">
                             <label htmlFor="surname2" className="form-label">Segundo Apellido</label>
                             <input 
@@ -150,6 +178,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             {errors.surname2 && <div className="invalid-feedback">{errors.surname2}</div>}
                         </div>
                         
+                        {/*Campo correo */}
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Correo Electrónico</label>
                             <input 
@@ -163,6 +192,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
                         
+                        {/*Campo Contraseña */}
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">Contraseña</label>
                             <input 
@@ -175,6 +205,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             />
                         </div>
                         
+                        {/*Option de Rol */}
                         <div className="mb-4">
                             <label htmlFor="rol" className="form-label">Rol</label>
                             <select 

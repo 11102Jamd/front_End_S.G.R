@@ -3,11 +3,26 @@ import { errorEditUser, errorFormUser, successEditUser } from "../../utils/alert
 import { updateUser } from "../../utils/enpoints/users";
 import { validateName, validateEmail } from "../../utils/validations/validationFields";
 
+/**
+ * Componente modal para editar un usuario existente.
+ *
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.user - Datos actuales del usuario a editar.
+ * @param {Function} props.onClose - Función para cerrar el modal.
+ * @param {Function} props.onUserUpdated - Función para recargar la lista de usuarios tras la actualización.
+ */
 function EditUserModal({user, onClose, onUserUpdated}){
+    // Estado para almacenar los datos actualizados del usuario
     const [userUpdate, setUserUpdate] = useState(user);
 
+    // Estado para manejar los errores
     const [errors, setErrors] = useState({});
 
+    /**
+     * Valida el formulario de edición del usuario.
+     * @returns {boolean} - Retorna `true` si no hay errores, `false` en caso contrario.
+     */
     const validateUserEditForm = () => {
         const newErrors = {
             name1: validateName(userUpdate.name1, 'Primer Nombre del Usuario'),
@@ -23,7 +38,13 @@ function EditUserModal({user, onClose, onUserUpdated}){
         return !Object.values(newErrors).some(error => error !== null);
     };
 
+    /**
+     * Maneja cambios en los campos del formulario.
+     * @param {React.ChangeEvent<HTMLInputElement|HTMLSelectElement>} e - Evento del input.
+     */
     const handleChange = (e) => {
+
+        // Revalida el campo modificado si ya tenía errores
         const { id, value } = e.target;
 
         setUserUpdate(prev => ({ ...prev, [id]: value }));
@@ -56,7 +77,9 @@ function EditUserModal({user, onClose, onUserUpdated}){
         };
     };
 
-
+    /**
+     * Envía los datos actualizados al servidor y maneja la respuesta.
+     */
     const updateUserHandler = async () => {
         if (!validateUserEditForm()) {
             await errorFormUser();
@@ -90,6 +113,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
+                        {/*Campo de primer Nombre */}
                         <div className="mb-3">
                             <label htmlFor="name1" className="form-label">Primer Nombre</label>
                             <input 
@@ -103,6 +127,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
                             {errors.name1 && <div className="invalid-feedback">{errors.name1}</div>}
                         </div>
                         
+                        {/*Campo de Segundo Nombre */}
                         <div className="mb-3">
                             <label htmlFor="name2" className="form-label">Segundo Nombre</label>
                             <input 
@@ -115,6 +140,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
                             {errors.name2 && <div className="invalid-feedback">{errors.name2}</div>}
                         </div>
                         
+                        {/*Campo de primer apellido */}
                         <div className="mb-3">
                             <label htmlFor="surname1" className="form-label">Primer Apellido</label>
                             <input 
@@ -128,6 +154,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
                             {errors.surname1 && <div className="invalid-feedback">{errors.surname1}</div>}
                         </div>
                         
+                        {/*Campo de segundo apellido*/}
                         <div className="mb-3">
                             <label htmlFor="surname2" className="form-label">Segundo Apellido</label>
                             <input 
@@ -140,6 +167,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
                             {errors.surname2 && <div className="invalid-feedback">{errors.surname2}</div>}
                         </div>
                         
+                        {/*Campo de correo */}
                         <div className="mb-3">
                             <label htmlFor="email" className="form-label">Correo Electrónico</label>
                             <input 
@@ -153,6 +181,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
                         
+                        {/*Option de rol */}
                         <div className="mb-4">
                             <label htmlFor="rol" className="form-label">Rol</label>
                             <select 

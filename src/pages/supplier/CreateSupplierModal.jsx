@@ -33,26 +33,26 @@ function CreateSupplierModal({onClose, onSupplierCreated}){
         setNewSupplier(prev => ({ ...prev, [id]: value }));
         
         // Validación en tiempo real (opcional)
-        if (errors[id]) {
-            let error = null;
-            switch(id) {
-                case 'name':
-                    error = validateName(value, 'Nombre del proveedor');
-                    break;
-                case 'email':
-                    error = validateEmail(value);
-                    break;
-                case 'Addres':
-                    error = validateAddress(value);
-                    break;
-                case 'Phone':
-                    error = validatePhone(value);
-                    break;
-                default:
-                    break;
-            }
-            setErrors(prev => ({ ...prev, [id]: error }));
+        
+        let error = null;
+        switch(id) {
+            case 'name':
+                error = validateName(value, 'Nombre del proveedor');
+                break;
+            case 'email':
+                error = validateEmail(value);
+                break;
+            case 'Addres':
+                error = validateAddress(value);
+                break;
+            case 'Phone':
+                error = validatePhone(value);
+                break;
+            default:
+                break;
         }
+        setErrors(prev => ({ ...prev, [id]: error }));
+    
     };
 
 
