@@ -109,7 +109,7 @@ function EditUserModal({user, onClose, onUserUpdated}){
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                     <div className="modal-header text-white" style={{backgroundColor:' #176FA6'}}>
-                        <h5 className="modal-title">Crear Nuevo Usuario</h5>
+                        <h5 className="modal-title">Editar Usuario</h5>
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
