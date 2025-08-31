@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createInput } from "../../utils/enpoints/input";
-import { errorCreateInput, succesCreateInput } from "../../utils/alerts/alertsInputs";
+import { errorCreateInput, successCreateInput } from "../../utils/alerts/alertsInputs";
 import { validateName } from "../../utils/validations/validationFields";
 
 function CreateInputModal({ onClose, onInputCreated }) {
@@ -43,7 +43,7 @@ function CreateInputModal({ onClose, onInputCreated }) {
         }
         try {
             await createInput(newInput);
-            await succesCreateInput();
+            await successCreateInput();
             onInputCreated();
             onClose();
             setNewInput({

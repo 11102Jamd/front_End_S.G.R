@@ -8,8 +8,8 @@ import MainContent from './layout/MainContent';
 import Footer from './layout/Footer';
 import Login from './pages/auth/Login';
 import Welcome from './pages/welcome/Welcome';
-
-
+import Input from './pages/inputs/InputList';
+import Order from './pages/order/Order';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
@@ -49,7 +49,7 @@ function App() {
             }/> */}
 
 
-        
+
 
             {/* <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
@@ -57,11 +57,11 @@ function App() {
               </RoleBasedControl>
             } /> */}
 
-            {/* <Route path='/insumos' element={
+            <Route path='/insumos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
                 <Input />
               </RoleBasedControl>
-            } /> */}
+            } />
 
             {/* <Route path='/productos' element={<Product />} /> */}
 
@@ -78,11 +78,11 @@ function App() {
               </RoleBasedControl>
             } /> */}
 
-            {/* <Route path='/compras' element={
+            <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Order />
               </RoleBasedControl>
-            } /> */}
+            } />
 
 
             {/* <Route path='/fabricacion' element={

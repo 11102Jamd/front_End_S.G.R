@@ -3,7 +3,7 @@ import api from "../axiosConfig";
 export const getOrder = async () => {
     try {
         const response = await api.get("/order");
-        return  response.data;
+        return response.data;
     } catch (error) {
         console.error("Error al obtener lista de Compras", error);
     }
@@ -28,3 +28,14 @@ export const deleteOrder = async (id) => {
         throw error;
     }
 };
+
+
+export const showOrder = async (id) => {
+    try {
+        const response = await api.get(`/order/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error al traer las ordenes de compra", error);
+        throw error;
+    }
+}

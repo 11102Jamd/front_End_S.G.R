@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 
+
 /**
  * 
  * @returns Alertas de creacion de Insumo
