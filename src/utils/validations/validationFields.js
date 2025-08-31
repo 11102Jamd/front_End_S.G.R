@@ -76,9 +76,12 @@ export const validateQuantity = (value) => {
 export const validatePrice = (value) => {
     if (!value) return 'El precio es requerido';
 
-    if (!/^[0-9]{1,5}(,[0-9]{1,2})?$/.test(value)) {
-        return 'Formato inválido. Solo se permiten números y una coma, máximo 7 caracteres en total';
+    // Hasta 7 enteros, opcionalmente un punto/coma con hasta 2 decimales
+    // El separador debe ir después del primer dígito
+    if (!/^[0-9]{1,7}([.,][0-9]{1,2})?$/.test(value)) {
+        return 'Formato inválido. Se permiten hasta 7 enteros y opcionalmente decimales (máx 2) con . o ,';
     }
-    
+
     return null;
 };
+

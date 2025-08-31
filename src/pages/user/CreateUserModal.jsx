@@ -223,7 +223,7 @@ function CreateUserModal({onClose, onUserCreated}){
                             {errors.rol && <div className="invalid-feedback">{errors.rol}</div>}
                         </div>
                     </div>
-                    <div className="modal-footer">
+                    <div className="modal-footer" style={{alignItems:'center'}}>
                         <button type="button" className="btn btn-primary" onClick={createUserHandler} style={{backgroundColor:' #176FA6'}}>
                             Guardar Usuario
                         </button>
