@@ -3,20 +3,21 @@ import Swal from "sweetalert2";
 import api from "../../utils/axiosConfig";
 import DataTable from "react-data-table-component";
 import customStyles from "../../utils/styles/customStyles";
-import { getInputs } from "../../utils/api/inputs";
-import { getSuppliers } from "../../utils/api/supplier";
+import { getInputs } from "../../utils/enpoints/input";
+import { getSuppliers } from "../../utils/enpoints/supplier";
 
-
-function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
+function CreateOrderModal({ onClose, onOrderCreated }) {
+    
     const today = new Date().toISOString().split('T')[0];
-
     const [items, setItems] = useState([]);
-    const [newPurchase, setNewPurchase] = useState({
-        ID_supplier: '',
-        ID_input: '',
-        InitialQuantity: '',
-        UnitMeasurement: '',
-        UnityPrice: ''
+
+    const [newOrder, setNewOrder] = useState({
+        supplier_name: '',
+        order_date: '',
+        items: '',
+        input_id: '',
+        quantity_total: '',
+        unit_price: ''
     });
 
     const [loadingSuppliers, setLoadingSuppliers] = useState(true);
@@ -37,7 +38,7 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
     useEffect(() => {
         const fetchInput = async () => {
             try {
-                const response= await getInputs();
+                const response = await getInputs();
                 setInputs(response); // Renombrado a inputs para que coincida con el valor en el formulario
             } catch (error) {
                 console.error("Error al obtener los insumos:", error);
@@ -62,7 +63,7 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
         fetchSuppliers();
     }, []);
 
-    const handleAddItem = () => {
+    /*const handleAddItem = () => {
         const { ID_input, InitialQuantity, UnitMeasurement, UnityPrice } = newPurchase;
         // Validar que todos los campos estén completos antes de agregar el item
         if (!ID_input || !InitialQuantity || !UnitMeasurement || !UnityPrice) {
@@ -84,28 +85,76 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
             UnitMeasurement: '',
             UnityPrice: ''
         });
-    };
+    };*/
+
+
+    const handleAddItem = () => {
+        const { ID_input, InitialQuantity, UnitMeasurement, UnityPrice } = newOrder;
+        'order_id',
+        'input_id',
+        'quantity_total',
+        'quantity_remaining',
+        'unit_price',
+        'subtotal_price',
+        'batch_number',
+        'received_date'
+        let errorMessage = "";
+
+        if (!ID_input) {
+            errorMessage = "Debe seleccionar un insumo";
+        } else if (!InitialQuantity || InitialQuantity <= 0) {
+            errorMessage = "La cantidad debe ser mayor a 0";
+        } else if (!UnitMeasurement) {
+            errorMessage = "Debe seleccionar la unidad de medida";
+        } else if (!UnityPrice || UnityPrice <= 0) {
+            errorMessage = "El precio debe ser mayor a 0";
+        }
+
+        if (errorMessage) {
+            return Swal.fire('Error', errorMessage, 'warning');
+        }
+
+        setItems([
+            ...items,
+            {
+                ID_input: parseInt(ID_input),
+                InitialQuantity: parseFloat(InitialQuantity),
+                UnitMeasurement: UnitMeasurement.trim().toLowerCase(),
+                UnityPrice: parseFloat(UnityPrice)
+            }
+        ]);
+
+        setNewOrder({
+            //trae los valores del array "..."
+            ...newOrder,
+            ID_input: "",
+            InitialQuantity: '',
+            UnitMeasurement: '',
+            UnityPrice: ''
+        });
+    }
 
     const handleDeleteItem = (index) => {
         setItems(items.filter((_, i) => i !== index));
     };
 
-    const createPurchase = async () => {
-        if (!newPurchase.ID_supplier || items.length === 0) {
+    //constante importante para crear las ordenes de compra
+    const createOrder = async () => {
+        if (!newOrder.ID_supplier || items.length === 0) {
             return Swal.fire('Error', 'Debe ingresar proveedor y al menos un insumo', 'warning');
         }
-        const purchaseData = {
-            ID_supplier: parseInt(newPurchase.ID_supplier),
+        const orderData = {
+            ID_supplier: parseInt(newOrder.ID_supplier),
             PurchaseOrderDate: today,
             inputs: items
         };
         try {
-            await api.post('/purchaseorder', purchaseData);
+            await api.post('/order', orderData);
             await Swal.fire('Éxito', 'Orden de Compra creada', 'success');
-            onPurchaseCreated();
+            onOrderCreated();
             onClose();
             setItems([]);
-            setNewPurchase({
+            setNewOrder({
                 ID_supplier: '',
                 ID_input: '',
                 InitialQuantity: '',
@@ -151,8 +200,8 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
                                     <label className="from-label">Proveedor</label>
                                     <select
                                         className="form-select form-select-sm"
-                                        value={newPurchase.ID_supplier}
-                                        onChange={(e) => setNewPurchase({ ...newPurchase, ID_supplier: e.target.value })}
+                                        value={newOrder.ID_supplier}
+                                        onChange={(e) => setNewOrder({ ...newOrder, ID_supplier: e.target.value })}
                                     >
                                         <option value="">Seleccione...</option>
                                         {loadingSuppliers ? (<option>Cargando proveedores...</option>
@@ -170,8 +219,8 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
                                     <select
                                         type="text"
                                         className="form-control form-control-sm"
-                                        value={newPurchase.ID_input}
-                                        onChange={(e) => setNewPurchase({ ...newPurchase, ID_input: e.target.value })}><option value=''>Seleccione...</option>
+                                        value={newOrder.ID_input}
+                                        onChange={(e) => setNewOrder({ ...newOrder, ID_input: e.target.value })}><option value=''>Seleccione...</option>
                                         {loadingItems ? (<option>Cargando insumos...</option>
                                         ) : (
                                             inputs.map((input) => (
@@ -187,16 +236,16 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"
-                                        value={newPurchase.InitialQuantity}
-                                        onChange={(e) => setNewPurchase({ ...newPurchase, InitialQuantity: e.target.value })}
+                                        value={newOrder.InitialQuantity}
+                                        onChange={(e) => setNewOrder({ ...newOrder, InitialQuantity: e.target.value })}
                                     />
                                 </div>
                                 <div className="mb-2">
                                     <label className="form-label">Unidad de Medida</label>
                                     <select
                                         className="form-select form-select-sm"
-                                        value={newPurchase.UnitMeasurement}
-                                        onChange={(e) => setNewPurchase({ ...newPurchase, UnitMeasurement: e.target.value })}
+                                        value={newOrder.UnitMeasurement}
+                                        onChange={(e) => setNewOrder({ ...newOrder, UnitMeasurement: e.target.value })}
                                     >
                                         <option value="">Seleccione...</option>
                                         <option value="kg">Kg</option>
@@ -209,8 +258,8 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
                                     <input
                                         type="number"
                                         className="form-control form-control-sm"
-                                        value={newPurchase.UnityPrice}
-                                        onChange={(e) => setNewPurchase({ ...newPurchase, UnityPrice: e.target.value })}
+                                        value={newOrder.UnityPrice}
+                                        onChange={(e) => setNewOrder({ ...newOrder, UnityPrice: e.target.value })}
                                     />
                                 </div>
                                 <button onClick={handleAddItem} className="btn btn-success btn-sm mt-2">
@@ -233,7 +282,7 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn btn-primary" onClick={createPurchase}>
+                        <button className="btn btn-primary" onClick={createOrder}>
                             Guardar
                         </button>
                         <button className="btn btn-danger" onClick={onClose}>
@@ -246,4 +295,4 @@ function CreatePurchaseModal({ onClose, onPurchaseCreated }) {
     );
 }
 
-export default CreatePurchaseModal;
+export default CreateOrderModal;
