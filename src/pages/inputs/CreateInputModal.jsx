@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import api from "../../utils/axiosConfig";
-import Swal from "sweetalert2";
 import { validateName } from "../../utils/validations/validationFields";
 import { createInputs } from "../../utils/enpoints/input";
 import { errorCreateInput, errorFormInput, successCreateInput } from "../../utils/alerts/alertsInputs";
