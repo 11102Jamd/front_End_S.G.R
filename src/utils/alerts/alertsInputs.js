@@ -1,71 +1,13 @@
 import Swal from "sweetalert2";
 
 /**
- * Alerta de eliminar insumo
+ * 
+ * @returns Alertas de creacion de Insumo
  */
-export const showConfirmDeleteInputs = () => {
-    return Swal.fire({
-        title:"¿Estas Seguro?",
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton:true,
-        confirmButtonColor:'#176FA6',
-        cancelButtonColor: '#f60606',
-        confirmButtonText: 'Si, Eliminar',
-        cancelButtonText: 'Cancelar',
-        showClass: {
-            popup: `
-            animate__animated
-            animate__fadeInUp
-            animate__faster
-            `
-        },
-        hideClass: {
-            popup: 'animate__animated animate__fadeOutDown animate__faster'
-        },
-        background:"#3E608C",
-        color:"#f6f2f2"
-    });
-};
-
-export const errorDeleteInput = () => {
-    return Swal.fire({
-        title:"Error",
-        text:"No se pudo eliminar el insumo",
-        icon:"error",
-        background:"#1a1616",
-        color:"#ffffff"
-    });
-};
-
-export const successDeleteInput = () => {
-    return Swal.fire({
-        title:"Exito",
-        text:"Insumo eliminado con exito",
-        icon:"success",
-        showClass: {
-            popup: `
-            animate__animated
-            animate__fadeInUp
-            animate__faster
-            `
-        },
-        hideClass: {
-            popup: 'animate__animated animate__fadeOutDown animate__faster'
-        },
-        background:"#3E608C",
-        color:"#f6f2f2"
-    });
-};
-
-/**
- * Alertas de creacion de insumo
- */
-
 export const successCreateInput = () => {
     return Swal.fire({
         title:"Exito",
-        text:"Proveedor creado con exito",
+        text:"Insumo creado con exito",
         icon:"success",
         showClass: {
             popup: `
@@ -77,28 +19,46 @@ export const successCreateInput = () => {
         hideClass: {
             popup: 'animate__animated animate__fadeOutDown animate__faster'
         },
-        background:"#3E608C",
-        color:"#f6f2f2"
+        width :'350px',
+        background:"#e6fff5",
+        color:"#220900",
+        iconColor: '#77EE74',  // color del círculo del ícono
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#04A1FF",
+        customClass: {
+            popup: "my-swal-popup",
+            title: "my-swal-title",
+            htmlContainer: "my-swal-text",
+            confirmButton: "my-swal-button",
+        }
     });
 };
 
 export const errorCreateInput = () => {
     return Swal.fire({
         title:"Error",
-        text:"No se pudo crear el proveedor",
+        text:"No se pudo crear el insumo",
         icon:"error",
-        background:"#1a1616",
-        color:"#ffffff"
+        background:"#e6fff5",
+        color:"#220900",
+        width :'350px',
+        customClass: {
+            popup: "my-swal-popup",
+            title: "my-swal-title",
+            htmlContainer: "my-swal-text",
+            confirmButton: "my-swal-button",
+        }
     });
 };
 
 /**
- * Alertas de Edicion de Insumos
+ * 
+ * @returns Alertas de Edicion de Insumo
  */
-export const successEditInput = () => {
+export const successUpdateInput = () => {
     return Swal.fire({
         title:"Exito",
-        text:"Insumo Actualizado exitosamente",
+        text:"Insumo actualizado con exito",
         icon:"success",
         showClass: {
             popup: `
@@ -110,30 +70,34 @@ export const successEditInput = () => {
         hideClass: {
             popup: 'animate__animated animate__fadeOutDown animate__faster'
         },
-        background:"#3E608C",
-        color:"#f6f2f2"
+        width :'350px',
+        background:"#e6fff5",
+        color:"#220900",
+        iconColor: '#77EE74',  // color del círculo del ícono
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#04A1FF",
+        customClass: {
+            popup: "my-swal-popup",
+            title: "my-swal-title",
+            htmlContainer: "my-swal-text",
+            confirmButton: "my-swal-button",
+        }
     });
 };
 
-export const errorEditInput = () => {
+export const errorUpdateInput = () => {
     return Swal.fire({
         title:"Error",
-        text:"No se pudo actualizar el Insumo",
+        text:"No se pudo actualizar insumo",
         icon:"error",
-        background:"#1a1616",
-        color:"#ffffff"
-    });
-};
-/**
- * Alerta error de formulario: 
- */
-
-export const errorFormInput = () => {
-    return Swal.fire({
-        title:"Error",
-        text:"Por favor, corrige los errores del formulario",
-        icon:"error",
-        background:"#1a1616",
-        color:"#ffffff"
+        background:"#Afffff",
+        color:"#220900",
+        width :'350px',
+        customClass: {
+            popup: "my-swal-popup",
+            title: "my-swal-title",
+            htmlContainer: "my-swal-text",
+            confirmButton: "my-swal-button",
+        }
     });
 };

@@ -2,7 +2,7 @@ import api from "../axiosConfig";
 
 export const getInputs = async () => {
     try {
-        const response = await api.get("/inputs");
+        const response = await api.get("/input");
         return response.data;
     } catch (error) {
         console.error("Error al obtener los insumos", error);
@@ -10,9 +10,9 @@ export const getInputs = async () => {
     };
 };
 
-export const createInputs = async (inputData) => {
+export const createInput = async (inputData) => {
     try {
-        const response = await api.post("/inputs", inputData);
+        const response = await api.post("/input", inputData);
         return response.data;
     } catch (error) {
         console.error("Error al crear el insumo", error);
@@ -22,7 +22,7 @@ export const createInputs = async (inputData) => {
 
 export const updateInputs = async (id, inputData) => {
     try {
-        const response = await api.put(`/inputs/${id}`, inputData);
+        const response = await api.put(`/input/${id}`, inputData);
         return response.data;
     } catch (error) {
         console.error("Error al actualizar los datos", error);
@@ -32,7 +32,7 @@ export const updateInputs = async (id, inputData) => {
 
 export const deleteInputs = async (id) => {
     try {
-        const response = await api.delete(`/inputs/${id}`);
+        const response = await api.delete(`/input/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error al eliminar el insumo", error);
