@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { createInput } from "../../utils/enpoints/input";
+import { errorCreateInput, successCreateInput } from "../../utils/alerts/alertsInputs";
 import { validateName } from "../../utils/validations/validationFields";
-import { createInputs } from "../../utils/enpoints/input";
-import { errorCreateInput, errorFormInput, successCreateInput } from "../../utils/alerts/alertsInputs";
 
-function CreateInputModal({onClose, onInputCreated}){
+function CreateInputModal({ onClose, onInputCreated }) {
     const [newInput, setNewInput] = useState({
-        InputName:''
+        name:'',
+        unit:''
     });
 
     const [errors, setErrors] = useState({});
 
     const validateFormInput = () => {
         const newErrors = {
-            InputName: validateName(newInput.InputName, 'Nombre del insumo'),
-        };
+            name: validateName(newInput.name, 'Nombre del insumo'),
+            unit: !newInput.unit ? 'La unidad de medida es requerida' : null        };
 
         setErrors(newErrors);
 
@@ -24,62 +25,78 @@ function CreateInputModal({onClose, onInputCreated}){
         const { id, value } = e.target;
         setNewInput(prev => ({ ...prev, [id]: value }));
         
-        // Validación en tiempo real (opcional)
-        if (errors[id]) {
-            let error = null;
-            switch(id) {
-                case 'InputName':
-                    error = validateName(value, 'Nombre del Insumo');
-                    break;
-                default:
-                    break;
-            }
-            setErrors(prev => ({ ...prev, [id]: error }));
+        let error = null;
+        switch(id) {
+            case 'name':
+                error = validateName(value, 'Nombre del Insumo');
+                break;
+            default:
+                break;
         }
+        setErrors(prev => ({ ...prev, [id]: error }));
     };
 
-    const createInputHandler = async() => {
+    const createInputHandler = async () => {
         if (!validateFormInput()) {
-            await errorFormInput();
+            errorCreateInput();
             return;
         }
         try {
-            await createInputs(newInput);
+            await createInput(newInput);
             await successCreateInput();
             onInputCreated();
             onClose();
             setNewInput({
-                InputName:'',
+                name:'',
+                unit:''
             });
         } catch (error) {
-            console.error('Error al crear el insumo', error);
+            console.error('error al crear el inusmo', error);
             await errorCreateInput();
         };
     };
 
     return(
         <div className="modal fade show" style={{display:'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-            <div className="modal-dialog modal-lg">
+            <div className="modal-dialog modal-sm">
                 <div className="modal-content">
                     <div className="modal-header text-white" style={{backgroundColor:' #176FA6'}}>
-                        <h5 className="modal-title">Crear Nuevo Insumo</h5>
+                        <h5 className="modal-title">Crear Insumo</h5>
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
                         <div className="mb-3">
-                            <label htmlFor="InputName" className="form-label">Insumo</label>
+                            <label htmlFor="name" className="form-label">Insumo</label>
                             <input 
                                 type="text" 
-                                className={`form-control form-control-lg ${errors.InputName ? 'is-invalid' : ''}`} 
-                                id="InputName" 
-                                value={newInput.InputName} 
+                                className={`form-control form-control-sm ${errors.name ? 'is-invalid' : ''}`} 
+                                id="name" 
+                                value={newInput.name} 
                                 onChange={handleChange} 
                                 required 
                             />
-                            {errors.InputName && <div className="invalid-feedback">{errors.InputName}</div>}
+                            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="unit" className="form-label">Unidad de Medida</label>
+                            <select 
+                                className={`form-control form-control-sm ${errors.unit ? 'is-invalid' : ''}`} 
+                                id="unit"
+                                value={newInput.unit}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Selecciona una Unidad</option>
+                                <option value="kg">kilogramos</option>
+                                <option value="lb">Libras</option>
+                                <option value="l">Litros</option>
+                                <option value="un">unidad</option>
+                                <option value="g">gramos</option>
+                            </select>
+                            {errors.unit && <div className="invalid-feedback">{errors.unit}</div>}
                         </div>
                     </div>
-                    <div className="modal-footer">
+                    <div className="modal-footer" style={{alignItems:'center'}}>
                         <button type="button" className="btn btn-primary" onClick={createInputHandler} style={{backgroundColor:' #176FA6'}}>
                             Guardar Insumo
                         </button>

@@ -8,18 +8,13 @@ import MainContent from './layout/MainContent';
 import Footer from './layout/Footer';
 import Login from './pages/auth/Login';
 import Welcome from './pages/welcome/Welcome';
-import Supplier from './pages/supplier/SupplierList';
 import Input from './pages/inputs/InputList';
-import User from './pages/user/UserList';
-import Manufacturing from './pages/manufacturing/ManufacturingList';
-import Product from './pages/products/ProductList';
-import ReportDownloader from './pages/reports/ReportDownloader';
+import Order from './pages/order/Order';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-// import Products from './components/productos/ProductsList';
-// import Pedidos from './components/pedidos/OrderList';
-// import Compras from './components/compras/PurchaseList';
 import './App.css';
+
+
 
 function App() {
   return (
@@ -49,46 +44,57 @@ function App() {
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <User/>
               </RoleBasedControl>
-            }/>
-            
-            <Route path='/proveedores' element={
+            }/> 
+
+
+
+
+            {/* <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <Supplier/>
+                <Purchase />
               </RoleBasedControl>
-            }/>
-            
+            } /> */}
+
             <Route path='/insumos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Input/>
+                <Input />
               </RoleBasedControl>
-            }/>
-            
-            <Route path='/productos' element={<Product/>}/>
-            
+            } />
+
+            {/* <Route path='/productos' element={<Product />} /> */}
+
             {/* <Route path='/pedidos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
-                <Pedidos/>
+                <Pedidos />
               </RoleBasedControl>
-            }/>
-            
+            } /> */}
+
+            {/* 
             <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <Compras/>
+                <Purchase />
               </RoleBasedControl>
-            }/> */}
-            
-            
-            <Route path='/fabricacion' element={
+            } /> */}
+
+            <Route path='/compras' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Order />
+              </RoleBasedControl>
+            } />
+
+
+            {/* <Route path='/fabricacion' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Manufacturing/>
+                <Manufacturing />
               </RoleBasedControl>
-            }/> 
+            } />
 
             <Route path='/reportes' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <ReportDownloader/>
+                <ReportDownloader />
               </RoleBasedControl>
-            }/> 
+            } /> */}
+
           </Route>
           
           <Route path="*" element={<Navigate to="/login" replace />} />
