@@ -1,17 +1,24 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getUser, login as apiLogin, logout as apiLogout } from '../api/auth';
 
+// Crear el contexto de autenticación
 const AuthContext = createContext();
 
+// Proveedor del contexto que envuelve la aplicación y maneja la autenticación
 export const AuthProvider = ({ children }) => {
+  // Estado para almacenar la información del usuario autenticado
   const [user, setUser] = useState(null);
+  
+    // Estado para manejar el indicador de carga (loading)
   const [loading, setLoading] = useState(true);
 
+    // useEffect para cargar datos del usuario si hay un token guardado
   useEffect(() => {
     const loadUser = async () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
+          // Obtiene datos del usuario autenticado desde la API
           const userData = await getUser();
           setUser(userData);
         }
@@ -26,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
+  // Función para iniciar sesión
   const login = async (email, password) => {
     try {
       const userData = await apiLogin(email, password);
@@ -37,6 +45,7 @@ export const AuthProvider = ({ children }) => {
     } 
   };
 
+    // Función para cerrar sesión
   const logout = async () => {
     try {
       await apiLogout();
@@ -53,7 +62,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Verifica si el usuario tiene un rol específico
   const hasRole = (role) => user?.rol === role;
+  // Verifica si el usuario tiene alguno de los roles dados
   const hasAnyRole = (roles) => roles.includes(user?.rol);
 
   return (
@@ -70,4 +81,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// Hook personalizado para acceder al contexto de autenticación
 export const useAuth = () => useContext(AuthContext);

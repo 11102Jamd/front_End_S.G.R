@@ -1,4 +1,3 @@
-// src/layout/Sidebar.jsx
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../App.css';
@@ -13,6 +12,7 @@ function Sidebar() {
         setIsOpen(!isOpen);
     };
 
+    // si no existe un usuario autenticad no rederizar el sidebar
     if (!user) return null;
 
     return (
@@ -89,6 +89,14 @@ function Sidebar() {
                     <Link to="/recipe" className="sidebar-link">
                         <i className="bi bi-journal-bookmark"></i>
                         {isOpen && <span>receta</span>}
+                    </Link>
+                )}
+
+
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/reportes" className="sidebar-link">
+                        <i className="bi bi-gear"></i>
+                        {isOpen && <span>Reportes</span>}
                     </Link>
                 )}
             </div>

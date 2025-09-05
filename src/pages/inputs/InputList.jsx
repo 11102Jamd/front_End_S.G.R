@@ -1,86 +1,59 @@
-import React, { use, useEffect, useState } from "react";
-import api from "../../utils/axiosConfig";
+import React, { useEffect, useState } from "react";
+import { getInputs } from "../../utils/enpoints/input";
 import DataTable from "react-data-table-component";
-import Swal from "sweetalert2";
 import CreateInputModal from "./CreateInputModal";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import customStyles from "../../utils/styles/customStyles";
 
-function Input(){
+function Input() {
     const [input, setInput] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [inputSelected, setInputSelected] = useState(null);
     const [pending, setPending] = useState(true);
 
 
-    useEffect(()=>{
-        getInputs();
+    useEffect(() => {
+        fetchInputs();
     }, []);
 
 
-    const getInputs = async () => {
+    const fetchInputs = async () => {
         try {
             setPending(true);
-            const response = await api.get('/inputs');
-            setInput(response.data);
+            const data = await getInputs();
+            setInput(data);
             setPending(false);
         } catch (error) {
             console.error('Error al mostrar todos los Insumos: ', error);
             setPending(false);
-        }
-    }
+        };
+    };
 
     const columns = [
         {
             name: 'Insumo',
-            selector: row => row.InputName,
+            selector: row => row.name,
             sortable: true,
         },
         {
-            name: 'Precio Unidad',
-            selector: row => {
-                const lastOrder = row.input_orders?.[0];
-                return lastOrder ? `${lastOrder.UnityPrice}`: 'N/A'
-            },
-            sortable: true,
-        },
-        {
-            name: 'Cantidad Inicial',
-            selector: row => {
-                const lastOrder = row.input_orders?.[0];
-                return lastOrder ? `${lastOrder.InitialQuantity} ${lastOrder.UnitMeasurement}`: 'N/A'
-            },
-            sortable: true,
-        },
-        {
-            name: 'Precio Cantidad',
-            selector: row => {
-                const lastOrder = row.input_orders?.[0];
-                return lastOrder ? `${lastOrder.PriceQuantity}`: 'N/A'
-            },
-            sortable: true,
-        },
-        {
-            name: 'Stock',
-            selector: row => `${row.CurrentStock} ${row.UnitMeasurementGrams}`,
+            name: 'Unidad de Medida',
+            selector: row => `${row.unit}`,
             sortable: true,
         },
         {
             name: 'Acciones',
             cell: row => (
                 <div className="btn-group" role="group">
-                    <button 
-                        onClick={() => deleteInput(row.id)} 
+                    <button
                         className='btn btn-danger btn-sm rounded-2 p-2'
                         title="Eliminar"
                     >
                         <i className="bi bi-trash fs-6"></i>
                     </button>
-                    <button 
+                    <button
                         onClick={() => {
-                            console.log('Editando insumo:', row); 
-                            setInputSelected(row);
-                        }} 
+                            console.log('Editando insumo:', row);
+                            // setInputSelected(row);
+                        }}
                         className='btn btn-primary btn-sm ms-2 rounded-2 p-2'
                         title="Editar"
                     >
@@ -92,18 +65,18 @@ function Input(){
         }
     ];
 
-    
-    return(
+
+    return (
         <div className='container-fluid mt-4'>
             <div className='card'>
-                <div className='card-header text-white' style={{background:'#176FA6'}}>
+                <div className='card-header text-white' style={{ background: '#176FA6' }}>
                     <h1 className='h3'>Gestión de Insumos</h1>
                 </div>
 
                 <div className='card-body p-4'>
                     <div className='d-flex justify-content-between mb-3'>
-                        <button 
-                            onClick={() => setShowModal(true)} 
+                        <button
+                            onClick={() => setShowModal(true)}
                             className='btn btn-success'
                         >
                             <i className="bi bi-plus-circle"></i> Crear Insumo
@@ -115,8 +88,8 @@ function Input(){
                         columns={columns}
                         data={input}
                         pagination
-                        paginationPerPage={5} 
-                        paginationRowsPerPageOptions={[5, 10, 15, 20]} 
+                        paginationPerPage={5}
+                        paginationRowsPerPageOptions={[5, 10, 15, 20]}
                         paginationComponentOptions={paginationOptions}
                         highlightOnHover
                         pointerOnHover
@@ -135,15 +108,16 @@ function Input(){
             {showModal && (
                 <CreateInputModal
                     onClose={() => setShowModal(false)}
-                    onInputCreated={getInputs}
+                    onInputCreated={fetchInputs}
                 />
             )}
 
-            {/* {inputSelected && (
+            {/* 
+            {inputSelected && (
                 <EditInputModal
                     input={inputSelected}
                     onClose={() => setInputSelected(null)}
-                    onInputUpdated={getInputs}
+                    onInputUpdated={fetchInputs}
                 />
             )} */}
         </div>
