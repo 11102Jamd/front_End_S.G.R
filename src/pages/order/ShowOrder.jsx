@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { showOrder } from "../../utils/enpoints/purchase";
 import { errorShowDetails } from "../../utils/alerts/alertsOrder";
+import { formatCurrency } from './format/format';
 
 function ShowOrder({ show, onHide, orderId }) {
     const [order, setOrder] = useState(null);
@@ -36,7 +37,7 @@ function ShowOrder({ show, onHide, orderId }) {
                 if (!signal.aborted) {
                     setLoading(false);
                 }
-            };
+            }
         };
 
         fetchOrderDetails();
@@ -52,7 +53,7 @@ function ShowOrder({ show, onHide, orderId }) {
 
     return (
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
-            <div className="modal-dialog modal-lg">
+            <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div className="modal-content">
                     <div className="modal-header text-white" style={{ backgroundColor: '#176FA6' }}>
                         <h5 className="modal-title">Detalles de Orden de Compra</h5>
@@ -74,6 +75,7 @@ function ShowOrder({ show, onHide, orderId }) {
                             </div>
                         ) : order ? (
                             <>
+                                {/* Información general */}
                                 <div className="mb-4">
                                     <h5>Información General</h5>
                                     <div className="row">
@@ -82,11 +84,12 @@ function ShowOrder({ show, onHide, orderId }) {
                                             <p><strong>Fecha de Orden:</strong> {new Date(order.order_date).toLocaleDateString()}</p>
                                         </div>
                                         <div className="col-md-6">
-                                            <p><strong>Total de la Orden:</strong> ${order.order_total?.toLocaleString() || '0'}</p>
+                                            <p><strong>Total de la Orden:</strong> ${formatCurrency(order.order_total)}</p>
                                         </div>
                                     </div>
                                 </div>
 
+                                {/* Tabla de Items */}
                                 <h5 className="mb-3">Items de la Orden</h5>
                                 <div className="table-responsive">
                                     <table className="table table-bordered">
@@ -99,13 +102,13 @@ function ShowOrder({ show, onHide, orderId }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {order.inputBatches?.length > 0 ? (
-                                                order.inputBatches.map((batch, index) => (
+                                            {order.batches?.length > 0 ? (
+                                                order.batches.map((batch, index) => (
                                                     <tr key={index}>
-                                                        <td>{batch.input?.name || 'Insumo ID:' `${batch.input_id}`}</td>
+                                                        <td>{batch.input?.name || `Insumo ID: ${batch.input_id}`}</td>
                                                         <td>{batch.quantity_total.toLocaleString()} {batch.input?.unit || 'un'}</td>
-                                                        <td>${batch.unit_price?.toLocaleString() || '0'}</td>
-                                                        <td>${(batch.subtotal_price).toLocaleString()}</td>
+                                                        <td>${formatCurrency(batch.unit_price)}</td>
+                                                        <td>${formatCurrency(batch.subtotal_price)}</td>
                                                     </tr>
                                                 ))
                                             ) : (
@@ -117,12 +120,13 @@ function ShowOrder({ show, onHide, orderId }) {
                                         <tfoot className="table-light">
                                             <tr>
                                                 <td colSpan="3" className="text-end fw-bold">Total:</td>
-                                                <td className="fw-bold">${order.order_total?.toLocaleString() || '0'}</td>
+                                                <td className="fw-bold">${formatCurrency(order.order_total)}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
 
+                                {/* Tabla de Lotes */}
                                 {order.batches?.length > 0 && (
                                     <>
                                         <h5 className="mb-3 mt-4">Lotes Recibidos</h5>
@@ -140,7 +144,7 @@ function ShowOrder({ show, onHide, orderId }) {
                                                 <tbody>
                                                     {order.batches.map((batch, index) => (
                                                         <tr key={index}>
-                                                            <td>{batch.input?.name || 'Insumo ID:' `${batch.input_id}`}</td>
+                                                            <td>{batch.input?.name || `Insumo ID: ${batch.input_id}`}</td>
                                                             <td>{batch.input?.unit}</td>
                                                             <td># {batch.batch_number || batch.id}</td>
                                                             <td>{batch.quantity_remaining || batch.quantity_total} g</td>

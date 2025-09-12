@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getInputs } from '../../utils/enpoints/input';
-//import { LoadingSpinner } from '../../Loading';
+// import { LoadingSpinner } from '../../Loading';
 
 function InputSelector({ currentItem, onItemChange, onAddItem }) {
     const [inputs, setInputs] = useState([]);
@@ -36,7 +36,7 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
             </div>
             <div className="card-body">
                 <div className="row g-3">
-                    <div className="col-md-5">
+                    <div className="col-12 col-md-5">
                         <label htmlFor="input_id" className="form-label">Insumo</label>
                         <select
                             className="form-select"
@@ -54,7 +54,7 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             ))}
                         </select>
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-12 col-md-2">
                         <label htmlFor="quantity_total" className="form-label">Cantidad</label>
                         <input
                             type="number"
@@ -68,7 +68,7 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             required
                         />
                     </div>
-                    <div className="col-md-2">
+                    <div className="col-12 col-md-2">
                         <label htmlFor="unit_price" className="form-label">Precio Unitario</label>
                         <input
                             type="number"
@@ -82,7 +82,21 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             required
                         />
                     </div>
-                    <div className="col-md-3 d-flex align-items-end">
+                    <div className="col-12 col-md-3">
+                        <label htmlFor='unit_measure' className='form-label'>Unidad</label>
+                        <select
+                            id='unit_measure'
+                            name='unit_measure'
+                            className='form-select'
+                        >
+                            <option value="g">gramos</option>
+                            <option value="kg">kilo gramos</option>
+                            <option value="lb">libras</option>
+                            <option value="l">litros</option>
+                            <option value="un">Unidades</option>
+                        </select>
+                    </div>
+                    <div className="col-12 col-md-3 d-flex align-items-end">
                         <button
                             onClick={onAddItem}
                             className="btn btn-primary w-100"
