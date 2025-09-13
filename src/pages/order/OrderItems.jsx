@@ -1,6 +1,8 @@
 import React from 'react';
 
+//Funcion que muestra la tabla con los insumos de una compra
 function OrderItemsTable({ items, onRemoveItem }) {
+    //Si no hay insumos muestra un mensaje de advertencia
     if (items.length === 0) {
         return (
             <div className="card">
@@ -11,6 +13,7 @@ function OrderItemsTable({ items, onRemoveItem }) {
         );
     }
 
+    //Renderiza el componente cuando existen insumos en la compra
     return (
         <div className="card">
             <div className="card-header bg-light">
@@ -34,10 +37,10 @@ function OrderItemsTable({ items, onRemoveItem }) {
                                 <tr key={index}>
                                     <td>{item.input_id}</td>
                                     <td>{item.quantity_total}</td>
-                                    <td> ${item.unit_price?.toFixed(0)}</td>                                   
+                                    <td> ${item.unit_price?.toFixed(0)}</td> {/*Precio unitario formateado*/}
                                     <td>
                                         <button
-                                            onClick={() => onRemoveItem(index)}
+                                            onClick={() => onRemoveItem(index)}//Al hacer clic elimina el insumo de la compra
                                             className="btn btn-danger btn-sm"
                                             title="Eliminar"
                                         >
@@ -57,9 +60,9 @@ function OrderItemsTable({ items, onRemoveItem }) {
                             <div className="card-body p-2">
                                 <p className="mb-1"><strong>ID Insumo:</strong> {item.input_id}</p>
                                 <p className="mb-1"><strong>Cantidad:</strong> {item.quantity_total}</p>
-                                <p className="mb-1"><strong>Precio Unitario:</strong> ${item.unit_price?.toFixed(3) || '0.000'}</p>
+                                <p className="mb-1"><strong>Precio Unitario:</strong> ${item.unit_price?.toFixed(3) || '0.000'}</p>{/*Precio unitario con un formato legible*/}
                                 <button
-                                    onClick={() => onRemoveItem(index)}
+                                    onClick={() => onRemoveItem(index)}//Funcion para eliminar el insummo
                                     className="btn btn-danger btn-sm mt-2"
                                     title="Eliminar"
                                 >

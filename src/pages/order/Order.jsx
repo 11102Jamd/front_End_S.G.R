@@ -9,21 +9,23 @@ import orderColumns from './OrderColumns';
 import { errorDeleteOrder, showConfirmDeleteOrder, successDeleteOrder } from "../../utils/alerts/alertsOrder";
 
 function Order() {
-    const [order, setOrder] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [orderSelected, setOrderSelected] = useState(null);
-    const [pending, setPending] = useState(true);
+    const [order, setOrder] = useState([]);//Estado para almacenar la lista de compras
+    const [showModal, setShowModal] = useState(false);//Estado que controla la visibilidad del modal de creación de la compra
+    const [orderSelected, setOrderSelected] = useState(null);//Estado que selecciona la compra y muestra sus detalles
+    const [pending, setPending] = useState(true);//Estado para controlar el estado de carga
 
+    //Efecto que se ejecuta al mostrar el componente para obtener la lista de compras
     useEffect(() => {
         fetchOrder();
     }, []);
 
+    //Fución para obtener la lista de compras
     const fetchOrder = async () => {
         try {
             setPending(true);
-            const data = await getOrder();
-            console.log('Fila', data);
-            setOrder(data);
+            const data = await getOrder();//Llama a la API para obtener las compras
+            console.log('Fila', data);//Imprime los datos por consola
+            setOrder(data);//Actualiza el estado con la lista de órdenes
             setPending(false);
         } catch (error) {
             console.error("error al obtener la lista de compras", error);
@@ -31,13 +33,14 @@ function Order() {
         };
     };
 
+    //Función para manejar la eliminación de una compra
     const handleDeleteOrder = async (id) => {
-        const result = await showConfirmDeleteOrder();
+        const result = await showConfirmDeleteOrder();//Muestra una confirmacion antes de eliminar 
         if (result.isConfirmed) {
             try {
-                await deleteOrder(id);
-                await successDeleteOrder();
-                await fetchOrder();
+                await deleteOrder(id);//Llama a la API para eliminar la compra
+                await successDeleteOrder();//Mensaje de eliminacion exitosa de la compra
+                await fetchOrder();//Vuelve a cargar la lista de compras
             } catch (error) {
                 console.error("error al eliminar la orden de compra", error);
                 await errorDeleteOrder();
@@ -59,7 +62,7 @@ function Order() {
                     {/* <div className='d-flex justify-content-between mb-3'> */}
                     <div className="d-flex justify-content-between flex-wrap mb-3">
                         <button
-                            onClick={() => setShowModal(true)}
+                            onClick={() => setShowModal(true)}//Abre el modal al hacer clic
                             className='btn btn-success'
                         >
                             <i className="bi bi-plus-circle"></i> Crear Orden
@@ -92,17 +95,17 @@ function Order() {
             {/* Modal de creación de Orden */}
             {showModal && (
                 <CreateOrderModal
-                    onClose={() => setShowModal(false)}
-                    onOrderCreated={fetchOrder}
+                    onClose={() => setShowModal(false)}//Cierra el modal
+                    onOrderCreated={fetchOrder}//Vuelve a cargar las compras al crear una nueva
                 />
             )}
 
             {/* Modal de Detalles de Orden - MANTIENE TU ESTRUCTURA */}
             {orderSelected && (
                 <ShowOrder
-                    show={true}
-                    onHide={() => setOrderSelected(null)}
-                    orderId={orderSelected.id}
+                    show={true}//Muestra el modal
+                    onHide={() => setOrderSelected(null)}//Cierra el modal
+                    orderId={orderSelected.id}//Pasa el ID de la compra seleccionada
                 />
             )}
         </div>

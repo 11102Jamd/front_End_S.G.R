@@ -3,11 +3,13 @@ import { showOrder } from "../../utils/enpoints/purchase";
 import { errorShowDetails } from "../../utils/alerts/alertsOrder";
 import { formatCurrency } from './format/format';
 
+//Presenta los detalles de la compra
 function ShowOrder({ show, onHide, orderId }) {
-    const [order, setOrder] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [order, setOrder] = useState(null);//Almacena los detalles de la compra
+    const [loading, setLoading] = useState(false);//Controla la carga de datos
     const abortControllerRef = useRef(null);
 
+    //Limpia la solicitud pendiente cuando el componente se desmonta
     useEffect(() => {
         return () => {
             if (abortControllerRef.current) {
@@ -16,22 +18,25 @@ function ShowOrder({ show, onHide, orderId }) {
         };
     }, []);
 
+    //Obtiene los detalles de la compra cuando se muestra el componente y hay un ID de la compra
     useEffect(() => {
+        //Si no se debe mostrar o no hay un ID
         if (!show || !orderId) return;
 
-        abortControllerRef.current = new AbortController();
-        const signal = abortControllerRef.current.signal;
+        abortControllerRef.current = new AbortController();//Inicializa un nuevo controlador de aborto
+        const signal = abortControllerRef.current.signal;//Obtiene la señal para poder abortar
 
+        //Función asíncrona para obtener los detalles de la compra desde la API
         const fetchOrderDetails = async () => {
             setLoading(true);
             try {
-                const data = await showOrder(orderId, { signal });
-                setOrder(data);
+                const data = await showOrder(orderId, { signal });//Realiza la solicitud y obtiene la compra
+                setOrder(data);//Almacena los datos de la compra en el estado
             } catch (error) {
                 if (error.name !== 'AbortError') {
                     console.error("Error al cargar los datos de la orden", error);
                     await errorShowDetails();
-                    onHide();
+                    onHide();//Cierre el modal
                 }
             } finally {
                 if (!signal.aborted) {
@@ -40,16 +45,17 @@ function ShowOrder({ show, onHide, orderId }) {
             }
         };
 
-        fetchOrderDetails();
+        fetchOrderDetails();//Ejecuta la función para obtener los detalles de la compra
 
+        //Retorna una limpieza al desmontar el componente
         return () => {
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
             }
         };
-    }, [show, orderId, onHide]);
+    }, [show, orderId, onHide]);//Dependencias del efecto
 
-    if (!show) return null;
+    if (!show) return null;//Si es diferente a show retorna null
 
     return (
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -60,8 +66,8 @@ function ShowOrder({ show, onHide, orderId }) {
                         <button
                             type="button"
                             className="btn-close btn-close-white"
-                            onClick={onHide}
-                            disabled={loading}
+                            onClick={onHide}//Evento de clic para cerrar el modal
+                            disabled={loading}//Deshabilita el boton mientras carga
                         ></button>
                     </div>
 
@@ -81,7 +87,7 @@ function ShowOrder({ show, onHide, orderId }) {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <p><strong>Proveedor:</strong> {order.supplier_name || 'N/A'}</p>
-                                            <p><strong>Fecha de Orden:</strong> {new Date(order.order_date).toLocaleDateString()}</p>
+                                            <p><strong>Fecha de Orden:</strong> {new Date(order.order_date).toLocaleDateString()}</p>{/*Fecha de compra formateada*/}
                                         </div>
                                         <div className="col-md-6">
                                             <p><strong>Total de la Orden:</strong> ${formatCurrency(order.order_total)}</p>

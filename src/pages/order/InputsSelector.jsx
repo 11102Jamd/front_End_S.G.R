@@ -3,23 +3,26 @@ import { getInputs } from '../../utils/enpoints/input';
 // import { LoadingSpinner } from '../../Loading';
 
 function InputSelector({ currentItem, onItemChange, onAddItem }) {
+    // Estado para almacenar los insumos obtenidos y el estado de carga.
     const [inputs, setInputs] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Efecto para obtener insumos al montar el componente.
     useEffect(() => {
         const fetchInput = async () => {
             try {
-                const data = await getInputs();
-                setInputs(data);
+                const data = await getInputs();//Obtiene los insumos desde la API
+                setInputs(data);//Actualiza el estado con los insumos obtenidos
             } catch (error) {
                 console.error("Error cargando insumos:", error);
             } finally {
-                setLoading(false);
+                setLoading(false);//Cambia el estado de carga a falso
             }
         };
-        fetchInput();
+        fetchInput();//Llama a la funcion para obtener insumos 
     }, []);
 
+    //Si los insumos están cargando muestra un snipper de carga
     if (loading) {
         return (
             <div className="card mb-4">
@@ -42,8 +45,8 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             className="form-select"
                             id="input_id"
                             name="input_id"
-                            value={currentItem.input_id}
-                            onChange={onItemChange}
+                            value={currentItem.input_id}//Valor del insumo seleccionado
+                            onChange={onItemChange}//Maneja el cambio del insumo seleccionado
                             required
                         >
                             <option value="">Seleccione un insumo</option>
@@ -61,8 +64,8 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             className="form-control"
                             id="quantity_total"
                             name="quantity_total"
-                            value={currentItem.quantity_total}
-                            onChange={onItemChange}
+                            value={currentItem.quantity_total}//Valor de la cantidad
+                            onChange={onItemChange}//Maneja el cambio en la cantidad
                             min="0.01"
                             step="0.01"
                             required
@@ -98,9 +101,9 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                     </div>
                     <div className="col-12 col-md-3 d-flex align-items-end">
                         <button
-                            onClick={onAddItem}
+                            onClick={onAddItem}//Ejecuta la función onAddItem al hacer clic
                             className="btn btn-primary w-100"
-                            disabled={!currentItem.input_id || !currentItem.quantity_total || !currentItem.unit_price}
+                            disabled={!currentItem.input_id || !currentItem.quantity_total || !currentItem.unit_price}//Desactiva ek botón si falta información
                         >
                             <i className="bi bi-plus-lg me-2"></i>Agregar
                         </button>
