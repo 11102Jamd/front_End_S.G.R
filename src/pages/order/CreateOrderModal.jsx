@@ -6,16 +6,33 @@ import OrderItemsTable from './OrderItems';
 import { validateSupplierName, validateQuantity, validateUnitPrice } from '../../utils/validations/orderValidations';
 import Swal from "sweetalert2";
 
+/**
+ * Componente modal para la creación de órdenes de compra.
+ *
+ * @param {function} onClose - Callback para cerrar el modal.
+ * @param {function} onOrderCreated - Callback que se ejecuta cuando una orden es creada exitosamente.
+ */
 function CreateOrderModal({ onClose, onOrderCreated }) {
 
-    //Estado para guardar la información de la compra
+    /**
+     * Estado principal que contiene la información de la orden.
+     * - supplier_name: Nombre del proveedor
+     * - order_date: Fecha de creación de la orden
+     * - items: Lista de ítems agregados a la orden
+     */
     const [order, setOrder] = useState({
         supplier_name: '',
         order_date: new Date().toISOString().split('T')[0],
         items: []
     });
 
-    //Estado para los detalles del item que se agrega
+    /**
+     * Estado para manejar el ítem actual que se está agregando.
+     * - input_id: Identificador del insumo
+     * - quantity_total: Cantidad total
+     * - unit_price: Precio unitario
+     * - unit_measure: Unidad de medida
+     */
     const [currentItem, setCurrentItem] = useState({
         input_id: '',
         quantity_total: '',
@@ -23,22 +40,22 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
         unit_measure: 'g'
     });
 
-    //Estado para controlar el estado de carga durante la creación de la compra
+    /** Estado booleano para mostrar indicador de carga */
     const [loading, setLoading] = useState(false);
 
-    //Función para agregar un nuevo item a la orden
+    /**
+     * Agrega un nuevo ítem a la orden.
+     * @returns {void}
+     */
     const addItem = () => {
-        //Validación que asegura la seleccion de un insumo
         if (!currentItem.input_id) {
             Swal.fire("Error", "Debes seleccionar un insumo.", "error");
             return;
         }
 
-        //Validaciones de cantidad y precio unitario
         if (!validateQuantity(currentItem.quantity_total)) return;
         if (!validateUnitPrice(currentItem.unit_price)) return;
 
-        //Crear nuevo item a partir del estado actual
         const newItem = {
             input_id: parseInt(currentItem.input_id),
             quantity_total: parseFloat(currentItem.quantity_total),
@@ -46,13 +63,12 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
             unit_measure: currentItem.unit_measure
         };
 
-        //Actualizar el estado de la orden con el nuevo item
         setOrder(prev => ({
             ...prev,
             items: [...prev.items, newItem]
         }));
 
-        //Reiniciar el estado del item actual
+        // Reiniciar estado del ítem actual
         setCurrentItem({
             input_id: '',
             quantity_total: '',
@@ -61,45 +77,62 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
         });
     };
 
-    // Función para eliminar un item de la compra
+    /**
+     * Elimina un ítem existente en la orden por índice.
+     *
+     * @param {number} index - Índice del ítem en la lista.
+     * @returns {void}
+     */
     const removeItem = (index) => {
         const updatedItems = [...order.items];
-        updatedItems.splice(index, 1); // Eliminar el item en la posición especificada
+        updatedItems.splice(index, 1);
         setOrder({ ...order, items: updatedItems });
     };
 
-    // Manejar cambios en el formulario de la compra
+    /**
+     * Maneja cambios en los campos principales de la orden.
+     *
+     * @param {object} e - Evento del input.
+     * @returns {void}
+     */
     const handleOrderChange = (e) => {
         setOrder({ ...order, [e.target.name]: e.target.value });
     };
 
-    //Maneja los cambios en el item actual
+    /**
+     * Maneja cambios en los campos del ítem actual.
+     *
+     * @param {object} e - Evento del input.
+     * @returns {void}
+     */
     const handleItemChange = (e) => {
         setCurrentItem({ ...currentItem, [e.target.name]: e.target.value });
     };
 
-    //Función para manejar el envío del formulario y guardar la compra
+    /**
+     * Envía la orden al backend para crearla.
+     *
+     * @returns {Promise<void>}
+     */
     const handleSubmit = async () => {
-        //Validación del nombre del proveedor
         if (!validateSupplierName(order.supplier_name)) return;
 
-        //Validación de que al menos haya un item en la compra
         if (order.items.length === 0) {
             Swal.fire("Error", "La orden debe contener al menos un item.", "error");
             return;
         }
 
-        setLoading(true);//Activa el estado de carga
+        setLoading(true);
         try {
-            await createOrder(order);//Llamar la función para crear la compra
+            await createOrder(order);
             await successCreateOrder();
-            onOrderCreated?.();//Callback para notificar que se ha creado la compra
-            onClose(); //Cerrar el modal
+            onOrderCreated?.();
+            onClose();
         } catch (error) {
             console.error("Error al crear orden:", error);
-            await errorCreateOrder(error.response?.data?.message || error.message);//Muestra el mensaje de error
+            await errorCreateOrder(error.response?.data?.message || error.message);
         } finally {
-            setLoading(false);//Desactiva el estado de carga
+            setLoading(false);
         }
     };
 
@@ -112,7 +145,8 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
-                        {/* Proveedor */}
+
+                        {/* Campo proveedor */}
                         <div className="row mb-4">
                             <div className="col-12">
                                 <label htmlFor="supplier_name" className="form-label">Proveedor *</label>
@@ -135,7 +169,7 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
                             onAddItem={addItem}
                         />
 
-                        {/* Tabla de items */}
+                        {/* Tabla de ítems */}
                         <OrderItemsTable
                             items={order.items}
                             onRemoveItem={removeItem}
@@ -167,8 +201,3 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
 }
 
 export default CreateOrderModal;
-
-
-
-
-
