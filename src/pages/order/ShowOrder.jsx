@@ -78,72 +78,46 @@ function ShowOrder({ show, onHide, orderId }) {
     // Si el modal no debe mostrarse, retorna null
     if (!show) return null;
 
+
     return (
-        <div
-            className="modal fade show"
-            style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-        >
+        <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                 <div className="modal-content">
-                    {/* Encabezado del modal */}
-                    <div
-                        className="modal-header text-white"
-                        style={{ backgroundColor: "#176FA6" }}
-                    >
+                    <div className="modal-header text-white" style={{ backgroundColor: '#176FA6' }}>
                         <h5 className="modal-title">Detalles de Orden de Compra</h5>
                         <button
                             type="button"
                             className="btn-close btn-close-white"
-                            onClick={onHide}
-                            disabled={loading}
+                            onClick={onHide}//Evento de clic para cerrar el modal
+                            disabled={loading}//Deshabilita el boton mientras carga
                         ></button>
                     </div>
 
-                    {/* Cuerpo del modal */}
                     <div className="modal-body">
                         {loading ? (
-                            // Estado de carga
                             <div className="text-center py-4">
-                                <div
-                                    className="spinner-border text-primary"
-                                    role="status"
-                                >
-                                    <span className="visually-hidden">
-                                        Cargando...
-                                    </span>
+                                <div className="spinner-border text-primary" role="status">
+                                    <span className="visually-hidden">Cargando...</span>
                                 </div>
-                                <p className="mt-2">
-                                    Cargando detalles de la orden...
-                                </p>
+                                <p className="mt-2">Cargando detalles de la orden...</p>
                             </div>
                         ) : order ? (
                             <>
-                                {/* Información general de la orden */}
+                                {/* Información general */}
                                 <div className="mb-4">
                                     <h5>Información General</h5>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <p>
-                                                <strong>Proveedor:</strong>{" "}
-                                                {order.supplier_name || "N/A"}
-                                            </p>
-                                            <p>
-                                                <strong>Fecha de Orden:</strong>{" "}
-                                                {new Date(
-                                                    order.order_date
-                                                ).toLocaleDateString()}
-                                            </p>
+                                            <p><strong>Proveedor:</strong> {order.supplier_name || 'N/A'}</p>
+                                            <p><strong>Fecha de Orden:</strong> {new Date(order.order_date).toLocaleDateString()}</p>{/*Fecha de compra formateada*/}
                                         </div>
                                         <div className="col-md-6">
-                                            <p>
-                                                <strong>Total de la Orden:</strong>{" "}
-                                                ${formatCurrency(order.order_total)}
-                                            </p>
+                                            <p><strong>Total de la Orden:</strong> ${formatCurrency(order.order_total)}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Tabla de items */}
+                                {/* Tabla de Items */}
                                 <h5 className="mb-3">Items de la Orden</h5>
                                 <div className="table-responsive">
                                     <table className="table table-bordered">
@@ -157,67 +131,33 @@ function ShowOrder({ show, onHide, orderId }) {
                                         </thead>
                                         <tbody>
                                             {order.batches?.length > 0 ? (
-                                                order.batches.map(
-                                                    (batch, index) => (
-                                                        <tr key={index}>
-                                                            <td>
-                                                                {batch.input?.name ||
-                                                                    `Insumo ID: ${batch.input_id}`}
-                                                            </td>
-                                                            <td>
-                                                                {batch.quantity_total.toLocaleString()}{" "}
-                                                                {batch.input?.unit ||
-                                                                    "un"}
-                                                            </td>
-                                                            <td>
-                                                                $
-                                                                {formatCurrency(
-                                                                    batch.unit_price
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                $
-                                                                {formatCurrency(
-                                                                    batch.subtotal_price
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                )
+                                                order.batches.map((batch, index) => (
+                                                    <tr key={index}>
+                                                        <td>{batch.input?.name || `Insumo ID: ${batch.input_id}`}</td>
+                                                        <td>{batch.quantity_total.toLocaleString()} {batch.input?.unit || 'un'}</td>
+                                                        <td>${formatCurrency(batch.unit_price)}</td>
+                                                        <td>${formatCurrency(batch.subtotal_price)}</td>
+                                                    </tr>
+                                                ))
                                             ) : (
                                                 <tr>
-                                                    <td
-                                                        colSpan="4"
-                                                        className="text-center"
-                                                    >
-                                                        No hay items en esta
-                                                        orden
-                                                    </td>
+                                                    <td colSpan="4" className="text-center">No hay items en esta orden</td>
                                                 </tr>
                                             )}
                                         </tbody>
                                         <tfoot className="table-light">
                                             <tr>
-                                                <td
-                                                    colSpan="3"
-                                                    className="text-end fw-bold"
-                                                >
-                                                    Total:
-                                                </td>
-                                                <td className="fw-bold">
-                                                    ${formatCurrency(order.order_total)}
-                                                </td>
+                                                <td colSpan="3" className="text-end fw-bold">Total:</td>
+                                                <td className="fw-bold">${formatCurrency(order.order_total)}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
 
-                                {/* Tabla de lotes */}
+                                {/* Tabla de Lotes */}
                                 {order.batches?.length > 0 && (
                                     <>
-                                        <h5 className="mb-3 mt-4">
-                                            Lotes Recibidos
-                                        </h5>
+                                        <h5 className="mb-3 mt-4">Lotes Recibidos</h5>
                                         <div className="table-responsive">
                                             <table className="table table-bordered">
                                                 <thead className="table-secondary">
@@ -226,47 +166,19 @@ function ShowOrder({ show, onHide, orderId }) {
                                                         <th>Unidad Original</th>
                                                         <th>Lote</th>
                                                         <th>Cantidad</th>
-                                                        <th>
-                                                            Fecha de Recepción
-                                                        </th>
+                                                        <th>Fecha de Recepción</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {order.batches.map(
-                                                        (batch, index) => (
-                                                            <tr key={index}>
-                                                                <td>
-                                                                    {batch.input
-                                                                        ?.name ||
-                                                                        `Insumo ID: ${batch.input_id}`}
-                                                                </td>
-                                                                <td>
-                                                                    {
-                                                                        batch
-                                                                            .input
-                                                                            ?.unit
-                                                                    }
-                                                                </td>
-                                                                <td>
-                                                                    #{" "}
-                                                                    {batch.batch_number ||
-                                                                        batch.id}
-                                                                </td>
-                                                                <td>
-                                                                    {batch.quantity_remaining ||
-                                                                        batch.quantity_total}{" "}
-                                                                    g
-                                                                </td>
-                                                                <td>
-                                                                    {batch.received_date
-                                                                        ? new Date(
-                                                                            batch.received_date
-                                                                        ).toLocaleDateString()
-                                                                        : "N/A"}
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    )}
+                                                    {order.batches.map((batch, index) => (
+                                                        <tr key={index}>
+                                                            <td>{batch.input?.name || `Insumo ID: ${batch.input_id}`}</td>
+                                                            <td>{batch.input?.unit}</td>
+                                                            <td># {batch.batch_number || batch.id}</td>
+                                                            <td>{batch.quantity_remaining || batch.quantity_total} g</td>
+                                                            <td>{batch.received_date ? new Date(batch.received_date).toLocaleDateString() : 'N/A'}</td>
+                                                        </tr>
+                                                    ))}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -274,21 +186,19 @@ function ShowOrder({ show, onHide, orderId }) {
                                 )}
                             </>
                         ) : (
-                            // Estado: no se encontraron datos
                             <div className="alert alert-warning">
                                 No se encontraron datos de la orden
                             </div>
                         )}
                     </div>
 
-                    {/* Pie del modal */}
                     <div className="modal-footer">
                         <button
                             className="btn btn-secondary"
                             onClick={onHide}
                             disabled={loading}
                         >
-                            {loading ? "Cerrar (cargando...)" : "Cerrar"}
+                            {loading ? 'Cerrar (cargando...)' : 'Cerrar'}
                         </button>
                     </div>
                 </div>
