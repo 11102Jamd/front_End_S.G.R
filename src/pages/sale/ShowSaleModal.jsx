@@ -1,8 +1,9 @@
+// importaciones necesarias
 import React, { useEffect, useRef, useState } from "react";
 import { getSaleDetails } from "../../utils/enpoints/sale";
 import { errorShowDetailsSale } from "../../utils/alerts/alertsSale";
 
-
+// Componente para mostrar los detalles de una venta en un modal
 function ShowSale({ show, onHide, saleId }) {
     const [sale, setSale] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ function ShowSale({ show, onHide, saleId }) {
             }
         };
     }, []);
-
+    // useEffect para cargar los detalles de la venta cuando el modal se muestra o cambia la venta seleccionada
     useEffect(() => {
         if (!show || !saleId) return;
 
@@ -39,7 +40,7 @@ function ShowSale({ show, onHide, saleId }) {
                 }
             };
         };
-
+        // Llamada a la función para obtener los detalles de la venta
         fetchSaleDetails();
 
         return () => {
@@ -50,7 +51,7 @@ function ShowSale({ show, onHide, saleId }) {
     }, [show, saleId, onHide]);
 
     if (!show) return null;
-
+    // Renderizado del modal con los detalles de la venta
     return (
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
@@ -135,7 +136,7 @@ function ShowSale({ show, onHide, saleId }) {
                         <button 
                             className="btn btn-secondary" 
                             onClick={onHide}
-                            disabled={loading}
+                            disabled={loading}// Deshabilitar botón si está cargando
                         >
                             {loading ? 'Cerrar (cargando...)' : 'Cerrar'}
                         </button>

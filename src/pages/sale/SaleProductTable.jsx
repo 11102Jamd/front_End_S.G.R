@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+// Componente para mostrar la tabla de productos agregados a la venta
 function SaleProductsTable({ products, onRemoveProduct }) {
     if (products.length === 0) {
         return (
@@ -11,7 +11,7 @@ function SaleProductsTable({ products, onRemoveProduct }) {
             </div>
         );
     }
-
+    // Renderizado de la tabla de productos, con opción para eliminar cada producto
     return (
         <div className="card">
             <div className="card-header bg-light">
@@ -51,4 +51,5 @@ function SaleProductsTable({ products, onRemoveProduct }) {
     );
 }
 
+// Exportación del componente
 export default SaleProductsTable;

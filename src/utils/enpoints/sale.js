@@ -1,6 +1,7 @@
+// importación de la configuración de Axios
 import api from "../axiosConfig";
 
-
+// Función para obtener el listado de ventas desde el backend
 export const getSale = async () => {
     try {
         const response = await api.get("/sale");
@@ -10,7 +11,7 @@ export const getSale = async () => {
         throw error;        
     };
 };
-
+// Importación de SweetAlert2 para mostrar alertas
 export const getSaleDetails = async (id) => {
     try {
         const response = await api.get(`/sale/${id}`);
@@ -20,7 +21,7 @@ export const getSaleDetails = async (id) => {
         throw error;
     };
 };
-
+// Importación de SweetAlert2 para mostrar alertas
 export const createSale = async (saleData) => {
     try {
         const response = await api.post("/sale", saleData);
@@ -30,7 +31,7 @@ export const createSale = async (saleData) => {
         throw error;        
     };
 };
-
+// Función para eliminar una venta por su ID
 export const deleteSale = async (id) => {
     try {
         const response = await api.delete(`/sale/${id}`);

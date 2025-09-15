@@ -1,58 +1,62 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import customStyles from "../../utils/styles/customStyles";
-import paginationOptions from "../../utils/styles/paginationOptions";
+// Importaciones necesarias
+import React, { useEffect, useState } from "react"; 
+import customStyles from "../../utils/styles/customStyles"; 
+import paginationOptions from "../../utils/styles/paginationOptions"; 
 import { useAuth } from "../../context/AuthContext";
 import { deleteSale, getSale } from "../../utils/enpoints/sale.js";
 import { showConfirmDeleteSale, successDeleteSale } from "../../utils/alerts/alertsSale.js";
 import CreateSaleModal from "./CreateSaleModal.jsx";
 import ShowSale from "./ShowSaleModal.jsx";
-import DataTable from "react-data-table-component";
+import DataTable from "react-data-table-component"; 
 
+// Componente principal de Gestión de Ventas, incluyendo tabla y modales
+function Sale() {
 
-
-
-function Sale(){
-    const {user} = useAuth();
+    
+    const { user } = useAuth();
 
     if (!user) return null;
 
-    const [sale, setSale] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [saleSelected, setSaleSelected] = useState(null);
-    const [pending, setPending] = useState(true);
+    // Estados principales
+    const [sale, setSale] = useState([]); 
+    const [showModal, setShowModal] = useState(false); 
+    const [saleSelected, setSaleSelected] = useState(null); 
+    const [pending, setPending] = useState(true); 
 
-
+    // useEffect para cargar las ventas al montar el componente
     useEffect(() => {
-        fetchSale();
+        fetchSale(); 
     }, []);
 
+    // Función para obtener las ventas desde el backend y actualizar el estado
     const fetchSale = async () => {
         try {
-            setPending(true);
-            const data = await getSale();
-            setSale(data);
-            setPending(false)
+            setPending(true); 
+            const data = await getSale(); 
+            setSale(data); 
+            setPending(false); 
         } catch (error) {
-            console.error  ("error al obtener la lista de ventas", error);
-            setPending(false);            
-        };
+            console.error("error al obtener la lista de ventas", error);
+            setPending(false); 
+        }
     };
 
+    // Función para eliminar una venta, mostrando confirmación y manejando errores
     const handleDeleteSale = async (id) => {
-        const result = await showConfirmDeleteSale();
+        const result = await showConfirmDeleteSale(); 
         if (result.isConfirmed) {
             try {
-                await deleteSale(id);
-                await successDeleteSale();
-                await fetchSale();
+                await deleteSale(id); 
+                await successDeleteSale(); 
+                await fetchSale(); 
             } catch (error) {
                 console.error("error al eliminar la orden de compra", error);
-                await errorDeleteSale();                
-            };
-        };
+                await errorDeleteSale(); 
+            }
+        }
     };
 
+    // Configuración de columnas para la tabla de ventas
     const columns = [
         {
             name:'Venta N°',
@@ -84,6 +88,7 @@ function Sale(){
             center: "true"
         },
         {
+            // Columna de acciones (Eliminar y Ver Detalles)
             name: 'Acciones',
             cell: row => (
                 <div className="btn-group" role="group">
@@ -112,14 +117,22 @@ function Sale(){
         },
     ];
 
+    // Renderizado del componente
     return(
         <div className='container-fluid mt-4'>
+
+            {/* Card principal */}
             <div className='card'>
+
+                {/* Header del card */}
                 <div className='card-header text-white' style={{background:' #176FA6'}}>
                     <h1 className='h4'>Gestión de Ventas</h1>
                 </div>
 
+                {/* Body del card */}
                 <div className='card-body p-4'>
+
+                    {/* Botón para abrir modal de creación de venta */}
                     <div className='d-flex justify-content-between mb-3'>
                         <button 
                             onClick={() => setShowModal(true)} 
@@ -129,6 +142,7 @@ function Sale(){
                         </button>
                     </div>
 
+                    {/* Tabla de ventas */}
                     <DataTable
                         title="Lista de Ventas"
                         columns={columns}
@@ -141,12 +155,16 @@ function Sale(){
                         pointerOnHover
                         responsive
                         striped
-                        customStyles={customStyles}
-                        progressPending={pending}
-                        progressComponent={<div className="spinner-border text-success" role="status">
-                            <span className="visually-hidden">Cargando...</span>
-                        </div>}
-                        noDataComponent={<div className="alert alert-info">No hay ventas registradas</div>}
+                        customStyles={customStyles} 
+                        progressPending={pending} 
+                        progressComponent={
+                            <div className="spinner-border text-success" role="status">
+                                <span className="visually-hidden">Cargando...</span>
+                            </div>
+                        }
+                        noDataComponent={
+                            <div className="alert alert-info">No hay ventas registradas</div>
+                        }
                     />
                 </div>
             </div>
@@ -155,7 +173,7 @@ function Sale(){
             {showModal && (
                 <CreateSaleModal
                     onClose={() => setShowModal(false)}
-                    onSaleCreated={fetchSale}
+                    onSaleCreated={fetchSale} // Refresca lista de ventas tras crear nueva
                 />
             )}
 
@@ -164,7 +182,7 @@ function Sale(){
                 <ShowSale
                     show={true}
                     onHide={() => setSaleSelected(null)}
-                    saleId={saleSelected.id}
+                    saleId={saleSelected.id} // Pasa ID de la venta seleccionada
                 />
             )}
         </div>
@@ -172,4 +190,5 @@ function Sale(){
 
 }
 
+// Exportar componente para usar en otras partes de la app
 export default Sale;

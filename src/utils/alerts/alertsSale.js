@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
  * 
  * @returns Alertas de creacion Venta
  */
+// Alerta de éxito al crear una venta, con personalización de estilos y animaciones
 export const successCreateSale = () => {
     return Swal.fire({
         title:"Exito",
@@ -35,7 +36,7 @@ export const successCreateSale = () => {
         }
     });
 };
-
+// Alerta de error al crear una venta, con personalización de estilos
 export const errorCreateSale = () => {
     return Swal.fire({
         title:"Error",
@@ -104,7 +105,7 @@ export const showConfirmDeleteSale = () => {
         color:"#220900",
     });
 }
-
+// Alerta de error al eliminar una venta, con personalización de estilos
 export const errorDeleteSale = () => {
     return Swal.fire({
         title:"Error",
@@ -121,7 +122,7 @@ export const errorDeleteSale = () => {
         }
     });
 };
-
+// Alerta de éxito al eliminar una venta, con personalización de estilos y animaciones
 export const successDeleteSale = () => {
     return Swal.fire({
         title:"Exito",
