@@ -23,7 +23,7 @@ function Input() {
             setInput(data);
             setPending(false);
         } catch (error) {
-            console.error('Error al mostrar todos los Insumos: ', error);
+            console.error('Error al mostrar todos los Productos: ', error);
             setPending(false);
         };
     };

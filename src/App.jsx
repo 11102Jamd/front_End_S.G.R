@@ -14,6 +14,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import Product from './pages/product/ProductList';
+import Sale from './pages/sale/SaleList';
+
 
 
 
@@ -86,6 +88,12 @@ function App() {
             <Route path='/productos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero' , 'Cajero' ]}>
                 <Product />
+              </RoleBasedControl>
+            } />
+
+            <Route path='/ventas' element={
+              <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
+                <Sale />
               </RoleBasedControl>
             } />
 
