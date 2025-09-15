@@ -13,6 +13,7 @@ import Order from './pages/order/Order';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
+import Product from './pages/product/ProductList';
 
 
 
@@ -40,11 +41,11 @@ function App() {
             <Route index element={<Navigate to="/welcome" replace />} />
             <Route path="/welcome" element={<Welcome />} />
             
-            <Route path='/usuarios' element={
+            {/* <Route path='/usuarios' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <User/>
               </RoleBasedControl>
-            }/> 
+            }/>  */}
 
 
 
@@ -82,6 +83,11 @@ function App() {
               </RoleBasedControl>
             } />
 
+            <Route path='/productos' element={
+              <RoleBasedControl allowedRoles={['Administrador', 'Panadero' , 'Cajero' ]}>
+                <Product />
+              </RoleBasedControl>
+            } />
 
             {/* <Route path='/fabricacion' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
