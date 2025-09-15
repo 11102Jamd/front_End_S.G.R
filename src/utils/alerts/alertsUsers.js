@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 
 /**
  * 
- * @returns Alertas de Inhabilit6ar Usuario
+ * @returns Alertas de Inhabilitar Usuario
  */
 export const showConfirmDisableUser = () => {
     return Swal.fire({
