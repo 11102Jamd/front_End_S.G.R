@@ -3,8 +3,8 @@ import DataTable from "react-data-table-component";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import customStyles from "../../utils/styles/customStyles";
 import { getProduct } from "../../utils/enpoints/product";
-import CreateProductModal from "./CreateProdcutModal";
 import EditProductModal from "./EditProductModal";
+import CreateProductModal from "./CreateProductModal";
 
 
 
@@ -59,7 +59,7 @@ function Product() {
                     <button
                         onClick={() => {
                             console.log('Editando Producto:', row);
-                            setProductSelected(row.id);
+                            setProductSelected(row);
                         }}
                         className='btn btn-primary btn-sm ms-2 rounded-2 p-2'
                         title="Editar"
@@ -124,7 +124,7 @@ function Product() {
                 <EditProductModal
                     product={productSelected}
                     onClose={() => setProductSelected(null)}
-                    onInputUpdated={fetchProduct}
+                    onProductUpdate={fetchProduct}
                 />
             )}
         </div>

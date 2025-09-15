@@ -38,16 +38,6 @@ function EditProductModal({ product, onClose, onProductUpdate }) {
     };
 
     const updateProductHandler = async () => {
-        //  NUEVO: agregamos logs para verificar qué producto llega al modal
-        console.log("Producto recibido en modal:", product);
-        console.log("ID que voy a enviar:", product?.id);
-
-        //  NUEVO: validamos que el id exista ANTES de intentar llamar al backend
-        if (!product?.id) {
-            console.error("No se recibió un ID válido, no se puede actualizar el producto.");
-            await errorUpdateProduct();
-            return;
-        }
 
         if (!validateEditProductForm()) {
             // Si el formulario es inválido, no hacemos la llamada a la API
