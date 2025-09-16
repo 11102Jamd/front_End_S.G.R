@@ -30,6 +30,7 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
         fetchInput();
     }, []);
 
+    const selectedInput = inputs.find(input => input.id === parseInt(currentItem?.input_id || ''));
     /**
      * Muestra un spinner de carga mientras se obtienen los insumos
      */
@@ -43,9 +44,9 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
         );
     }
 
-        /**
-     * Renderiza el formulario para seleccionar un ingrediente y su cantidad
-     */
+    /**
+ * Renderiza el formulario para seleccionar un ingrediente y su cantidad
+ */
     return (
         <div className="card mb-4">
             <div className="card-header bg-light">
@@ -53,7 +54,7 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
             </div>
             <div className="card-body">
                 <div className="row g-3">
-                     {/* Selector de ingrediente */}
+                    {/* Selector de ingrediente */}
                     <div className="col-md-5">
                         <label htmlFor="input_id" className="form-label">Ingrediente</label>
                         <select
@@ -87,6 +88,38 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
                             step="0.001"
                             required
                         />
+                    </div>
+
+                    <div className="col-md-2">
+                        <label htmlFor="unit_used" className="form-label">Unidad</label>
+                        <select
+                            className="form-select"
+                            id="unit_used"
+                            name="unit_used"
+                            value={currentItem?.unit_used || ''}
+                            onChange={onCurrentItemChange}
+                            required
+                            disabled={!currentItem?.input_id}
+                        >
+                            <option value="">Seleccione unidad</option>
+                            {selectedInput && (
+                                <>
+                                    {selectedInput.category === 'liquido' && (
+                                        <>
+                                            <option value="ml">ml</option>
+                                        </>
+                                    )}
+                                    {selectedInput.category === 'solido_no_con' && (
+                                        <>
+                                            <option value="g">g</option>
+                                        </>
+                                    )}
+                                    {selectedInput.category === 'solido_con' && (
+                                        <option value="un">un</option>
+                                    )}
+                                </>
+                            )}
+                        </select>
                     </div>
 
                     {/* Botón para agregar el ingrediente seleccionado */}
