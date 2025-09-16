@@ -78,7 +78,7 @@ function ShowRecipeModal({ show, onHide, recipeId }) {
                                     <h5>Información General</h5>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <p><strong>Nombre de la Receta:</strong> {recipe.name || 'N/A'}</p>
+                                            <p><strong>Nombre de la Receta:</strong> {recipe.recipe_name || 'N/A'}</p>
                                             <p><strong>Cantidad del Producto:</strong> {recipe.yield_quantity}</p>
                                             <p><strong>Unidad:</strong> {recipe.unit}</p>
                                         </div>

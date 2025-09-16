@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getInput } from "../../../api/input";
+import { getInputs } from "../../utils/enpoints/input";
 import { LoadingSpinner } from "../../components/Loading";
 
 
@@ -10,7 +10,7 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
     useEffect(() => {
         const fetchInput = async () => {
             try {
-                const data = await getInput();
+                const data = await getInputs();
                 setInputs(data);
             } catch (error) {
                 console.error("error al cargar insumos", error);

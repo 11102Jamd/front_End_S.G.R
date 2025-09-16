@@ -6,58 +6,93 @@ import customStyles from "../../utils/styles/customStyles";
 import CreateRecipeModal from "./CreateRecipeModal";
 import ShowRecipeModal from "./ShowRecipeModal";
 import EditRecipeModal from "./EditRecipeModal";
+import { deleteRecipe } from "../../utils/enpoints/recipe";
+import { successDeleteRecipe, errorDeleteRecipe, showConfirmDeleteRecipe } from "../../utils/alerts/recipeAlert";
 
 
-function Recipe(){
-    const [recipe, setRecipe] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [recipeSelected, setRecipeSelected] = useState(null);
-    const [pending, setPending] = useState(true);
 
+/**
+ * Componente Recipe
+ *
+ * Este componente maneja la gestión de recetas:
+ * - Lista todas las recetas en un DataTable.
+ * - Permite crear nuevas recetas.
+ * - Permite eliminar recetas existentes.
+ * - Permite ver detalles de cada receta.
+ * - Permite editar recetas existentes.
+ *
+ */
+function Recipe() {
+    const [recipe, setRecipe] = useState([]); // Lista de recetas
+    const [showModal, setShowModal] = useState(false); // Estado del modal de creación/edición
+    const [recipeSelected, setRecipeSelected] = useState(null); // Receta seleccionada para ver o editar
+    const [pending, setPending] = useState(true); // Estado de carga del DataTable
+
+    // Ejecuta fetchRecipe al montar el componente
     useEffect(() => {
         fetchRecipe();
     }, []);
 
-    const fetchRecipe = async() => {
+    /**
+     * Obtiene todas las recetas desde el backend
+     */
+    const fetchRecipe = async () => {
         try {
-            setPending(true);   
+            setPending(true);
             const data = await getRecipe();
             setRecipe(data);
             setPending(false);
         } catch (error) {
             console.error("error al obtener la lista de Recetas", error);
-            setPending(false);              
+            setPending(false);
         };
     };
 
-
+    /**
+     * Maneja la eliminación de una receta
+     * @param {number} id - ID de la receta a eliminar
+     */
+    const handleDeleteRecipe = async (id) => {
+        const result = await showConfirmDeleteRecipe();
+        if (result.isConfirmed) {
+            try {
+                await deleteRecipe(id);
+                await successDeleteRecipe();
+                await fetchRecipe();
+            } catch (error) {
+                console.error("Error al eliminar la receta", error);
+                await errorDeleteRecipe();
+            }
+        }
+    };
+    // Configuración de columnas para el DataTable
     const columns = [
         {
-            name:'Receta',
-            selector: row => `${row.id} ${row.name}`,
+            name: 'Receta',
+            selector: row => `${row.id} ${row.recipe_name}`,
             sortable: true,
-            center: "true" 
+            center: "true"
         },
         {
-            name:'Cantidad',
-            selector: row => `${row.yield_quantity} ${row.unit}`,
+            name: 'Cantidad',
+            selector: row => `${parseInt(row.yield_quantity)} ${row.unit}`,
             sortable: true,
-            center: "true" 
+            center: "true"
         },
         {
             name: 'Acciones',
             cell: row => (
                 <div className="btn-group" role="group">
-                    <button 
-                        // onClick={() => handleDeleteOrder(row.id)}
+                    <button
+                        onClick={() => handleDeleteRecipe(row.id)}
                         className='btn btn-danger btn-sm rounded-2 p-2'
-                        style={{background:'#D6482D'}}
+                        style={{ background: '#D6482D' }}
                         title="Eliminar"
                     >
                         <i className="bi bi-trash fs-6"></i>
                     </button>
-                    <button 
-                        onClick={() => setRecipeSelected(row)} 
+                    <button
+                        onClick={() => setRecipeSelected(row)}
                         className='btn btn-info btn-sm ms-2 rounded-2 p-2'
                         title="Ver Detalles"
                     >
@@ -65,13 +100,13 @@ function Recipe(){
                     </button>
                     <button
 
-                        onClick={()=> { 
+                        onClick={() => {
                             setRecipeSelected(row);
                             setShowModal(true);
                         }}
 
                         className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
-                        style={{background:'#2DACD6'}}
+                        style={{ background: '#2DACD6' }}
                         title="editar"
                     >
                         <i className="bi bi-pencil-square fs-6"></i>
@@ -79,34 +114,37 @@ function Recipe(){
                 </div>
             ),
             ignoreRowClick: true,
-            center:"true"
+            center: "true"
         }
     ];
 
-    return(
+    return (
         <div className='container-fluid mt-4'>
+            {/* Card principal */}
             <div className='card'>
-                <div className='card-header text-white' style={{background:'#176FA6'}}>
+                <div className='card-header text-white' style={{ background: '#176FA6' }}>
                     <h1 className='h4'>Gestión de Recetas</h1>
                 </div>
 
                 <div className='card-body p-4'>
+                    {/* Botón para crear receta */}
                     <div className='d-flex justify-content-between mb-3'>
-                        <button 
-                            onClick={() => setShowModal(true)} 
+                        <button
+                            onClick={() => setShowModal(true)}
                             className='btn btn-success'
                         >
                             <i className="bi bi-plus-circle"></i> Crear Receta
                         </button>
                     </div>
 
+                    {/* DataTable de recetas */}
                     <DataTable
                         title="Lista de Recetas"
                         columns={columns}
                         data={recipe}
                         pagination
-                        paginationPerPage={5} 
-                        paginationRowsPerPageOptions={[5, 10, 15, 20]} 
+                        paginationPerPage={5}
+                        paginationRowsPerPageOptions={[5, 10, 15, 20]}
                         paginationComponentOptions={paginationOptions}
                         highlightOnHover
                         pointerOnHover
@@ -122,6 +160,7 @@ function Recipe(){
                 </div>
             </div>
 
+            {/* Modal de creación de receta */}
             {showModal && (
                 <CreateRecipeModal
                     onClose={() => setShowModal(false)}
@@ -129,6 +168,7 @@ function Recipe(){
                 />
             )}
 
+             {/* Modal de detalles de receta */}
             {recipeSelected && (
                 <ShowRecipeModal
                     show={true}
@@ -137,6 +177,7 @@ function Recipe(){
                 />
             )}
 
+             {/* Modal de edición de receta */}
             {showModal && recipeSelected && (
                 <EditRecipeModal
                     recipeId={recipeSelected.id}
