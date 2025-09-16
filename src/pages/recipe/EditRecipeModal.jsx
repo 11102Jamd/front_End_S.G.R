@@ -5,7 +5,17 @@ import IngredientSelector from "./IngredientSelector";
 import RecipeItemsTable from "./RecipeItemsTable";
 import LoadingModal from "../../components/Loading";
 
+/**
+ * Componente EditRecipeModal
+ *
+ * Modal para editar una receta base existente.
+ * Permite:
+ *  - Cargar los datos actuales de la receta desde el backend
+ *  - Modificar nombre, cantidad producida, unidad de medida e ingredientes
+ *  - Guardar los cambios en el backend
+ */
 function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
+    // Estado para almacenar los datos actuales de la receta a editar
     const [recipe, setRecipe] = useState({
         recipe_name: '',
         yield_quantity: '',
@@ -13,14 +23,15 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
         ingredient: []
     });
 
+    // Estado para el ingrediente que se está agregando actualmente
     const [currentItem, setCurrentItem] = useState({
         input_id: '',
         quantity_required: ''
     });
 
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [inputs, setInputs] = useState([]);
+    const [loading, setLoading] = useState(true); // Indica si se están cargando los datos
+    const [saving, setSaving] = useState(false);  // Indica si se está guardando la receta
+    const [inputs, setInputs] = useState([]);// Lista de insumos disponibles
 
     useEffect(() => {
         const fetchRecipeData = async () => {
@@ -54,11 +65,15 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
         }
     }, [recipeId]);
 
+    /**
+    * Agrega un nuevo ingrediente a la receta
+    */
     const addItem = () => {
         if (!currentItem.input_id || !currentItem.quantity_required) {
-            return;
+            return;// Validación: campos vacíos
         }
 
+        // Obtener el nombre del insumo desde la lista de inputs
         const selectedInput = inputs.find(input => input.id === parseInt(currentItem.input_id));
         const inputName = selectedInput ? selectedInput.name : '';
 
@@ -68,39 +83,53 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
             input_name: inputName
         };
 
+        // Agregar ingrediente al estado
         setRecipe(prev => ({
             ...prev,
             ingredient: [...prev.ingredient, newItem]
         }));
 
+        // Resetear el formulario del ingrediente actual
         setCurrentItem({
             input_id: '',
             quantity_required: ''
         });
     };
 
+    /**
+    * Elimina un ingrediente de la receta por su índice
+    */
     const removeItem = (index) => {
         const updatedItems = [...recipe.ingredient];
         updatedItems.splice(index, 1);
         setRecipe({ ...recipe, ingredient: updatedItems });
     };
 
+    /**
+     * Maneja los cambios en los campos principales de la receta
+     */
     const handleRecipeChange = (e) => {
         setRecipe({ ...recipe, [e.target.name]: e.target.value });
     };
 
+    /**
+     * Maneja los cambios en el formulario del ingrediente actual
+     */
     const handleItemChange = (e) => {
         setCurrentItem({ ...currentItem, [e.target.name]: e.target.value });
     };
 
+    /**
+     * Envía la receta actualizada al backend
+     */
     const handleSubmit = async () => {
         if (!recipe.recipe_name || !recipe.yield_quantity || !recipe.unit || recipe.ingredient.length === 0) {
-            return;
+            return;// Validación: no enviar si hay campos vacíos
         }
 
         setSaving(true);
         try {
-            // Preparar datos para enviar (sin input_name)
+            // Preparar datos para enviar
             const recipeData = {
                 recipe_name: recipe.recipe_name,
                 yield_quantity: recipe.yield_quantity,
@@ -136,6 +165,7 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
+                        {/* Campos principales de la receta */}
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="name" className="form-label">Nombre de la Receta</label>

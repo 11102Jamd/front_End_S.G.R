@@ -2,15 +2,23 @@ import { useEffect, useState } from "react";
 import { getInputs } from "../../utils/enpoints/input";
 import { LoadingSpinner } from "../../components/Loading";
 
-
+/**
+ * Componente IngredientSelector
+ *
+ * Permite seleccionar un insumo (ingrediente) de una lista
+ * y especificar la cantidad requerida para agregarlo a la receta.
+ */
 function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
-    const [inputs, setInputs] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [inputs, setInputs] = useState([]); // Lista de insumos disponibles
+    const [loading, setLoading] = useState(true);// Indica si se están cargando los insumos
 
+    /**
+     * useEffect que carga los insumos disponibles desde el backend al montar el componente
+     */
     useEffect(() => {
         const fetchInput = async () => {
             try {
-                const data = await getInputs();
+                const data = await getInputs();// Obtener insumos desde la API
                 setInputs(data);
             } catch (error) {
                 console.error("error al cargar insumos", error);
@@ -22,6 +30,9 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
         fetchInput();
     }, []);
 
+    /**
+     * Muestra un spinner de carga mientras se obtienen los insumos
+     */
     if (loading) {
         return (
             <div className="card mb-4">
@@ -32,6 +43,9 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
         );
     }
 
+        /**
+     * Renderiza el formulario para seleccionar un ingrediente y su cantidad
+     */
     return (
         <div className="card mb-4">
             <div className="card-header bg-light">
@@ -39,6 +53,7 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
             </div>
             <div className="card-body">
                 <div className="row g-3">
+                     {/* Selector de ingrediente */}
                     <div className="col-md-5">
                         <label htmlFor="input_id" className="form-label">Ingrediente</label>
                         <select
@@ -57,6 +72,8 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
                             ))}
                         </select>
                     </div>
+
+                    {/* Campo para la cantidad requerida */}
                     <div className="col-md-3">
                         <label htmlFor="quantity_required" className="form-label">Cantidad Requerida</label>
                         <input
@@ -71,6 +88,8 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
                             required
                         />
                     </div>
+
+                    {/* Botón para agregar el ingrediente seleccionado */}
                     <div className="col-md-2 d-flex align-items-end">
                         <button
                             onClick={onAddItem}

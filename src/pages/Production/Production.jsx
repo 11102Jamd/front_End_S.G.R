@@ -24,7 +24,7 @@ function Production() {
     const [productionSelected, setProductionSelected] = useState(null);  // Producción seleccionada para ver detalles
     const [pending, setPending] = useState(true); // Estado de carga del DataTable
 
-     // Ejecuta fetchProduction al montar el componente
+    // Ejecuta fetchProduction al montar el componente
     useEffect(() => {
         fetchProduction();
     }, []);
@@ -45,7 +45,7 @@ function Production() {
         };
     };
 
-        /**
+    /**
      * Maneja la eliminación de una producción
      * @param {number} id - ID de la producción a eliminar
      */
