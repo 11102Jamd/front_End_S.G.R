@@ -3,13 +3,21 @@ import { getProductionDetails } from "../../utils/enpoints/production";
 import { errorShowDetailsProduction } from "../../utils/alerts/productionAlerts";
 import { formatCurrency } from "../../utils/formatters/currency";
 
+/**
+ * Componente ShowProductionDetails
+ * 
+ * Muestra en un modal los detalles de una producción seleccionada.
+ * Obtiene la información desde el backend y la presenta con sus insumos y productos generados.
+ */
 function ShowProductionDetails({ show, onHide, productionId }) {
-    const [production, setProduction] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const abortControllerRef = useRef(null);
+    const [production, setProduction] = useState(null); // Estado para guardar los datos de la producción
+    const [loading, setLoading] = useState(false); // Estado para controlar el indicador de carga
+    const abortControllerRef = useRef(null); // Referencia para controlar el AbortController 
 
-
-
+    /**
+     * 
+     * Cuando el componente se desmonta, si existe una petición activa se aborta para evitar fugas de memoria.
+     */
     useEffect(() => {
         return () => {
             if (abortControllerRef.current) {
@@ -18,15 +26,21 @@ function ShowProductionDetails({ show, onHide, productionId }) {
         };
     }, []);
 
+    /**
+     * Efecto que se ejecuta cuando cambia 'show' o 'productionId':
+     * Si el modal debe mostrarse y hay un ID válido, carga los detalles de la producción desde el backend.
+     */
     useEffect(() => {
         if (!show || !productionId) return;
 
         abortControllerRef.current = new AbortController();
         const signal = abortControllerRef.current.signal;
 
+        // Función asíncrona que obtiene los detalles de producción
         const fetchProductionDetails = async () => {
             setLoading(true);
             try {
+                // Llamada a la API para obtener los detalles
                 const data = await getProductionDetails(productionId, { signal });
                 setProduction(data);
             } catch (error) {
@@ -44,6 +58,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
 
         fetchProductionDetails();
 
+        // Si el modal se cierra o cambia el ID mientras carga, aborta la petición
         return () => {
             if (abortControllerRef.current) {
                 abortControllerRef.current.abort();
@@ -51,12 +66,14 @@ function ShowProductionDetails({ show, onHide, productionId }) {
         };
     }, [show, productionId, onHide]);
 
+    // Si no debe mostrarse el modal, no renderiza nada
     if (!show) return null;
 
     return (
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
+                    {/* --- CABECERA DEL MODAL --- */}
                     <div className="modal-header text-white" style={{ backgroundColor: '#176FA6' }}>
                         <h5 className="modal-title">Detalles de Producción</h5>
                         <button
@@ -67,6 +84,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                         ></button>
                     </div>
 
+                    {/* --- CUERPO DEL MODAL --- */}
                     <div className="modal-body">
                         {loading ? (
                             <div className="text-center py-4">
@@ -77,6 +95,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                             </div>
                         ) : production ? (
                             <>
+                            {/* INFORMACIÓN GENERAL */}
                                 <div className="mb-4">
                                     <h5>Información General</h5>
                                     <div className="row">
@@ -103,6 +122,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                                     </div>
                                 </div>
 
+                                {/* CONSUMO DE INSUMOS */}
                                 <h5 className="mb-3">Consumo de Insumos</h5>
                                 <div className="table-responsive">
                                     <table className="table table-bordered">
@@ -141,6 +161,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                                     </table>
                                 </div>
 
+                                {/* PRODUCTOS GENERADOS */}
                                 {production.product_production?.length > 0 && (
                                     <>
                                         <h5 className="mb-3 mt-4">Productos Generados</h5>
@@ -176,6 +197,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                         )}
                     </div>
 
+                    {/* --- PIE DEL MODAL --- */}
                     <div className="modal-footer">
                         <button
                             className="btn btn-secondary"

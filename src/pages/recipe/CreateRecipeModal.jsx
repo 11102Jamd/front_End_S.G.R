@@ -5,27 +5,44 @@ import IngredientSelector from "./IngredientSelector";
 import RecipeItemsTable from "./RecipeItemsTable";
 import Swal from "sweetalert2";
 
+/**
+ * Componente CreateRecipeModal
+ *
+ * Modal para crear una nueva receta base.
+ * Permite:
+ *  - Especificar nombre, cantidad producida y unidad de medida
+ *  - Seleccionar ingredientes (insumos) y sus cantidades
+ *  - Guardar la receta en el backend
+ */
 function CreateRecipeModal({ onClose, onRecipeCreated }) {
+    // Estado para almacenar los datos del formulario de la receta
     const [newRecipe, setNewRecipe] = useState({
         recipe_name: '',
         yield_quantity: '',
-        unit: '',
         ingredient: []
     });
 
+    // Estado del ingrediente que se está agregando actualmente
     const [currentItem, setCurrentItem] = useState({
         input_id: '',
-        quantity_required: ''
+        quantity_required: '',
+        unit_used: ''
     });
 
-    const [loading, setLoading] = useState(true);
-    const [inputs, setInputs] = useState([]);
+    const [loading, setLoading] = useState(true); // Indica si hay procesos en curso
+    const [inputs, setInputs] = useState([]);  // Lista de insumos disponibles
 
+    /**
+     * Agrega un ingrediente a la receta
+     * - Verifica que no esté repetido
+     * - Obtiene el nombre del insumo seleccionado
+     */
     const addItem = () => {
-        if (!currentItem.input_id || !currentItem.quantity_required) {
-            return;
+        if (!currentItem.input_id || !currentItem.quantity_required || !currentItem.unit_used) {
+            return; // Validación: no permitir campos vacíos
         }
-        
+
+        // Verificar que el ingrediente no exista ya en la lista
         const exists = newRecipe.ingredient.some(
             item => item.input_id === parseInt(currentItem.input_id)
         );
@@ -39,32 +56,45 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
             });
             return;
         }
+
+        // Obtener el nombre del insumo desde la lista de inputs
         const selectedInput = inputs.find(input => input.id === parseInt(currentItem.input_id));
         const inputName = selectedInput ? selectedInput.name : '';
 
+        // Crear nuevo objeto de ingrediente
         const newItem = {
             input_id: parseInt(currentItem.input_id),
             quantity_required: parseFloat(currentItem.quantity_required),
+            unit_used:currentItem.unit_used,
             input_name: inputName
         };
 
+        // Agregar el nuevo ingrediente al estado
         setNewRecipe(prev => ({
             ...prev,
             ingredient: [...prev.ingredient, newItem]
         }));
 
+        // Resetear el formulario de ingrediente
         setCurrentItem({
             input_id: '',
-            quantity_required: ''
+            quantity_required: '',
+            unit_used: ''
         });
     };
 
+    /**
+     * Elimina un ingrediente de la receta por su índice
+     */
     const removeItem = (index) => {
         const updatedItems = [...newRecipe.ingredient];
         updatedItems.splice(index, 1);
         setNewRecipe({ ...newRecipe, ingredient: updatedItems });
     };
 
+    /**
+     * Maneja los cambios en el formulario del ingrediente actual
+     */
     const handleRecipeChange = (e) => {
         setNewRecipe({ ...newRecipe, [e.target.name]: e.target.value });
     };
@@ -73,15 +103,18 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
         setCurrentItem({ ...currentItem, [e.target.name]: e.target.value });
     };
 
+    /**
+     * Envía la receta al backend
+     */
     const handleSubmit = async () => {
-        if (!newRecipe.recipe_name || !newRecipe.yield_quantity || !newRecipe.unit || newRecipe.ingredient.length === 0) {
-            return;
+        if (!newRecipe.recipe_name || !newRecipe.yield_quantity || newRecipe.ingredient.length === 0) {
+            return; // Validación: no enviar si hay campos vacíos
         }
         setLoading(true);
         try {
-            await createRecipe(newRecipe);
+            await createRecipe(newRecipe); // Crear receta en backend
             await successCreateRecipe();
-            onRecipeCreated();
+            onRecipeCreated(); // Notificar al componente padre
             onClose();
         } catch (error) {
             console.error("Error al crear receta:", error);
@@ -100,6 +133,7 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
                         <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
+                        {/* Campos principales de la receta */}
                         <div className="row mb-4">
                             <div className="col-md-6">
                                 <label htmlFor="recipe_name" className="form-label">Nombre de la Receta</label>
@@ -127,18 +161,6 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
                                     required
                                 />
                             </div>
-                            <div className="col-md-3">
-                                <label htmlFor="unit" className="form-label">Unidad</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="unit"
-                                    name="unit"
-                                    value={newRecipe.unit}
-                                    onChange={handleRecipeChange}
-                                    required
-                                />
-                            </div>
                         </div>
 
                         {/* Selector de ingredientes */}
@@ -160,7 +182,7 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
                             className="btn btn-primary"
                             style={{ backgroundColor: ' #176FA6' }}
                             onClick={handleSubmit}
-                            disabled={newRecipe.ingredient.length === 0 || !newRecipe.recipe_name || !newRecipe.yield_quantity || !newRecipe.unit}
+                            disabled={newRecipe.ingredient.length === 0 || !newRecipe.recipe_name || !newRecipe.yield_quantity }
                         >
                             Guardar Receta
                         </button>
