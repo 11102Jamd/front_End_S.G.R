@@ -7,14 +7,25 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
 
-
+/**
+ * Componente modal para crear un nuevo producto
+ * @param {function} onClose - Cierra el modal
+ * @param {function} onProductCreated - Callback para actualizar la lista de productos después de crear uno
+ */
 function CreateProductModal({ onClose, onProductCreated }) {
+    // Estado para almacenar los datos del nuevo producto
     const [newProduct, setNewProduct] = useState({
         product_name: '',
         unit_price:''
     });
 
+    // Estado para manejar los erores
     const [errors, setErrors] = useState({});
+
+    /**
+     * Valida el formulario de edición del producto.
+     * @returns {boolean} - Retorna `true` si no hay errores, `false` en caso contrario.
+     */
     const validateProductForm = () => {
         const newErrors = {
             product_name: validateName(newProduct.product_name, 'Nombre del Producto'),
@@ -26,8 +37,15 @@ function CreateProductModal({ onClose, onProductCreated }) {
         return !Object.values(newErrors).some(error => error !== null);
     };
 
+    /**
+     * Maneja los cambios en los inputs del formulario
+     * Incluye validación en tiempo real si ya había errores
+     */
     const handleChange = (e) => {
+        
+        // Revalida el campo modificado si ya tenía errores
         const { id, value } = e.target;
+
         setNewProduct(prev => ({ ...prev, [id]: value }));
         
         let error = null;
@@ -44,16 +62,26 @@ function CreateProductModal({ onClose, onProductCreated }) {
         setErrors(prev => ({ ...prev, [id]: error }));
     };
 
+    /**
+     * Envía la solicitud para crear un producto
+     * Si la validación falla, muestra una alerta de error
+     */
     const createProductHandler = async () => {
             if (!validateProductForm()) {
                 await errorCreateProduct();
                 return;
             }
             try {
+
+                //se ejecuta el enpoint de product pasandole en la solicitud la informaicon del formulario
                 await createProduct(newProduct);
+                // Alerta de exito
                 await succesCreateProduct();
+                // Actualiza la lista de productos
                 onProductCreated();
+                //Cierra el Modal
                 onClose();
+                //Resetea el fromulario
                 setNewProduct({
                     product_name:'',
                     unit_price:''

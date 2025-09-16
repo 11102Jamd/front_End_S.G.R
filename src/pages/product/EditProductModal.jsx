@@ -3,10 +3,26 @@ import { validateName, validatePrice } from "../../utils/validations/validationF
 import { errorUpdateProduct, succesUpdateProduct } from "../../utils/alerts/productAlerts";
 import { updateProduct } from "../../utils/enpoints/product";
 
+/**
+ * Componente modal para editar un producto existente.
+ *
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.product - Datos actuales del producto a editar.
+ * @param {Function} props.onClose - Función para cerrar el modal.
+ * @param {Function} props.onProductUpdate - Función para recargar la lista de Productos tras la actualización.
+ */
 function EditProductModal({ product, onClose, onProductUpdate }) {
+    //Estado para almacenar los datos del producto actualizado
     const [productUpdate, setProductUpdate] = useState(product);
+
+    //Estado que maneja los errores
     const [errors, setErrors] = useState({});
 
+    /**
+     * Valida el formulario de edición del usuario.
+     * @returns {boolean} - Retorna `true` si no hay errores, `false` en caso contrario.
+     */
     const validateEditProductForm = () => {
         const newErrors = {
             product_name: validateName(productUpdate.product_name, 'Nombre del Producto'),
@@ -18,12 +34,19 @@ function EditProductModal({ product, onClose, onProductUpdate }) {
         return !Object.values(newErrors).some(error => error !== null);
     };
 
+    /**
+     * Maneja cambios en los campos del formulario.
+     * @param {React.ChangeEvent<HTMLInputElement|HTMLSelectElement>} e - Evento del input.
+     */
     const handleChange = (e) => {
+
+        //revalida e l campo modificado si ya tenia errores
         const { id, value } = e.target;
         setProductUpdate(prev => ({ ...prev, [id]: value }));
 
         let error = null;
 
+        //valida los errores por medio del id del input de entrada del formulario
         switch (id) {
             case 'product_name':
                 error = validateName(value, 'Nombre del Producto');
@@ -45,14 +68,20 @@ function EditProductModal({ product, onClose, onProductUpdate }) {
         }
 
         try {
-            // 🔧 CAMBIO: ahora enviamos product.id asegurándonos de que no sea undefined
+            /**
+             * ahora enviamos product.id asegurándonos de que no sea undefined
+             * Ejecutamos el enpoint updateProduct enviado los datos del producto actualizado y su id
+             */
             await updateProduct(product.id, {
                 product_name: productUpdate.product_name,
                 unit_price: productUpdate.unit_price
             });
 
+            //Alerta de Exito
             await succesUpdateProduct();
+            //Actualiza lista de Productos
             onProductUpdate();
+            //Cierra el Modal
             onClose();
         } catch (error) {
             console.error("Error al actualizar el producto", error);
