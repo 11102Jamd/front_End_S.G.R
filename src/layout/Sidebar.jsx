@@ -57,11 +57,26 @@ function Sidebar() {
                     </Link>
                 )}
 
+<<<<<<< HEAD
                 {/* Solo visible para Administrador y Cajero */}
                 {(user.rol === 'Administrador' || user.rol === 'Cajero') && (
                     <Link to="/compras" className="sidebar-link">
                         <i className="bi bi-cart-check"></i>
                         {isOpen && <span>Compras</span>}
+=======
+                {/* Visible para Administrador y Panadero */}
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/production" className="sidebar-link">
+                        <i className="bi bi-gear"></i>
+                        {isOpen && <span>produccion</span>}
+                    </Link>
+                )}
+
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/recipe" className="sidebar-link">
+                        <i className="bi bi-journal-bookmark"></i>
+                        {isOpen && <span>receta</span>}
+>>>>>>> e97c224dc456795987d1345989f2c910ad700027
                     </Link>
                 )}
 

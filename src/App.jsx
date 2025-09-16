@@ -13,9 +13,15 @@ import Order from './pages/order/Order';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import User from './pages/user/UserList'; // Asegúrate de que la ruta sea correcta
-import './App.css';
 import Product from './pages/product/ProductList';
-
+import Production from './pages/Production/Production';
+import Recipe from './pages/recipe/Recipe';
+import './App.css';
+// import Usuarios from './components/usuarios/UserList';
+// import Supplier from './components/proveedores/SupplierList';
+// import Products from './components/productos/ProductsList';
+// import Pedidos from './components/pedidos/OrderList';
+// import Compras from './components/compras/PurchaseList';
 
 
 function App() {
@@ -41,6 +47,8 @@ function App() {
           }>
             <Route index element={<Navigate to="/welcome" replace />} />
             <Route path="/welcome" element={<Welcome />} />
+
+            {/* <Route path='/usuarios' element={
             
             {/* <Route path='/usuarios' element={
 
@@ -48,8 +56,13 @@ function App() {
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <User />
               </RoleBasedControl>
-            }/>  */}
+            }/> */}
 
+            {/* <Route path='/compras' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Purchase />
+              </RoleBasedControl>
+            } /> */}
 
             <Route path='/insumos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
@@ -57,12 +70,17 @@ function App() {
               </RoleBasedControl>
             } />
 
+            {/* {/* <Route path='/produccion' element={<Production/>}/>
+            
+            <Route path='/pedidos' element={
             {/* <Route path='/productos' element={<Product />} /> */}
 
             {/* <Route path='/pedidos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
                 <Pedidos />
               </RoleBasedControl>
+        
+            
             } /> */}
 
             {/* 
@@ -70,7 +88,20 @@ function App() {
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Purchase />
               </RoleBasedControl>
-            } /> */}
+            }/>*/
+
+              <Route path='/production' element={
+                <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
+                  <Production />
+                </RoleBasedControl>
+              } />}
+              
+            <Route path='/recipe' element={
+              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
+                <Recipe />
+              </RoleBasedControl>
+            } />
+
 
             <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
@@ -97,7 +128,6 @@ function App() {
             } /> */}
 
           </Route>
-
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
