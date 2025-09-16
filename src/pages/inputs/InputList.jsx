@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import { disableInput, getInputs } from "../../utils/enpoints/input";
-import { showConfirmDisableInput, successDisableInput } from "../../utils/alerts/alertsInputs";
+import { errorDisableInput, showConfirmDisableInput, successDisableInput } from "../../utils/alerts/alertsInputs";
 import NumberFormatter from "../../components/NumberFormatter";
 import CreateInputModal from "./CreateInputModal";
 import { useAuth } from "../../context/AuthContext";
