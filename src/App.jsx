@@ -12,6 +12,7 @@ import Input from './pages/inputs/InputList';
 import Order from './pages/order/Order';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import User from './pages/user/UserList'; // Asegúrate de que la ruta sea correcta
 import './App.css';
 import Product from './pages/product/ProductList';
 
@@ -23,7 +24,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          
+
           <Route element={
             <PrivateRoute>
               <div className="app-container">
@@ -33,7 +34,7 @@ function App() {
                   <MainContent>
                     <Outlet />
                   </MainContent>
-                  <Footer/>
+                  <Footer />
                 </div>
               </div>
             </PrivateRoute>
@@ -42,19 +43,13 @@ function App() {
             <Route path="/welcome" element={<Welcome />} />
             
             {/* <Route path='/usuarios' element={
+
+            <Route path='/user' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <User/>
+                <User />
               </RoleBasedControl>
             }/>  */}
 
-
-
-
-            {/* <Route path='/compras' element={
-              <RoleBasedControl allowedRoles={['Administrador']}>
-                <Purchase />
-              </RoleBasedControl>
-            } /> */}
 
             <Route path='/insumos' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
@@ -102,7 +97,7 @@ function App() {
             } /> */}
 
           </Route>
-          
+
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
