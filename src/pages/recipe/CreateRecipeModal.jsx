@@ -3,13 +3,14 @@ import { createRecipe } from "../../utils/enpoints/recipe";
 import { errorCreateRecipe, successCreateRecipe } from "../../utils/alerts/recipeAlert";
 import IngredientSelector from "./IngredientSelector";
 import RecipeItemsTable from "./RecipeItemsTable";
+import Swal from "sweetalert2";
 
 function CreateRecipeModal({ onClose, onRecipeCreated }) {
     const [newRecipe, setNewRecipe] = useState({
-        name: '',
+        recipe_name: '',
         yield_quantity: '',
         unit: '',
-        ingredients: []
+        ingredient: []
     });
 
     const [currentItem, setCurrentItem] = useState({
@@ -24,7 +25,20 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
         if (!currentItem.input_id || !currentItem.quantity_required) {
             return;
         }
-
+        
+        const exists = newRecipe.ingredient.some(
+            item => item.input_id === parseInt(currentItem.input_id)
+        );
+        if (exists) {
+            Swal.fire({
+                title: "Ingrediente duplicado",
+                text: "Este ingrediente ya fue agregado",
+                icon: "warning",
+                confirmButtonColor: "#176FA6",
+                confirmButtonText: "Aceptar"
+            });
+            return;
+        }
         const selectedInput = inputs.find(input => input.id === parseInt(currentItem.input_id));
         const inputName = selectedInput ? selectedInput.name : '';
 
@@ -36,7 +50,7 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
 
         setNewRecipe(prev => ({
             ...prev,
-            ingredients: [...prev.ingredients, newItem]
+            ingredient: [...prev.ingredient, newItem]
         }));
 
         setCurrentItem({
@@ -46,9 +60,9 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
     };
 
     const removeItem = (index) => {
-        const updatedItems = [...newRecipe.ingredients];
+        const updatedItems = [...newRecipe.ingredient];
         updatedItems.splice(index, 1);
-        setNewRecipe({ ...newRecipe, ingredients: updatedItems });
+        setNewRecipe({ ...newRecipe, ingredient: updatedItems });
     };
 
     const handleRecipeChange = (e) => {
@@ -60,12 +74,12 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
     };
 
     const handleSubmit = async () => {
-        if (!newRecipe.name || !newRecipe.yield_quantity || !newRecipe.unit || newRecipe.ingredients.length === 0) {
+        if (!newRecipe.recipe_name || !newRecipe.yield_quantity || !newRecipe.unit || newRecipe.ingredient.length === 0) {
             return;
         }
         setLoading(true);
         try {
-            await await createRecipe(newRecipe);
+            await createRecipe(newRecipe);
             await successCreateRecipe();
             onRecipeCreated();
             onClose();
@@ -88,13 +102,13 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
                     <div className="modal-body">
                         <div className="row mb-4">
                             <div className="col-md-6">
-                                <label htmlFor="name" className="form-label">Nombre de la Receta</label>
+                                <label htmlFor="recipe_name" className="form-label">Nombre de la Receta</label>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="name"
-                                    name="name"
-                                    value={newRecipe.name}
+                                    id="recipe_name"
+                                    name="recipe_name"
+                                    value={newRecipe.recipe_name}
                                     onChange={handleRecipeChange}
                                     required
                                 />
@@ -136,7 +150,7 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
 
                         {/* Tabla de ingredientes de la receta */}
                         <RecipeItemsTable
-                            items={newRecipe.ingredients}
+                            items={newRecipe.ingredient}
                             onRemoveItem={removeItem}
                         />
                     </div>
@@ -146,7 +160,7 @@ function CreateRecipeModal({ onClose, onRecipeCreated }) {
                             className="btn btn-primary"
                             style={{ backgroundColor: ' #176FA6' }}
                             onClick={handleSubmit}
-                            disabled={newRecipe.ingredients.length === 0 || !newRecipe.name || !newRecipe.yield_quantity || !newRecipe.unit}
+                            disabled={newRecipe.ingredient.length === 0 || !newRecipe.recipe_name || !newRecipe.yield_quantity || !newRecipe.unit}
                         >
                             Guardar Receta
                         </button>

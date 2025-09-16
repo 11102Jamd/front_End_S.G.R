@@ -7,10 +7,10 @@ import LoadingModal from "../../components/Loading";
 
 function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
     const [recipe, setRecipe] = useState({
-        name: '',
+        recipe_name: '',
         yield_quantity: '',
         unit: '',
-        ingredients: []
+        ingredient: []
     });
 
     const [currentItem, setCurrentItem] = useState({
@@ -36,10 +36,10 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
                 }));
 
                 setRecipe({
-                    name: recipeData.name,
+                    recipe_name: recipeData.recipe_name,
                     yield_quantity: parseFloat(recipeData.yield_quantity),
                     unit: recipeData.unit,
-                    ingredients: transformedIngredients
+                    ingredient: transformedIngredients
                 });
 
             } catch (error) {
@@ -70,7 +70,7 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
 
         setRecipe(prev => ({
             ...prev,
-            ingredients: [...prev.ingredients, newItem]
+            ingredient: [...prev.ingredient, newItem]
         }));
 
         setCurrentItem({
@@ -80,9 +80,9 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
     };
 
     const removeItem = (index) => {
-        const updatedItems = [...recipe.ingredients];
+        const updatedItems = [...recipe.ingredient];
         updatedItems.splice(index, 1);
-        setRecipe({ ...recipe, ingredients: updatedItems });
+        setRecipe({ ...recipe, ingredient: updatedItems });
     };
 
     const handleRecipeChange = (e) => {
@@ -94,7 +94,7 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
     };
 
     const handleSubmit = async () => {
-        if (!recipe.name || !recipe.yield_quantity || !recipe.unit || recipe.ingredients.length === 0) {
+        if (!recipe.recipe_name || !recipe.yield_quantity || !recipe.unit || recipe.ingredient.length === 0) {
             return;
         }
 
@@ -102,10 +102,10 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
         try {
             // Preparar datos para enviar (sin input_name)
             const recipeData = {
-                name: recipe.name,
+                recipe_name: recipe.recipe_name,
                 yield_quantity: recipe.yield_quantity,
                 unit: recipe.unit,
-                ingredients: recipe.ingredients.map(ingredient => ({
+                ingredient: recipe.ingredient.map(ingredient => ({
                     input_id: ingredient.input_id,
                     quantity_required: ingredient.quantity_required
                 }))
@@ -142,9 +142,9 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
                                 <input
                                     type="text"
                                     className="form-control"
-                                    id="name"
-                                    name="name"
-                                    value={recipe.name}
+                                    id="recipe_name"
+                                    name="recipe_name"
+                                    value={recipe.recipe_name}
                                     onChange={handleRecipeChange}
                                     required
                                 />
@@ -186,7 +186,7 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
 
                         {/* Tabla de ingredientes de la receta */}
                         <RecipeItemsTable
-                            items={recipe.ingredients}
+                            items={recipe.ingredient}
                             onRemoveItem={removeItem}
                         />
                     </div>
@@ -196,7 +196,7 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
                             className="btn btn-primary"
                             style={{ backgroundColor: ' #176FA6' }}
                             onClick={handleSubmit}
-                            disabled={recipe.ingredients.length === 0 || !recipe.name || !recipe.yield_quantity || !recipe.unit || saving}
+                            disabled={recipe.ingredient.length === 0 || !recipe.recipe_name || !recipe.yield_quantity || !recipe.unit || saving}
                         >
                             Actualizar Receta
                         </button>

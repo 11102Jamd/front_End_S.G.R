@@ -55,15 +55,6 @@ function App() {
               </RoleBasedControl>
             }/> */}
 
-            <Route path='/proveedores' element={
-              <RoleBasedControl allowedRoles={['Administrador']}>
-                <Supplier />
-              </RoleBasedControl>
-            } />
-
-
-
-
             {/* <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Purchase />
@@ -101,6 +92,7 @@ function App() {
                   <Production />
                 </RoleBasedControl>
               } />}
+              
             <Route path='/recipe' element={
               <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
                 <Recipe />
