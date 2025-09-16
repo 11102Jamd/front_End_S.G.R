@@ -58,19 +58,19 @@ export const updateUser = async (id, userData) => {
 
 
 /**
- * Elimina un usuario de la API.
+ * Inhabilitar un usuario de la API.
  * @async
- * @function deleteUser
- * @param {number|string} id - ID del usuario a eliminar.
+ * @function 
+ * @param {number|string} id - ID del usuario a Inhabilitar.
  * @returns {Promise<Object>} Respuesta de la API tras la eliminación.
- * @throws Lanza un error si la eliminación falla.
+ * @throws Lanza un error si la Inhabiliacion falla.
  */
-export const deleteUser = async(id) => {
+export const disableUser = async(id) => {
     try {
-        const response = await api.delete(`/users/${id}`);
+        const response = await api.patch(`/user/${id}/disable`);
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el usuario", error);
+        console.error("error al inhabilitar el usuario", error);
         throw error;
     };
 };

@@ -42,35 +42,15 @@ function Sidebar() {
                     </Link>
                 )}
 
-                <Link to="/productos" className="sidebar-link">
-                    <i className="bi bi-box-seam"></i>
-                    {isOpen && <span>Productos</span>}
-                </Link>
-
-                {/* Solo visible para Administrador y Cajero */}
-                {(user.rol === 'Administrador' || user.rol === 'Cajero') && (
-                    <Link to="/pedidos" className="sidebar-link">
-                        <i className="bi bi-receipt"></i>
-                        {isOpen && <span>Pedidos</span>}
+                {(user.rol === 'Administrador' || user.rol === 'Cajero' || user.rol === 'Panadero') && (
+                    <Link to="/productos" className="sidebar-link">
+                        <i className="bi bi-box-seam"></i>
+                        {isOpen && <span>Productos</span>}
                     </Link>
                 )}
 
-                {/* Solo visible para Administrador */}
-                {user.rol === 'Administrador' && (
-                    <>
-                        <Link to="/proveedores" className="sidebar-link">
-                            <i className="bi bi-truck"></i>
-                            {isOpen && <span>Proveedores</span>}
-                        </Link>
-                        <Link to="/compras" className="sidebar-link">
-                            <i className="bi bi-cart-check"></i>
-                            {isOpen && <span>Compras</span>}
-                        </Link>
-                    </>
-                )}
-
-                {/* Visible para Administrador y Panadero */}
-                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                {/* Visible para todos los roles */}
+                {(user.rol === 'Administrador' || user.rol === 'Panadero' || user.rol === 'Cajero') && (
                     <Link to="/insumos" className="sidebar-link">
                         <i className="bi bi-clipboard-data"></i>
                         {isOpen && <span>Insumos</span>}
@@ -92,10 +72,34 @@ function Sidebar() {
                     </Link>
                 )}
 
+                {/* Solo visible para Administrador y Cajero */}
+                {(user.rol === 'Administrador' || user.rol === 'Cajero') && (
+                    <Link to="/ventas" className="sidebar-link">
+                        <i className="bi bi-receipt"></i>
+                        {isOpen && <span>Ventas</span>}
+                    </Link>
+                )}
 
+                {/**Solo visible para Administrador y Panadero */}
                 {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
-                    <Link to="/reportes" className="sidebar-link">
+                    <Link to="/recetas" className="sidebar-link">
+                        <i className="bi bi-egg-fried"></i>
+                        {isOpen && <span>Recetas</span>}
+                    </Link>
+                )}
+
+                {/* Visible para Administrador y Panadero */}
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/producciones" className="sidebar-link">
                         <i className="bi bi-gear"></i>
+                        {isOpen && <span>Produccion</span>}
+                    </Link>
+                )}
+
+                {/*Visible para Administrador */}
+                {(user.rol === 'Administrador') && (
+                    <Link to="/reportes" className="sidebar-link">
+                        <i className="bi bi-archive"></i>
                         {isOpen && <span>Reportes</span>}
                     </Link>
                 )}

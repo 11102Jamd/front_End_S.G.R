@@ -5,8 +5,7 @@ import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import CreateUserModal from "./CreateUserModal";
 import EditUserModal from "./EditUserModal";
-import { errorDeleteUser, showConfirmDeleteUser, successDeleteUser } from "../../utils/alerts/alertsUsers";
-
+import { successDisableUser } from "../../utils/alerts/alertsUsers";
 
 /**
  * Componente para la gestión de usuarios.
@@ -48,25 +47,25 @@ function User(){
     };
 
     /**
-     * Maneja la eliminación de un usuario.
+     * Maneja la inhabilitacion de un usuario.
      * - Confirma la acción.
-     * - Llama a la API para eliminarlo.
+     * - Llama a la API para inhabilitarlo.
      * - Refresca la lista si es exitoso.
-     * @param {number|string} id - ID del usuario a eliminar.
+     * @param {number|string} id - ID del usuario inhabilitar.
      */
-    const handleDeleteUser = async (id) => {
-        const result = await showConfirmDeleteUser();
+    const handleDisableUser = async (id) => {
+        const result = await showConfirmDisableUser();
         if (result.isConfirmed) {
             try {
-                await deleteUser(id);
-                await successDeleteUser();
+                await disableUser(id);
+                await successDisableUser;
                 await fetchUsers();
             } catch (error) {
-                console.error("Error al eliminar el usuario: ",error);
-                await errorDeleteUser();
-            }
-        }
-    }
+                console.error("error al inhabilitar el usuario", error);
+                await errorDisableUser();                
+            };
+        };
+    };
 
     // configuracion de columnas para la tabla de usuarios
     const columns = [
@@ -95,7 +94,7 @@ function User(){
             cell: row => (
                 <div className="btn-group" role="group">
                     <button 
-                        onClick={() => handleDeleteUser(row.id)}
+                        onClick={() => handleDisableUser(row.id)}
                         className='btn btn-danger btn-sm rounded-2 p-2'
                         title="Eliminar"
                     >
