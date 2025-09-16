@@ -1,28 +1,46 @@
-import { useState } from "react";
-import { createInput } from "../../utils/enpoints/input";
-import { errorCreateInput, successCreateInput } from "../../utils/alerts/alertsInputs";
+import React, { useState } from "react";
 import { validateName } from "../../utils/validations/validationFields";
+import { errorCreateInput, successCreateInput } from "../../utils/alerts/alertsInputs";
+import { createInput } from "../../utils/enpoints/input";
 
-function CreateInputModal({ onClose, onInputCreated }) {
+/**
+ * Componente modal para crear un nuevo Insumo
+ * @param {function} onClose - Cierra el modal
+ * @param {function} onProductCreated - Callback para actualizar la lista de Insumos después de crear uno
+ */
+function CreateInputModal({onClose, onInputCreated}){
+    // Estado para almacenar los datos del nuevo Insumo
     const [newInput, setNewInput] = useState({
         name:'',
-        unit:''
+        category:''
     });
 
+    //Estado para manejar los errores
     const [errors, setErrors] = useState({});
 
+    /**
+     * Valida el formulario de edición del Insumo.
+     * @returns {boolean} - Retorna `true` si no hay errores, `false` en caso contrario.
+     */
     const validateFormInput = () => {
         const newErrors = {
             name: validateName(newInput.name, 'Nombre del insumo'),
-            unit: !newInput.unit ? 'La unidad de medida es requerida' : null        };
+            category: !newInput.category ? 'La categoria es requeirda' : null        };
 
         setErrors(newErrors);
 
         return !Object.values(newErrors).some(error => error !== null);
     };
 
+    /**
+     * Maneja los cambios en los inputs del formulario
+     * Incluye validación en tiempo real si ya había errores
+     */
     const handleChange = (e) => {
+
+        // Revalida el campo modificado si ya tenía errores
         const { id, value } = e.target;
+
         setNewInput(prev => ({ ...prev, [id]: value }));
         
         let error = null;
@@ -36,19 +54,28 @@ function CreateInputModal({ onClose, onInputCreated }) {
         setErrors(prev => ({ ...prev, [id]: error }));
     };
 
+    /**
+     * Envía la solicitud para crear un producto
+     * Si la validación falla, muestra una alerta de error
+     */
     const createInputHandler = async () => {
         if (!validateFormInput()) {
             errorCreateInput();
             return;
         }
         try {
+            //se ejecuta el enpoint de input pasandole en la solicitud la informacion del formulario
             await createInput(newInput);
+            // Alerta de exito
             await successCreateInput();
+            //Actauliza la lista de Insumos
             onInputCreated();
+            //Cierra el modal
             onClose();
+            //Resetea el Formulario
             setNewInput({
                 name:'',
-                unit:''
+                category:''
             });
         } catch (error) {
             console.error('error al crear el inusmo', error);
@@ -78,22 +105,20 @@ function CreateInputModal({ onClose, onInputCreated }) {
                             {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="unit" className="form-label">Unidad de Medida</label>
+                            <label htmlFor="category" className="form-label">Categoria</label>
                             <select 
-                                className={`form-control form-control-sm ${errors.unit ? 'is-invalid' : ''}`} 
-                                id="unit"
-                                value={newInput.unit}
+                                className={`form-control form-control-sm ${errors.category ? 'is-invalid' : ''}`} 
+                                id="category"
+                                value={newInput.category}
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="">Selecciona una Unidad</option>
-                                <option value="kg">kilogramos</option>
-                                <option value="lb">Libras</option>
-                                <option value="l">Litros</option>
-                                <option value="un">unidad</option>
-                                <option value="g">gramos</option>
+                                <option value="">Selecciona una Categoria</option>
+                                <option value="liquido">Liquidos</option>
+                                <option value="solido_con">Solidos Contable</option>
+                                <option value="solido_no_con">Solidos no Contable</option>
                             </select>
-                            {errors.unit && <div className="invalid-feedback">{errors.unit}</div>}
+                            {errors.category && <div className="invalid-feedback">{errors.category}</div>}
                         </div>
                     </div>
                     <div className="modal-footer" style={{alignItems:'center'}}>

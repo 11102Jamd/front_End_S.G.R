@@ -36,8 +36,8 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
     const [currentItem, setCurrentItem] = useState({
         input_id: '',
         quantity_total: '',
-        unit_price: '',
-        unit_measure: 'g'
+        unit:'',
+        unit_price: ''
     });
 
     /** Estado booleano para mostrar indicador de carga */
@@ -59,8 +59,8 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
         const newItem = {
             input_id: parseInt(currentItem.input_id),
             quantity_total: parseFloat(currentItem.quantity_total),
+            unit: currentItem.unit,
             unit_price: parseFloat(currentItem.unit_price),
-            unit_measure: currentItem.unit_measure
         };
 
         setOrder(prev => ({
@@ -72,8 +72,8 @@ function CreateOrderModal({ onClose, onOrderCreated }) {
         setCurrentItem({
             input_id: '',
             quantity_total: '',
+            unit:'',
             unit_price: '',
-            unit_measure: 'g'
         });
     };
 

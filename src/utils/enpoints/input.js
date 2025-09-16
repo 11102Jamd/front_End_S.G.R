@@ -30,12 +30,20 @@ export const updateInputs = async (id, inputData) => {
     };
 };
 
-export const deleteInputs = async (id) => {
+/**
+ * Inhabilitar un insumo de la API.
+ * @async
+ * @function 
+ * @param {number|string} id - ID del insumo a inhabilitar.
+ * @returns {Promise<Object>} Respuesta de la API tras la inhbailitacion.
+ * @throws Lanza un error si la Inhabiliacion falla.
+ */
+export const disableInput = async (id) => {
     try {
-        const response = await api.delete(`/input/${id}`);
+        const response = await api.patch(`/input/${id}/disable`);
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar el insumo", error);
-        throw error;
+        console.error("error al inhabilitar el insumo", error);
+        throw error;        
     };
 };

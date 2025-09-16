@@ -94,6 +94,24 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             required
                         />
                     </div>
+                    
+                    {/* Selector de Unidad de medida */}
+                    <div className="col-12 col-md-3">
+                        <label htmlFor='unit' className='form-label'>Unidad</label>
+                        <select
+                            id='unit'
+                            name='unit'
+                            className='form-select'
+                            value={currentItem.unit} // Asegura que se refleje el estado actual
+                            onChange={onItemChange} // Maneja el cambio de unidad
+                        >
+                            <option value="g">gramos</option>
+                            <option value="kg">kilo gramos</option>
+                            <option value="lb">libras</option>
+                            <option value="l">litros</option>
+                            <option value="un">Unidades</option>
+                        </select>
+                    </div>
 
                     {/* Campo Precio Unitario */}
                     <div className="col-12 col-md-2">
@@ -109,24 +127,6 @@ function InputSelector({ currentItem, onItemChange, onAddItem }) {
                             step="0.01"
                             required
                         />
-                    </div>
-
-                    {/* Selector de Unidad de medida */}
-                    <div className="col-12 col-md-3">
-                        <label htmlFor='unit_measure' className='form-label'>Unidad</label>
-                        <select
-                            id='unit_measure'
-                            name='unit_measure'
-                            className='form-select'
-                            value={currentItem.unit_measure} // Asegura que se refleje el estado actual
-                            onChange={onItemChange} // Maneja el cambio de unidad
-                        >
-                            <option value="g">gramos</option>
-                            <option value="kg">kilo gramos</option>
-                            <option value="lb">libras</option>
-                            <option value="l">litros</option>
-                            <option value="un">Unidades</option>
-                        </select>
                     </div>
 
                     {/* Botón para agregar insumo */}

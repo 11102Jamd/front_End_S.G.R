@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUser } from "../../utils/enpoints/users";
 import { validateEmail, validateName } from "../../utils/validations/validationFields";
-import { errorCreateUser, errorFormUser, successCreateUser } from "../../utils/alerts/alertsUsers";
+import { errorCreateUser, successCreateUser } from "../../utils/alerts/alertsUsers";
 
 
 /**
@@ -88,7 +88,6 @@ function CreateUserModal({onClose, onUserCreated}){
      */
     const createUserHandler = async () => {
         if (!validateUserForm()) {
-            await errorFormUser();
             return;
         }
         try {

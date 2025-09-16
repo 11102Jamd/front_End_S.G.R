@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { showOrder } from "../../utils/enpoints/purchase";
 import { errorShowDetails } from "../../utils/alerts/alertsOrder";
 import { formatCurrency } from "./format/format";
+import NumberFormatter from "../../components/NumberFormatter";
 
 /**
  * Componente ShowOrder
@@ -134,7 +135,7 @@ function ShowOrder({ show, onHide, orderId }) {
                                                 order.batches.map((batch, index) => (
                                                     <tr key={index}>
                                                         <td>{batch.input?.name || `Insumo ID: ${batch.input_id}`}</td>
-                                                        <td>{batch.quantity_total.toLocaleString()} {batch.input?.unit || 'un'}</td>
+                                                        <td><NumberFormatter value={batch.quantity_total}/> {batch.unit || 'g'}</td>
                                                         <td>${formatCurrency(batch.unit_price)}</td>
                                                         <td>${formatCurrency(batch.subtotal_price)}</td>
                                                     </tr>
@@ -173,7 +174,7 @@ function ShowOrder({ show, onHide, orderId }) {
                                                     {order.batches.map((batch, index) => (
                                                         <tr key={index}>
                                                             <td>{batch.input?.name || `Insumo ID: ${batch.input_id}`}</td>
-                                                            <td>{batch.input?.unit}</td>
+                                                            <td>{batch.unit}</td>
                                                             <td># {batch.batch_number || batch.id}</td>
                                                             <td>{batch.quantity_remaining || batch.quantity_total} g</td>
                                                             <td>{batch.received_date ? new Date(batch.received_date).toLocaleDateString() : 'N/A'}</td>
