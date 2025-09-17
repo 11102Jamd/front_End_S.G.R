@@ -75,7 +75,7 @@ function Recipe() {
         },
         {
             name: 'Cantidad',
-            selector: row => `${parseInt(row.yield_quantity)} ${row.unit}`,
+            selector: row => `${parseInt(row.yield_quantity)} unidades`,
             sortable: true,
             center: "true"
         },

@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { getInputs } from "../../utils/enpoints/input";
-
+/**
+ * Componente RecipeItemsTable
+ *
+ * Muestra en forma de tabla los ingredientes agregados a la receta,
+ * incluyendo su ID, nombre y cantidad requerida.
+ */
 function RecipeItemsTable({ items, onRemoveItem }) {
-    const [inputs, setInputs] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [inputs, setInputs] = useState([]); // Lista de insumos disponibles
+    const [loading, setLoading] = useState(true);// Estado de carga de los insumos
 
+
+    /**
+     * useEffect que carga los insumos desde el backend cuando se monta el componente
+     */
     useEffect(() => {
         const fetchInput = async () => {
             try {
-                const data = await getInputs();
+                const data = await getInputs();// Obtener lista de insumos
                 setInputs(data);
             } catch (error) {
                 console.error("Error al cargar insumos", error);
@@ -19,6 +28,9 @@ function RecipeItemsTable({ items, onRemoveItem }) {
         fetchInput();
     }, []);
 
+    /**
+     * Si no hay ingredientes en la lista, muestra un mensaje de advertencia
+     */
     if (items.length === 0) {
         return (
             <div className="card">
@@ -31,6 +43,9 @@ function RecipeItemsTable({ items, onRemoveItem }) {
         );
     }
 
+    /**
+     * Renderiza la tabla con los ingredientes agregados
+     */
     return (
         <div className="card">
             <div className="card-header bg-light">
