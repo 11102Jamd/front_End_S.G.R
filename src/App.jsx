@@ -24,6 +24,9 @@ import ReportDownloader from './pages/reports/ReportDownloader';
 // import Products from './components/productos/ProductsList';
 // import Pedidos from './components/pedidos/OrderList';
 // import Compras from './components/compras/PurchaseList';
+import Sale from './pages/sale/SaleList';
+
+
 
 
 function App() {
@@ -78,6 +81,12 @@ function App() {
             <Route path='/compras' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
                 <Order />
+              </RoleBasedControl>
+            } />
+
+            <Route path='/ventas' element={
+              <RoleBasedControl allowedRoles={['Administrador']}>
+                <Sale/>
               </RoleBasedControl>
             } />
 

@@ -61,15 +61,8 @@ function Sidebar() {
                 {/* Visible para Administrador y Panadero */}
                 {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
                     <Link to="/compras" className="sidebar-link">
-                        <i className="bi bi-gear"></i>
-                        {isOpen && <span>produccion</span>}
-                    </Link>
-                )}
-
-                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
-                    <Link to="/recipe" className="sidebar-link">
                         <i className="bi bi-journal-bookmark"></i>
-                        {isOpen && <span>receta</span>}
+                        {isOpen && <span>Compras</span>}
                     </Link>
                 )}
 

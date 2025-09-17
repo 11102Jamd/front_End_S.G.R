@@ -6,7 +6,7 @@ function Footer() {
         <footer className="footer">
             <div className="container">
                 <p className="text-center mb-0">
-                    © {new Date().getFullYear()} Pan de Yuca Que Rico - Todos los derechos reservados
+                    © {new Date().getFullYear()} S.G.R - Todos los derechos reservados
                 </p>
             </div>
         </footer>

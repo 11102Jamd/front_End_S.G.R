@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import '../../index.css';
 import { Link } from 'react-router-dom';
 import { errorLogin } from '../../utils/alerts/alertsUsers';
-
+import profileImage from '../../assets/Foto.png';
 
 /**
  * Componente de formulario de inicio de sesión.
@@ -103,9 +103,8 @@ const Login = () => {
                 <Link to="/reset-password">¿Quieres Cambiar Contraseña?</Link>
                 </form>
             </div>
-            <div className='login-image-panel'>
-                <div className='circle'></div>
-                <p>S.G.R</p>
+            <div className='login-image-panel'>                
+                <img src={profileImage} alt="Logo" style={{ width: '200px', height: '100px', borderRadius: '0%', marginRight: '10px' }} />
             </div>
         </div>
     </div>
