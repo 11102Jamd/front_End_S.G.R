@@ -12,7 +12,6 @@ import DataTable from "react-data-table-component";
 // Componente principal de Gestión de Ventas, incluyendo tabla y modales
 function Sale() {
 
-    
     const { user } = useAuth();
 
     if (!user) return null;
@@ -61,31 +60,36 @@ function Sale() {
         {
             name:'Venta N°',
             selector: row => row.id,
-            center: "true"
+            center: undefined, // CAMBIO: Se quitó center para evitar warning de React
+            style: { textAlign: 'center' } // CAMBIO: Se centró el contenido visualmente
         },
         {
             name: 'Vendedor',
             selector: row => row.user?.name ?? 'N/A',
             sortable: true,
-            center: "true"
+            center: undefined, // CAMBIO: Se quitó center
+            style: { textAlign: 'center' } // CAMBIO: centrado visual
         },
         {
             name: 'Fecha de Venta',
             selector: row => row.sale_date ?? 'N/A',
             sortable: true,
-            center: "true"
+            center: undefined, // CAMBIO: Se quitó center
+            style: { textAlign: 'center' } // CAMBIO: centrado visual
         },
         {
             name: 'Total',
             sortable: true,
-            center: "true",
+            center: undefined, // CAMBIO: Se quitó center
+            style: { textAlign: 'center' }, // CAMBIO: centrado visual
             selector: row => row.sale_total
         },
         {
             name: 'Cant. Productos',
             selector: row => row.sale_products ? row.sale_products.length : 0,
             sortable: true,
-            center: "true"
+            center: undefined, // CAMBIO: Se quitó center
+            style: { textAlign: 'center' } // CAMBIO: centrado visual
         },
         {
             // Columna de acciones (Eliminar y Ver Detalles)
@@ -113,7 +117,8 @@ function Sale() {
                 </div>
             ),
             ignoreRowClick: true,
-            center: "true"
+            center: undefined, // CAMBIO: Se quitó center
+            style: { textAlign: 'center' } // CAMBIO: centrado visual
         },
     ];
 

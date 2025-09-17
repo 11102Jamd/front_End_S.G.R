@@ -1,20 +1,19 @@
 // Importaciones necesarias
 import React, { useState, useEffect } from 'react'; 
-import { getProduct } from '../../utils/enpoints/product'; 
+import { getProducts } from '../../utils/enpoints/product'; 
 import LoadingSpinner from '../../components/LoadingSpinner'; 
 
-// Creo el Componente ProductSelector que permite seleccionar productos y cantidades
+// Componente ProductSelector
 function ProductSelector({ currentProduct, onProductChange, onAddProduct }) {
 
-    
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // useEffect para cargar los productos cuando el componente se monta, llamando al endpoint correspondiente
+    // useEffect para cargar los productos cuando el componente se monta
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const data = await getProduct(); 
+                const data = await getProducts(); // ✅ CORREGIDO: getProducts plural
                 setProducts(data); 
             } catch (error) {
                 console.error("Error cargando productos:", error); 
@@ -23,7 +22,7 @@ function ProductSelector({ currentProduct, onProductChange, onAddProduct }) {
             }
         };
         fetchProducts(); 
-    }, []); 
+    }, []);
 
     // Mostrar spinner mientras se cargan los productos
     if (loading) {
@@ -42,7 +41,6 @@ function ProductSelector({ currentProduct, onProductChange, onAddProduct }) {
             <div className="card-header bg-light">
                 <h6 className="mb-0">Agregar Productos</h6>
             </div>
-
 
             <div className="card-body">
                 <div className="row g-3">
@@ -87,7 +85,7 @@ function ProductSelector({ currentProduct, onProductChange, onAddProduct }) {
                         <button 
                             onClick={onAddProduct}
                             className="btn btn-primary w-100"
-                            disabled={!currentProduct.product_id || !currentProduct.quantity_requested} // Deshabilita si no hay producto o cantidad
+                            disabled={!currentProduct.product_id || !currentProduct.quantity_requested}
                         >
                             <i className="bi bi-plus-lg me-2"></i>Agregar
                         </button>
@@ -98,5 +96,5 @@ function ProductSelector({ currentProduct, onProductChange, onAddProduct }) {
     );
 }
 
-// Exportar componente para usarlo en otras partes de la app
+// Exportar componente
 export default ProductSelector;

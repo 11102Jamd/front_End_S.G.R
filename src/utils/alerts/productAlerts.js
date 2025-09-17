@@ -1,12 +1,11 @@
 import Swal from "sweetalert2";
 
-
-
+// ✅ Éxito al crear producto
 export const succesCreateProduct = () => {
     return Swal.fire({
-        title:"Exito",
-        text:"product creado con exito",
-        icon:"success",
+        title: "Éxito",
+        text: "Producto creado con éxito",
+        icon: "success",
         showClass: {
             popup: `
             animate__animated
@@ -17,10 +16,10 @@ export const succesCreateProduct = () => {
         hideClass: {
             popup: 'animate__animated animate__fadeOutDown animate__faster'
         },
-        width :'350px',
-        background:"#e6fff5",
-        color:"#220900",
-        iconColor: '#77EE74',  // color del círculo del ícono
+        width: '350px',
+        background: "#e6fff5",
+        color: "#220900",
+        iconColor: '#77EE74',
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#04A1FF",
         customClass: {
@@ -31,14 +30,16 @@ export const succesCreateProduct = () => {
         }
     });
 };
+
+// ❌ Error al crear producto
 export const errorCreateProduct = () => {
     return Swal.fire({
-        title:"Error",
-        text:"No se pudo crear el producto",
-        icon:"error",
-        background:"#Afffff",
-        color:"#220900",
-        width :'350px',
+        title: "Error",
+        text: "No se pudo crear el producto",
+        icon: "error",
+        background: "#Afffff",
+        color: "#220900",
+        width: '350px',
         customClass: {
             popup: "my-swal-popup",
             title: "my-swal-title",
@@ -47,11 +48,13 @@ export const errorCreateProduct = () => {
         }
     });
 };
+
+// ✅ Éxito al actualizar producto
 export const succesUpdateProduct = () => {
     return Swal.fire({
-        title:"Exito",
-        text:"producto actualizado con exito",
-        icon:"success",
+        title: "Éxito",
+        text: "Producto actualizado con éxito",
+        icon: "success",
         showClass: {
             popup: `
             animate__animated
@@ -62,10 +65,10 @@ export const succesUpdateProduct = () => {
         hideClass: {
             popup: 'animate__animated animate__fadeOutDown animate__faster'
         },
-        width :'350px',
-        background:"#e6fff5",
-        color:"#220900",
-        iconColor: '#77EE74',  // color del círculo del ícono
+        width: '350px',
+        background: "#e6fff5",
+        color: "#220900",
+        iconColor: '#77EE74',
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#04A1FF",
         customClass: {
@@ -75,14 +78,17 @@ export const succesUpdateProduct = () => {
             confirmButton: "my-swal-button",
         }
     });
-};export const errorUpdateProduct = () => {
+};
+
+// ❌ Error al actualizar producto
+export const errorUpdateProduct = () => {
     return Swal.fire({
-        title:"Error",
-        text:"No se pudo actualizar el producto",
-        icon:"error",
-        background:"#Afffff",
-        color:"#220900",
-        width :'350px',
+        title: "Error",
+        text: "No se pudo actualizar el producto",
+        icon: "error",
+        background: "#Afffff",
+        color: "#220900",
+        width: '350px',
         customClass: {
             popup: "my-swal-popup",
             title: "my-swal-title",

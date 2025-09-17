@@ -1,0 +1,72 @@
+import React, { useState } from 'react';
+import { deleteProduct } from '../utils/enpoints/product'; // Ajusta la ruta si es necesario
+
+const DeleteButton = ({ productId, onDeleted }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [message, setMessage] = useState('');
+
+    const handleDelete = async () => {
+        try {
+            await deleteProduct(productId); // Llama a tu backend
+            setMessage('Producto eliminado correctamente ');
+            if (onDeleted) onDeleted(); // Recarga la lista después de eliminar
+        } catch (error) {
+            setMessage('Error al eliminar el producto ');
+        } finally {
+            setShowModal(false);
+        }
+    };
+
+    return (
+        <>
+            <button
+                className='btn btn-danger btn-sm rounded-2 p-2'
+                title="Eliminar"
+                onClick={() => setShowModal(true)}
+            >
+                <i className="bi bi-trash fs-6"></i>
+            </button>
+
+            {/* Modal de confirmación */}
+            {showModal && (
+                <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title text-danger">⚠ Confirmar acción</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                            </div>
+                            <div className="modal-body">
+                                <p className="fs-5">¿Estás seguro de que quieres inhabilitar este producto?</p>
+                            </div>
+                            <div className="modal-footer">
+                                {/* Cancelar = Azul */}
+                                <button className="btn btn-primary" onClick={() => setShowModal(false)}>
+                                    Cancelar
+                                </button>
+                                {/* Eliminar = Rojo */}
+                                <button className="btn btn-danger" onClick={handleDelete}>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Toast de mensaje */}
+            {message && (
+                <div className="toast-container position-fixed top-50 start-50 translate-middle">
+                    <div className="toast show border-0 shadow" role="alert">
+                        <div className="toast-body">
+                            {message}
+                            <button type="button" className="btn-close float-end" onClick={() => setMessage('')}></button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
+export default DeleteButton;

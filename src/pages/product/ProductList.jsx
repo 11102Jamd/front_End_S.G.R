@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import customStyles from "../../utils/styles/customStyles";
-import { getProduct } from "../../utils/enpoints/product";
+import { getProducts } from "../../utils/enpoints/product";
 import EditProductModal from "./EditProductModal";
 import CreateProductModal from "./CreateProductModal";
-
-
-
+import DeleteButton from "../../components/DeleteButton"; 
+import CreateButton from "../../components/CreateButton"; 
 
 function Product() {
     const [product, setProduct] = useState([]);
@@ -15,24 +14,28 @@ function Product() {
     const [showModal, setShowModal] = useState(false);
     const [pending, setPending] = useState(true);
 
-
     useEffect(() => {
         fetchProduct();
     }, []);
 
-
     const fetchProduct = async () => {
         try {
             setPending(true);
-            const data = await getProduct();
+            const data = await getProducts();
             console.log("Datos recibidos:", data);
-            await 
             setProduct(data);
             setPending(false);
         } catch (error) {
-            console.error('Error al mostrar todos los Prodcutos: ', error);
+            console.error('Error al mostrar todos los Productos: ', error);
             setPending(false);
-        };
+        }
+    };
+
+    const formatCOP = (value) => {
+    return `$ ${new Intl.NumberFormat('es-CO', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+    }).format(value)} Col`;
     };
 
     const columns = [
@@ -43,25 +46,17 @@ function Product() {
         },
         {
             name: 'Precios por unidad',
-            selector: row => `${row.unit_price}`,
+            selector: row => formatCOP(row.unit_price),
             sortable: true,
         },
         {
             name: 'Acciones',
             cell: row => (
-                <div className="btn-group" role="group">
+                <div className="d-flex gap-2"> {/*  Agregamos espacio entre botones */}
+                    <DeleteButton productId={row.id} onDeleted={fetchProduct} />
                     <button
-                        className='btn btn-danger btn-sm rounded-2 p-2'
-                        title="Eliminar"
-                    >
-                        <i className="bi bi-trash fs-6"></i>
-                    </button>
-                    <button
-                        onClick={() => {
-                            console.log('Editando Producto:', row);
-                            setProductSelected(row);
-                        }}
-                        className='btn btn-primary btn-sm ms-2 rounded-2 p-2'
+                        onClick={() => setProductSelected(row)}
+                        className='btn btn-primary btn-sm rounded-2 p-2'
                         title="Editar"
                     >
                         <i className="bi bi-pencil-square fs-6"></i>
@@ -72,7 +67,6 @@ function Product() {
         }
     ];
 
-
     return (
         <div className='container-fluid mt-4'>
             <div className='card'>
@@ -81,13 +75,12 @@ function Product() {
                 </div>
 
                 <div className='card-body p-4'>
-                    <div className='d-flex justify-content-between mb-3'>
-                        <button
-                            onClick={() => setShowModal(true)}
-                            className='btn btn-success'
-                        >
-                            <i className="bi bi-plus-circle"></i> Crear Producto
-                        </button>
+                    {/* Botón Crear Producto usando CreateButton */}
+                    <div className='d-flex justify-content-start mb-3'>
+                        <CreateButton 
+                            text="Crear Producto" 
+                            onClick={() => setShowModal(true)} 
+                        />
                     </div>
 
                     <DataTable
@@ -104,10 +97,14 @@ function Product() {
                         striped
                         customStyles={customStyles}
                         progressPending={pending}
-                        progressComponent={<div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Cargando...</span>
-                        </div>}
-                        noDataComponent={<div className="alert alert-info">No hay Productos Registrados</div>}
+                        progressComponent={
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="visually-hidden">Cargando...</span>
+                            </div>
+                        }
+                        noDataComponent={
+                            <div className="alert alert-info">No hay Productos Registrados</div>
+                        }
                     />
                 </div>
             </div>
@@ -119,7 +116,6 @@ function Product() {
                 />
             )}
 
-            
             {productSelected && (
                 <EditProductModal
                     product={productSelected}
@@ -130,4 +126,5 @@ function Product() {
         </div>
     );
 }
+
 export default Product;
