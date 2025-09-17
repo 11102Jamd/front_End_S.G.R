@@ -101,10 +101,10 @@ function ShowSale({ show, onHide, saleId }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {sale.sale_products?.length > 0 ? (
-                                                sale.sale_products.map((saleProduct, index) => (
+                                            {sale.sale_product?.length > 0 ? (
+                                                sale.sale_product.map((saleProduct, index) => (
                                                     <tr key={index}>
-                                                        <td>{saleProduct.product?.name || `Producto ID: ${saleProduct.product_id}`}</td>
+                                                        <td>{saleProduct.product?.product_name || `Producto ID: ${saleProduct.product_id}`}</td>
                                                         <td>{saleProduct.quantity_requested}/</td>
                                                         <td>{saleProduct.product?.unit_price}</td>
                                                         <td>{saleProduct.subtotal_price} </td>

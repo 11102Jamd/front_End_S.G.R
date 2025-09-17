@@ -1,5 +1,12 @@
 import api from "../axiosConfig";
 
+/**
+ * Obtiene la lista de compra desde la API.
+ * @async
+ * @function getOrder
+ * @returns {Promise<Object[]>} Lista de compra obtenida desde el backend.
+ * @throws Lanza un error si la petición falla.
+ */
 export const getOrder = async () => {
     try {
         const response = await api.get("/order");
@@ -19,6 +26,14 @@ export const createOrder = async (orderData) => {
     }
 };
 
+/**
+ * elimina una receta de la API.
+ * @async
+ * @function 
+ * @param {number|string} id - ID de la receta a eliminar.
+ * @returns {Promise<Object>} Respuesta de la API tras la eliminacion.
+ * @throws Lanza un error si la Inhabiliacion falla.
+ */
 export const deleteOrder = async (id) => {
     try {
         const response = await api.delete(`/order/${id}`);
@@ -29,7 +44,14 @@ export const deleteOrder = async (id) => {
     }
 };
 
-
+/**
+ * obtiene una compra de la API.
+ * @async
+ * @function 
+ * @param {number|string} id - ID de la compra a obtener.
+ * @returns {Promise<Object>} Respuesta de la API.
+ * @throws Lanza un error si la Inhabiliacion falla.
+ */
 export const showOrder = async (id) => {
     try {
         const response = await api.get(`/order/${id}`);
