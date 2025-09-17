@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { errorEditUser, errorFormUser, successEditUser } from "../../utils/alerts/alertsUsers";
+import { errorUpdateUser, successUpdateUser } from "../../utils/alerts/alertsUsers";
 import { updateUser } from "../../utils/enpoints/users";
 import { validateName, validateEmail } from "../../utils/validations/validationFields";
 
@@ -82,7 +82,6 @@ function EditUserModal({user, onClose, onUserUpdated}){
      */
     const updateUserHandler = async () => {
         if (!validateUserEditForm()) {
-            await errorFormUser();
             return;
         }
 
@@ -95,12 +94,12 @@ function EditUserModal({user, onClose, onUserUpdated}){
                 email: userUpdate.email,
                 rol: userUpdate.rol
             });
-            await successEditUser();
+            await successUpdateUser();
             onUserUpdated();
             onClose();
         } catch (error) {
             console.error("Error al actualizar el usuario: ",error);
-            await errorEditUser();
+            await errorUpdateUser();
         };
     };
 

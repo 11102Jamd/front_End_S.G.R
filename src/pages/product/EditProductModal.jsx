@@ -11,64 +11,71 @@ const formatCOP = (value) =>
 const parseCOP = (formattedValue) => parseInt(formattedValue.replace(/\D/g, ""), 10) || 0;
 
 
+/**
+ * Componente modal para editar un producto existente.
+ *
+ * @component
+ * @param {Object} props - Propiedades del componente.
+ * @param {Object} props.product - Datos actuales del producto a editar.
+ * @param {Function} props.onClose - Función para cerrar el modal.
+ * @param {Function} props.onProductUpdate - Función para recargar la lista de Productos tras la actualización.
+ */
 function EditProductModal({ product, onClose, onProductUpdate }) {
-  const [productUpdate, setProductUpdate] = useState({
-    ...product,
-    unit_price: formatCOP(product.unit_price), // 👈 Mostramos ya formateado
-  });
-  const [errors, setErrors] = useState({});
+    const [productUpdate, setProductUpdate] = useState(product);
+    const [errors, setErrors] = useState({});
 
-  const validateEditProductForm = () => {
-    const newErrors = {
-      product_name: validateName(productUpdate.product_name, "Nombre del Producto"),
-      unit_price: validatePrice(parseCOP(productUpdate.unit_price), "Precio del Producto"),
-    };
+    const validateEditProductForm = () => {
+        const newErrors = {
+            product_name: validateName(productUpdate.product_name, 'Nombre del Producto'),
+            unit_price: validatePrice(productUpdate.unit_price, 'Precio del Producto')
+        };
 
     setErrors(newErrors);
 
     return !Object.values(newErrors).some((error) => error !== null);
   };
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-
-    setProductUpdate((prev) => ({
-      ...prev,
-      [id]: id === "unit_price" ? value : value,
-    }));
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setProductUpdate(prev => ({ ...prev, [id]: value }));
 
     let error = null;
 
-    switch (id) {
-      case "product_name":
-        error = validateName(value, "Nombre del Producto");
-        break;
-      case "unit_price":
-        error = validatePrice(parseCOP(value), "Precio del Producto");
-        break;
-      default:
-        break;
-    }
-    setErrors((prev) => ({ ...prev, [id]: error }));
-  };
+        switch (id) {
+            case 'product_name':
+                error = validateName(value, 'Nombre del Producto');
+                break;
+            case 'unit_price':
+                error = validatePrice(value, 'Precio del Producto');
+                break;
+            default:
+                break;
+        }
+        setErrors(prev => ({ ...prev, [id]: error }));
+    };
 
-  const updateProductHandler = async () => {
-    if (!validateEditProductForm()) return;
+    const updateProductHandler = async () => {
 
-    try {
-      await updateProduct(product.id, {
-        product_name: productUpdate.product_name,
-        unit_price: parseCOP(productUpdate.unit_price), // 👈 Enviamos valor numérico
-      });
+        if (!validateEditProductForm()) {
+            // Si el formulario es inválido, no hacemos la llamada a la API
+            return;
+        }
 
-      await succesUpdateProduct();
-      onProductUpdate();
-      onClose();
-    } catch (error) {
-      console.error("Error al actualizar el producto", error);
-      await errorUpdateProduct();
-    }
-  };
+        try {
+            // 🔧 CAMBIO: ahora enviamos product.id asegurándonos de que no sea undefined
+            await updateProduct(product.id, {
+                product_name: productUpdate.product_name,
+                unit_price: productUpdate.unit_price
+            });
+
+            await succesUpdateProduct();
+            onProductUpdate();
+            onClose();
+        } catch (error) {
+            console.error("Error al actualizar el producto", error);
+            await errorUpdateProduct();
+        }
+    };
 
   return (
     <div className="modal fade show" style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}>
@@ -98,7 +105,7 @@ function EditProductModal({ product, onClose, onProductUpdate }) {
                 Precio Unitario
               </label>
               <input
-                type="text" // 👈 OJO: ahora es texto para poder mostrar $ y puntos
+                type="text" // ahora es texto para poder mostrar $ y puntos
                 className={`form-control form-control-sm ${errors.unit_price ? "is-invalid" : ""}`}
                 id="unit_price"
                 value={productUpdate.unit_price}

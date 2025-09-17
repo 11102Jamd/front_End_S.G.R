@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '../App.css';
+import "../App.css"
 import React, { useState } from "react";
+
 
 
 function Sidebar() {
@@ -57,11 +58,18 @@ function Sidebar() {
                     </Link>
                 )}
 
-                {/* Solo visible para Administrador y Cajero */}
-                {(user.rol === 'Administrador' || user.rol === 'Cajero') && (
-                    <Link to="/compras" className="sidebar-link">
-                        <i className="bi bi-cart-check"></i>
-                        {isOpen && <span>Compras</span>}
+                {/* Visible para Administrador y Panadero */}
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/production" className="sidebar-link">
+                        <i className="bi bi-gear"></i>
+                        {isOpen && <span>produccion</span>}
+                    </Link>
+                )}
+
+                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                    <Link to="/recipe" className="sidebar-link">
+                        <i className="bi bi-journal-bookmark"></i>
+                        {isOpen && <span>receta</span>}
                     </Link>
                 )}
 
@@ -83,13 +91,12 @@ function Sidebar() {
 
                 {/* Visible para Administrador y Panadero */}
                 {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
-                    <Link to="/producciones" className="sidebar-link">
+                    <Link to="/production" className="sidebar-link">
                         <i className="bi bi-gear"></i>
                         {isOpen && <span>Produccion</span>}
                     </Link>
                 )}
 
-                {/*Visible para Administrador */}
                 {(user.rol === 'Administrador') && (
                     <Link to="/reportes" className="sidebar-link">
                         <i className="bi bi-archive"></i>

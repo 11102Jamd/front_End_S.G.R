@@ -9,7 +9,7 @@ import api from "../axiosConfig";
  */
 export const getUsers = async () => {
     try {
-        const response = await api.get("/users");
+        const response = await api.get("/user");
         return response.data;
     } catch (error) {
         console.error("Error al obtener la lista de usuarios: ",error);
@@ -28,7 +28,7 @@ export const getUsers = async () => {
  */
 export const createUser = async (userData) => {
     try {
-        const response = await api.post("/users",userData);
+        const response = await api.post("/user",userData);
         return response.data;
     } catch (error) {
         console.error("Error al crear el Usuario ", error);
@@ -48,7 +48,7 @@ export const createUser = async (userData) => {
  */
 export const updateUser = async (id, userData) => {
     try {
-        const response = await api.put(`/users/${id}`,userData);
+        const response = await api.put(`/user/${id}`,userData);
         return response.data;
     } catch (error) {
         console.error("Error al actualizar el usuario", error);

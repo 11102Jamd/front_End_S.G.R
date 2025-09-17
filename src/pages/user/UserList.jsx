@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { deleteUser, getUsers } from "../../utils/enpoints/users";
+import { disableUser, getUsers } from "../../utils/enpoints/users";
 import DataTable from "react-data-table-component";
 import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import CreateUserModal from "./CreateUserModal";
 import EditUserModal from "./EditUserModal";
-import { successDisableUser } from "../../utils/alerts/alertsUsers";
+import { errorDisableUser, showConfirmDisableUser, successDisableUser } from "../../utils/alerts/alertsUsers";
 
 /**
  * Componente para la gestión de usuarios.
@@ -58,7 +58,7 @@ function User(){
         if (result.isConfirmed) {
             try {
                 await disableUser(id);
-                await successDisableUser;
+                await successDisableUser();
                 await fetchUsers();
             } catch (error) {
                 console.error("error al inhabilitar el usuario", error);
@@ -73,32 +73,37 @@ function User(){
             name: 'Nombres',
             selector: row => `${row.id} ${row.name1} ${row.name2}`,
             sortable: true,
+            center:"true"
         },
         {
             name: 'Apellidos',
             selector: row => `${row.surname1} ${row.surname2}`,
             sortable: true,
+            center:"true"
         },
         {
             name: 'Correo',
             selector: row => row.email,
             sortable: true,
+            center:"true"
         },
         {
             name: 'Rol',
             selector: row => row.rol,
             sortable: true,
+            center:"true"
         },
         {
             name: 'Acciones',
+            center: "true",
             cell: row => (
                 <div className="btn-group" role="group">
                     <button 
                         onClick={() => handleDisableUser(row.id)}
-                        className='btn btn-danger btn-sm rounded-2 p-2'
-                        title="Eliminar"
+                        className='btn btn-warning btn-sm rounded-2 p-2'
+                        title="Inhabilitar"
                     >
-                        <i className="bi bi-trash fs-6"></i>
+                        <i className="bi bi-lock-fill"></i>  
                     </button>
                     <button 
                         onClick={() => {
