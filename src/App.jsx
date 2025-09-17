@@ -16,6 +16,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import Product from './pages/product/ProductList';
 import Production from './pages/Production/Production';
 import Recipe from './pages/recipe/Recipe';
+import ResetPassword from './pages/auth/ResetPassword';
 import './App.css';
 // import Usuarios from './components/usuarios/UserList';
 // import Supplier from './components/proveedores/SupplierList';
@@ -30,7 +31,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-
+          <Route path='/reset-password' element={<ResetPassword/>}/>
           <Route element={
             <PrivateRoute>
               <div className="app-container">

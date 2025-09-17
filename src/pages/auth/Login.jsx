@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
 import '../../index.css';
+import { Link } from 'react-router-dom';
 import { errorLogin } from '../../utils/alerts/alertsUsers';
 
 
@@ -98,6 +99,8 @@ const Login = () => {
                 <button type="submit" disabled={loading}>
                     {loading ? 'Cargando...' : 'Ingresar'}
                 </button>
+                <br />
+                <Link to="/reset-password">¿Quieres Cambiar Contraseña?</Link>
                 </form>
             </div>
             <div className='login-image-panel'>
