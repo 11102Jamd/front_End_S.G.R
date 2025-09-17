@@ -11,105 +11,106 @@ import Welcome from './pages/welcome/Welcome';
 import User from './pages/user/UserList';
 import Input from './pages/inputs/InputList';
 import Order from './pages/order/Order';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import Product from './pages/product/ProductList';
-<<<<<<< HEAD
-import Sale from './pages/sale/SaleList';
-
-
-=======
 import Production from './pages/Production/Production';
 import Recipe from './pages/recipe/Recipe';
+import Sale from './pages/sale/Sale';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
-// import Usuarios from './components/usuarios/UserList';
-// import Supplier from './components/proveedores/SupplierList';
-// import Products from './components/productos/ProductsList';
-// import Pedidos from './components/pedidos/OrderList';
-// import Compras from './components/compras/PurchaseList';
->>>>>>> aa9217aae1b868ab7a2e1458c31d868a8d48e1f4
 
+// Layout para rutas privadas
+const PrivateLayout = () => (
+  <div className="app-container">
+    <Sidebar />
+    <div className="main-content-wrapper">
+      <Header />
+      <MainContent>
+        <Outlet /> {/* Aquí se renderizan las rutas hijas */}
+      </MainContent>
+      <Footer />
+    </div>
+  </div>
+);
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Ruta pública */}
           <Route path="/login" element={<Login />} />
 
-          <Route element={
-            <PrivateRoute>
-              <div className="app-container">
-                <Sidebar />
-                <div className="main-content-wrapper">
-                  <Header />
-                  <MainContent>
-                    <Outlet />
-                  </MainContent>
-                  <Footer />
-                </div>
-              </div>
-            </PrivateRoute>
-          }>
+          {/* Rutas privadas con layout */}
+          <Route element={<PrivateRoute><PrivateLayout /></PrivateRoute>}>
             <Route index element={<Navigate to="/welcome" replace />} />
             <Route path="/welcome" element={<Welcome />} />
 
-            <Route path='/usuarios' element={
-              <RoleBasedControl allowedRoles={['Administrador','Panadero']}>
-                <User/>
-              </RoleBasedControl>
-            }/>
+            <Route
+              path="/usuarios"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador','Panadero']}>
+                  <User />
+                </RoleBasedControl>
+              }
+            />
 
-            <Route path='/insumos' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Input />
-              </RoleBasedControl>
-            } />
+            <Route
+              path="/insumos"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador','Panadero']}>
+                  <Input />
+                </RoleBasedControl>
+              }
+            />
 
-            <Route path='/production' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Production />
-              </RoleBasedControl>
-            } />
-              
-            <Route path='/recetas' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Recipe />
-              </RoleBasedControl>
-            } />
+            <Route
+              path="/production"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador','Panadero']}>
+                  <Production />
+                </RoleBasedControl>
+              }
+            />
 
+            <Route
+              path="/recetas"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador','Panadero']}>
+                  <Recipe />
+                </RoleBasedControl>
+              }
+            />
 
-            <Route path='/compras' element={
-              <RoleBasedControl allowedRoles={['Administrador']}>
-                <Order />
-              </RoleBasedControl>
-            } />
+            <Route
+              path="/compras"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador']}>
+                  <Order />
+                </RoleBasedControl>
+              }
+            />
 
-            <Route path='/productos' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero' , 'Cajero' ]}>
-                <Product />
-              </RoleBasedControl>
-            } />
+            <Route
+              path="/productos"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador','Panadero','Cajero']}>
+                  <Product />
+                </RoleBasedControl>
+              }
+            />
 
-            <Route path='/ventas' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
-                <Sale />
-              </RoleBasedControl>
-            } />
-
-            {/* <Route path='/fabricacion' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Manufacturing />
-              </RoleBasedControl>
-            } />
-
-            <Route path='/reportes' element={
-              <RoleBasedControl allowedRoles={['Administrador']}>
-                <ReportDownloader />
-              </RoleBasedControl>
-            } /> */}
-
+            <Route
+              path="/ventas"
+              element={
+                <RoleBasedControl allowedRoles={['Administrador','Cajero']}>
+                  <Sale />
+                </RoleBasedControl>
+              }
+            />
           </Route>
+
+          {/* Ruta fallback */}
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
