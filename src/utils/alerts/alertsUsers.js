@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export const errorLogin = () => {
     return Swal.fire({
         title:"Error",
-        text:"No se pudo crear el Usuario",
+        text:"Credenciales Incorrectas",
         icon:"error",
         background:"#fff",
         color:"#220900",

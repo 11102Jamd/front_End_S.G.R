@@ -18,6 +18,7 @@ import Production from './pages/Production/Production';
 import Recipe from './pages/recipe/Recipe';
 import ResetPassword from './pages/auth/ResetPassword';
 import './App.css';
+import ReportDownloader from './pages/reports/ReportDownloader';
 // import Usuarios from './components/usuarios/UserList';
 // import Supplier from './components/proveedores/SupplierList';
 // import Products from './components/productos/ProductsList';
@@ -86,17 +87,11 @@ function App() {
               </RoleBasedControl>
             } />
 
-            {/* <Route path='/fabricacion' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
-                <Manufacturing />
-              </RoleBasedControl>
-            } />
-
             <Route path='/reportes' element={
               <RoleBasedControl allowedRoles={['Administrador']}>
-                <ReportDownloader />
+                <ReportDownloader/>
               </RoleBasedControl>
-            } /> */}
+            } />
 
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />

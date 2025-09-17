@@ -1,9 +1,10 @@
-import React from "react";
-import { exportPdfReportPurchase } from "../../utils/enpoints/reportPdfPurchase";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-import { useState } from "react";
-import 'react-datepicker/dist/react-datepicker.css';
-import { exportPdfReportManufacturing } from "../../utils/enpoints/reportPdfManufacturing";
+import "react-datepicker/dist/react-datepicker.css";
+import { generatePdfOrder } from "../../utils/enpoints/reportOrder";
+import { generatePdfProduction } from "../../utils/enpoints/reportProduction";
+import { generatePdfSale } from "../../utils/enpoints/reportSale";
+
 
 /**
  * Componente para descargar reportes PDF de diferentes tipos (compras, pedidos, fabricación).
@@ -13,24 +14,12 @@ import { exportPdfReportManufacturing } from "../../utils/enpoints/reportPdfManu
  */
 const ReportDownloader = () => {
     // Estado para el tipo de reporte seleccionado
-    const [reportType, setReportType] = useState('purchases');
-
-    // Estado para la fecha de inicio
+    const [reportType, setReportType] = useState('order');
     const [startDate, setStartDate] = useState(null);
-
-    // Estado para la fecha de Fin
     const [endDate, setEndDate] = useState(null);
-
-    // Estado de control de carga
     const [isLoading, setIsLoading] = useState(false);
-
-    // Estado para manejar los errores
     const [error, setError] = useState(null);
 
-    /**
-     * Maneja la generación y descarga del reporte PDF según los filtros seleccionados.
-     * Valida que las fechas sean correctas y llama a la API correspondiente.
-     */
     const handleDownload = async () => {
         if (!startDate || !endDate) {
             setError('Debe seleccionar ambas fechas');
@@ -49,24 +38,15 @@ const ReportDownloader = () => {
             const formattedStartDate = startDate.toISOString().split('T')[0];
             const formattedEndDate = endDate.toISOString().split('T')[0];
 
-            // Aquí deberías tener diferentes funciones para cada tipo de reporte
             let response;
-            if (reportType === 'purchases') {
-                response = await exportPdfReportPurchase({
-                    start_date: formattedStartDate,
-                    end_date: formattedEndDate
-                });
-            } else if (reportType === 'orders') {
-                // Llamar a la función para reporte de pedidos
-                // response = await exportPdfReportOrders(...)
-            } else if (reportType === 'manufacturing') {
-                response = await exportPdfReportManufacturing({
-                    start_date: formattedStartDate,
-                    end_date: formattedEndDate
-                });
+            if (reportType === 'order') {
+                response = await generatePdfOrder(formattedStartDate, formattedEndDate);
+            } else if (reportType === 'production') {
+                response = await generatePdfProduction(formattedStartDate, formattedEndDate);
+            } else if (reportType === 'sale') {
+                response = await generatePdfSale(formattedStartDate, formattedEndDate);
             }
 
-            // Crear enlace para descarga del archivo PDF
             const blob = new Blob([response], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -91,7 +71,6 @@ const ReportDownloader = () => {
                 </div>
                 
                 <div className="card-body">
-                    {/* Selector de Tipo de Reporte */}
                     <div className="row">
                         <div className="col-md-12 mb-3">
                             <label className="form-label">Tipo de Reporte</label>
@@ -100,14 +79,13 @@ const ReportDownloader = () => {
                                 value={reportType} 
                                 onChange={(e) => setReportType(e.target.value)}
                             >
-                                <option value="purchases">Reporte de Compras</option>
-                                <option value="orders">Reporte de Pedidos</option>
-                                <option value="manufacturing">Reporte de Fabricación</option>
+                                <option value="order">Reporte de Compras</option>
+                                <option value="production">Reporte de Produccion</option>
+                                <option value="sale">Reporte de Ventas</option>
                             </select>
                         </div>
                     </div>
 
-                    {/* Selección de fechas */}
                     <div className="row">
                         <div className="col-md-6 mb-3">
                             <label className="form-label">Fecha de Inicio: </label>

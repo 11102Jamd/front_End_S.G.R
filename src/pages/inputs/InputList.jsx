@@ -7,6 +7,7 @@ import { errorDisableInput, showConfirmDisableInput, successDisableInput } from 
 import NumberFormatter from "../../components/NumberFormatter";
 import CreateInputModal from "./CreateInputModal";
 import { useAuth } from "../../context/AuthContext";
+import EditInputModal from "./EditInputModal"
 
 function Input(){
     //contexto que se utilizara para validar el rol del usuario
@@ -187,7 +188,7 @@ function Input(){
 
             {/**Modal de Edicion de Insumo */}
             {inputSelected && (
-                <EditInputMo
+                <EditInputModal
                     input={inputSelected}
                     onClose={() => setInputSelected(null)}
                     onInputUpdated={fetchInput}
