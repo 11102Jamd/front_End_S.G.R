@@ -5,7 +5,7 @@ import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions";
 import CreateUserModal from "./CreateUserModal";
 import EditUserModal from "./EditUserModal";
-import { errorDisableUser, showConfirmDisableUser, successDisableUser } from "../../utils/alerts/alertsUsers";
+import { errorDisableSessionUser, errorDisableUser, showConfirmDisableUser, successDisableUser } from "../../utils/alerts/alertsUsers";
 
 /**
  * Componente para la gestión de usuarios.
@@ -62,7 +62,11 @@ function User(){
                 await fetchUsers();
             } catch (error) {
                 console.error("error al inhabilitar el usuario", error);
-                await errorDisableUser();                
+                if (error.response?.status === 403) {
+                    await errorDisableSessionUser();
+                } else {
+                    await errorDisableUser(); 
+                }                 
             };
         };
     };
