@@ -69,7 +69,7 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
     * Agrega un nuevo ingrediente a la receta
     */
     const addItem = () => {
-        if (!currentItem.input_id || !currentItem.quantity_required || currentItem.unit_used) {
+        if (!currentItem.input_id || !currentItem.quantity_required || !currentItem.unit_used) {
             return;// Validación: campos vacíos
         }
 
@@ -93,7 +93,8 @@ function EditRecipeModal({ recipeId, onClose, onRecipeUpdated }) {
         // Resetear el formulario del ingrediente actual
         setCurrentItem({
             input_id: '',
-            quantity_required: ''
+            quantity_required: '',
+            unit_used: ''
         });
     };
 
