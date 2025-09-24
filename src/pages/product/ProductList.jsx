@@ -134,14 +134,16 @@ function Product(){
                         </button>
                     )}
 
-                    <button
-                        onClick={()=> { setProductSelected(row);}}
-                        className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
-                        style={{background:'#2DACD6'}}
-                        title="editar"
-                    >
-                        <i className="bi bi-pencil-square fs-6"></i>
-                    </button>
+                    {user.rol === 'Administrador' && (
+                        <button
+                            onClick={()=> { setProductSelected(row);}}
+                            className="btn btn-primary btn-sm ms-2 rounded-2 p-2"
+                            style={{background:'#2DACD6'}}
+                            title="editar"
+                        >
+                            <i className="bi bi-pencil-square fs-6"></i>
+                        </button>
+                    )}
                     
                     {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
                         <button

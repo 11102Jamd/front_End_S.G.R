@@ -1,3 +1,4 @@
+
 /**
  * Define las columnas de la tabla de compras.
  *
@@ -42,6 +43,7 @@ const orderColumns = (setOrderSelected, handleDeleteOrder) => [
     },
     {
         name: 'Acciones',
+        ignoreRowClick: true, // Ignora clics sobre la fila (solo botones funcionan)
         cell: row => (
             <div className="d-flex gap-2" role="group">
 
@@ -54,7 +56,6 @@ const orderColumns = (setOrderSelected, handleDeleteOrder) => [
                     <i className="bi bi-eye fs-6"></i>
                 </button>
 
-                {/* Botón para eliminar la orden */}
                 <button
                     onClick={() => handleDeleteOrder(row.id)} // Llama la función de eliminación con el id de la orden
                     className='btn btn-danger btn-sm rounded-2 p-2'
@@ -64,8 +65,7 @@ const orderColumns = (setOrderSelected, handleDeleteOrder) => [
                     <i className="bi bi-trash fs-6"></i>
                 </button>
             </div>
-        ),
-        ignoreRowClick: true, // Ignora clics sobre la fila (solo botones funcionan)
+        )
     },
 ];
 

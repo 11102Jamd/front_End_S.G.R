@@ -84,8 +84,8 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
                             name="quantity_required"
                             value={currentItem.quantity_required}
                             onChange={onItemChange}
-                            min="0.001"
-                            step="0.001"
+                            min="1"
+                            step="1"
                             required
                         />
                     </div>
@@ -127,7 +127,7 @@ function IngredientSelector({ currentItem, onItemChange, onAddItem }) {
                         <button
                             onClick={onAddItem}
                             className="btn btn-primary w-100"
-                            disabled={!currentItem.input_id || !currentItem.quantity_required}
+                            disabled={!currentItem.input_id || !currentItem.quantity_required || !currentItem.unit_used}
                         >
                             <i className="bi bi-plus-lg me-2"></i>Agregar
                         </button>

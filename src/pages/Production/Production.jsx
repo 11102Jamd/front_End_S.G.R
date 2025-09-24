@@ -7,6 +7,7 @@ import CreateProductionModal from "./CreateProductionModal";
 import ShowProductionDetails from "./ShowProductionDetails";
 import { errorDeleteProduction, showConfirmDeleteProduction, successDeleteProduction } from "../../utils/alerts/productionAlerts";
 import { formatCurrency } from "../../utils/formatters/currency";
+import { useAuth } from "../../context/AuthContext";
 
 /**
  * Componente Production
@@ -19,6 +20,7 @@ import { formatCurrency } from "../../utils/formatters/currency";
  *
  */
 function Production() {
+    const {user} = useAuth();
     const [production, setProduction] = useState([]); // Lista de producciones
     const [showModal, setShowModal] = useState(false); // Estado del modal de creación
     const [productionSelected, setProductionSelected] = useState(null);  // Producción seleccionada para ver detalles
@@ -93,14 +95,16 @@ function Production() {
             name: 'Accion',
             cell: row => (
                 <div className="btn-group" role="group">
-                    <button
-                        onClick={() => handleDeleteProduction(row.id)}
-                        className='btn btn-danger btn-sm rounded-2 p-2'
-                        style={{ background: '#D6482D' }}
-                        title="Eliminar"
-                    >
-                        <i className="bi bi-trash fs-6"></i>
-                    </button>
+                    {user.rol === 'Administrador' && (
+                        <button
+                            onClick={() => handleDeleteProduction(row.id)}
+                            className='btn btn-danger btn-sm rounded-2 p-2'
+                            style={{ background: '#D6482D' }}
+                            title="Eliminar"
+                        >
+                            <i className="bi bi-trash fs-6"></i>
+                        </button>
+                    )}
                     <button
                         onClick={() => setProductionSelected(row)}
                         className='btn btn-info btn-sm ms-2 rounded-2 p-2'

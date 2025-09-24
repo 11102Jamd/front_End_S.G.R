@@ -59,7 +59,7 @@ function Sidebar() {
                 )}
 
                 {/* Visible para Administrador y Panadero */}
-                {(user.rol === 'Administrador' || user.rol === 'Panadero') && (
+                {(user.rol === 'Administrador' || user.rol === 'Cajero') && (
                     <Link to="/compras" className="sidebar-link">
                         <i className="bi bi-journal-bookmark"></i>
                         {isOpen && <span>Compras</span>}

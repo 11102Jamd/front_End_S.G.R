@@ -8,6 +8,7 @@ import ShowRecipeModal from "./ShowRecipeModal";
 import EditRecipeModal from "./EditRecipeModal";
 import { deleteRecipe } from "../../utils/enpoints/recipe";
 import { successDeleteRecipe, errorDeleteRecipe, showConfirmDeleteRecipe } from "../../utils/alerts/recipeAlert";
+import { useAuth } from "../../context/AuthContext";
 
 
 
@@ -23,6 +24,7 @@ import { successDeleteRecipe, errorDeleteRecipe, showConfirmDeleteRecipe } from 
  *
  */
 function Recipe() {
+    const {user} = useAuth();
     const [recipe, setRecipe] = useState([]); // Lista de recetas
     const [showModal, setShowModal] = useState(false); // Estado del modal de creación/edición
     const [recipeSelected, setRecipeSelected] = useState(null); // Receta seleccionada para ver o editar
@@ -83,14 +85,16 @@ function Recipe() {
             name: 'Acciones',
             cell: row => (
                 <div className="btn-group" role="group">
-                    <button
-                        onClick={() => handleDeleteRecipe(row.id)}
-                        className='btn btn-danger btn-sm rounded-2 p-2'
-                        style={{ background: '#D6482D' }}
-                        title="Eliminar"
-                    >
-                        <i className="bi bi-trash fs-6"></i>
-                    </button>
+                    {user.rol === 'Administrador' && (
+                        <button
+                            onClick={() => handleDeleteRecipe(row.id)}
+                            className='btn btn-warning btn-sm rounded-2 p-2'
+                            title="Inhabilitar"
+                        >
+                            <i className="bi bi-lock-fill"></i> 
+                        </button>
+                    )}
+
                     <button
                         onClick={() => setRecipeSelected(row)}
                         className='btn btn-info btn-sm ms-2 rounded-2 p-2'
@@ -98,6 +102,7 @@ function Recipe() {
                     >
                         <i className="bi bi-eye fs-6"></i>
                     </button>
+                    
                     <button
 
                         onClick={() => {

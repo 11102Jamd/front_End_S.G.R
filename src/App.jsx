@@ -60,7 +60,7 @@ function App() {
             }/>
 
             <Route path='/insumos' element={
-              <RoleBasedControl allowedRoles={['Administrador', 'Panadero']}>
+              <RoleBasedControl allowedRoles={['Administrador', 'Panadero', 'Cajero']}>
                 <Input />
               </RoleBasedControl>
             } />
@@ -79,13 +79,13 @@ function App() {
 
 
             <Route path='/compras' element={
-              <RoleBasedControl allowedRoles={['Administrador']}>
+              <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
                 <Order />
               </RoleBasedControl>
             } />
 
             <Route path='/ventas' element={
-              <RoleBasedControl allowedRoles={['Administrador']}>
+              <RoleBasedControl allowedRoles={['Administrador', 'Cajero']}>
                 <Sale/>
               </RoleBasedControl>
             } />
