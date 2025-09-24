@@ -1,6 +1,7 @@
 import React from "react";
+import NumberFormatter from "../../components/NumberFormatter";
 
-const StatsCards = ({stats, productionStats, inventoryValue}) => {
+const StatsCards = ({stats, productionStats}) => {
     const statItems = [
         {
             title: 'Ventas Totales',
@@ -24,8 +25,8 @@ const StatsCards = ({stats, productionStats, inventoryValue}) => {
             bg: 'bg-info'
         },
         {
-            title: 'Total ventas',
-            value: stats.sum_sales || 0,
+            title: 'Ingresos',
+            value: <NumberFormatter value={stats.sum_sales}/> || 0,
             icon: 'bi bi-cup-hot',
             color: 'warning',
             bg: 'bg-warning'

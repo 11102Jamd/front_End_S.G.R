@@ -94,7 +94,7 @@ function SupplyProductModal({ product, onClose, onProductSupplied }) {
                                 <option value="">Seleccione una producción</option>
                                 {productions.map(production => (
                                     <option key={production.id} value={production.id}>
-                                        {production.recipe?.name} - {production.quantity_to_produce} {production.recipe?.unit} 
+                                        {production.recipe?.recipe_name} - {production.quantity_to_produce} {production.recipe?.unit} 
                                         {production.production_date && ` (${new Date(production.production_date).toLocaleDateString()})`}
                                     </option>
                                 ))}
@@ -107,7 +107,7 @@ function SupplyProductModal({ product, onClose, onProductSupplied }) {
                         {selectedProduction && (
                             <div className="alert alert-info">
                                 <strong>Información de la producción seleccionada:</strong><br/>
-                                {productions.find(p => p.id == selectedProduction)?.recipe?.name} - 
+                                {productions.find(p => p.id == selectedProduction)?.recipe?.recipe_name} - 
                                 Cantidad: {productions.find(p => p.id == selectedProduction)?.quantity_to_produce}
                             </div>
                         )}

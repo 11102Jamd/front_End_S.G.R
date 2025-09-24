@@ -89,14 +89,14 @@ function Product(){
         {
             name: 'Stock Actual',
             selector: row => {
-                if (!row.product_production || row.product_production.length === 0) {
+                if (!row.product_productions || row.product_productions.length === 0) {
                     return 'N/A';
                 }
                 
                 // Encontrar el último lote con stock disponible
-                const latestWithStock = [...row.product_production]
+                const latestWithStock = [...row.product_productions]
                     .reverse()
-                    .find(production => parseFloat(production.quantity_produced) > 0);
+                    .find(p => parseFloat(p.quantity_produced) > 0);
                 
                 return latestWithStock ? parseFloat(latestWithStock.quantity_produced)+' unidades' : '0';
             },
@@ -111,7 +111,7 @@ function Product(){
                 }
                 
                 // Encontrar el último lote con stock disponible
-                const latestWithStock = [...row.product_production]
+                const latestWithStock = [...row.product_productions]
                     .reverse()
                     .find(production => parseFloat(production.profit_margin_porcentage) > 0);
                 

@@ -100,7 +100,7 @@ function CreateSaleModal({ onClose, onSaleCreated }) {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={user ? `${user.name}` : 'No autenticado'}
+                                value={user ? `${user.name1}` : 'No autenticado'}
                                 disabled
                             />
                             <small className="form-text text-muted">

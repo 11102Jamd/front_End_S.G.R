@@ -4,10 +4,11 @@ import customStyles from "../../utils/styles/customStyles";
 import paginationOptions from "../../utils/styles/paginationOptions"; 
 import { useAuth } from "../../context/AuthContext";
 import { deleteSale, getSale } from "../../utils/enpoints/sale.js";
-import { showConfirmDeleteSale, successDeleteSale } from "../../utils/alerts/alertsSale.js";
+import { showConfirmDeleteSale, successDeleteSale, errorDeleteSale } from "../../utils/alerts/alertsSale.js";
 import CreateSaleModal from "./CreateSaleModal.jsx";
 import ShowSale from "./ShowSaleModal.jsx";
 import DataTable from "react-data-table-component"; 
+import NumberFormatter from "../../components/NumberFormatter.jsx";
 
 // Componente principal de Gestión de Ventas, incluyendo tabla y modales
 function Sale() {
@@ -65,7 +66,7 @@ function Sale() {
         },
         {
             name: 'Vendedor',
-            selector: row => row.user?.name ?? 'N/A',
+            selector: row => row.user?.name1 ?? 'N/A',
             sortable: true,
             center: "true"
         },
@@ -79,7 +80,9 @@ function Sale() {
             name: 'Total',
             sortable: true,
             center: "true",
-            selector: row => row.sale_total
+            selector: row => (
+                <NumberFormatter prefix="$" suffix="COP" value={row.sale_total}/>
+            )
         },
         {
             name: 'Cant. Productos',

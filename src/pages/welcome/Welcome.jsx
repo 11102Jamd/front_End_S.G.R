@@ -6,7 +6,14 @@ import SalesChart from "../dashboard/SalesChart";
 import OrdersChart from "../dashboard/OrderChart";
 import UserDistributionChart from "../dashboard/UserDistributionChart";
 import TopProductsChart from "../dashboard/TopProductsChart";
-import { getDashboardStats, getOrdersData, getProductionStats, getSalesData, getTopProducts, getUserStats } from "../../utils/enpoints/dashboard";
+import { 
+    getDashboardStats, 
+    getOrdersData, 
+    getProductionStats, 
+    getSalesData, 
+    getTopProducts, 
+    getUserStats
+} from "../../utils/enpoints/dashboard";
 function Welcome(){
     const [stats, setStats] = useState({});
     const [salesData, setSalesData] = useState([]);
@@ -40,7 +47,6 @@ function Welcome(){
                 userResponse, 
                 productsResponse,
                 productionResponse,
-                inventoryResponse
             ] = await Promise.all([
                 getDashboardStats(),
                 getSalesData(formattedStartDate, formattedEndDate),

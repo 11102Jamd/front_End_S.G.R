@@ -21,7 +21,7 @@ ChartJS.register(
 
 const TopProductsChart = ({ topProducts }) => {
     const data = {
-        labels: topProducts.map(item => item.name),
+        labels: topProducts.map(item => item.product_name),
         datasets: [
         {
             label: 'Cantidad Vendida',

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getProductionDetails } from "../../utils/enpoints/production";
 import { errorShowDetailsProduction } from "../../utils/alerts/productionAlerts";
 import { formatCurrency } from "../../utils/formatters/currency";
+import NumberFormatter from "../../components/NumberFormatter";
 
 /**
  * Componente ShowProductionDetails
@@ -104,7 +105,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                                             <p><strong>Fecha de Producción:</strong> {new Date(production.production_date).toLocaleDateString()}</p>
                                         </div>
                                         <div className="col-md-6">
-                                            <p><strong>Cantidad Producida:</strong> {production.quantity_to_produce?.toLocaleString() || '0'} unidades</p>
+                                            <p><strong>Cantidad Producida:</strong> <NumberFormatter value={production.quantity_to_produce}/> unidades</p>
                                             <p>
                                                 <strong>Costo Total:</strong>{" "}
                                                 {formatCurrency(production.total_cost || 0, 2)}
@@ -140,7 +141,7 @@ function ShowProductionDetails({ show, onHide, productionId }) {
                                                 production.production_consumptions.map((consumption, index) => (
                                                     <tr key={index}>
                                                         <td>{consumption.input?.name || `Insumo ID: ${consumption.input_id}`}</td>
-                                                        <td>{consumption.quantity_used?.toLocaleString()} g</td>
+                                                        <td><NumberFormatter value={consumption.quantity_used}/> {consumption.batch?.unit_converted}</td>
                                                         <td>{formatCurrency(consumption.batch?.unit_price || 0, 2)}</td>
                                                         <td>{consumption.batch?.batch_number || 'N/A'}</td>
                                                         <td>{formatCurrency(consumption.total_cost || 0, 2)}</td>

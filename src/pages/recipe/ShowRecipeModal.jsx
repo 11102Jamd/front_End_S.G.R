@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getRecipeDetails } from "../../utils/enpoints/recipe";
 import { errorShowDetailsRecipe } from "../../utils/alerts/recipeAlert";
-
+import NumberFormatter from "../../components/NumberFormatter";
 function ShowRecipeModal({ show, onHide, recipeId }) {
     const [recipe, setRecipe] = useState(null); // Estado para guardar los datos de la receta obtenida desde el backend
     const [loading, setLoading] = useState(false); // Estado para controlar si los datos aún se están cargando
@@ -108,7 +108,7 @@ function ShowRecipeModal({ show, onHide, recipeId }) {
                                                 recipe.recipe_ingredients.map((ingredient, index) => (
                                                     <tr key={index}>
                                                         <td>{ingredient.input?.name || `Insumo ID: ${ingredient.input_id}`}</td>
-                                                        <td>{ingredient.quantity_required} g</td>
+                                                        <td><NumberFormatter value={ingredient.quantity_required}></NumberFormatter> {ingredient.unit_used}</td>
                                                     </tr>
                                                 ))
                                             ) : (

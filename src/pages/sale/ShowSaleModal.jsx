@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getSaleDetails } from "../../utils/enpoints/sale";
 import { errorShowDetailsSale } from "../../utils/alerts/alertsSale";
+import NumberFormatter from "../../components/NumberFormatter";
 
 // Componente para mostrar los detalles de una venta en un modal
 function ShowSale({ show, onHide, saleId }) {
@@ -80,11 +81,11 @@ function ShowSale({ show, onHide, saleId }) {
                                     <h5>Información General</h5>
                                     <div className="row">
                                         <div className="col-md-6">
-                                            <p><strong>Vendedor:</strong> {sale.user?.name || 'N/A'}</p>
+                                            <p><strong>Vendedor:</strong> {sale.user?.name1 || 'N/A'}</p>
                                             <p><strong>Fecha de Venta:</strong> {new Date(sale.sale_date).toLocaleDateString()}</p>
                                         </div>
                                         <div className="col-md-6">
-                                            <p><strong>Total de la Venta:</strong>{sale.sale_total} </p>
+                                            <p><strong>Total de la Venta:</strong><NumberFormatter prefix="$" suffix="COP" value={sale.sale_total}/></p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,13 +102,13 @@ function ShowSale({ show, onHide, saleId }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {sale.sale_product?.length > 0 ? (
-                                                sale.sale_product.map((saleProduct, index) => (
+                                            {sale.sale_products?.length > 0 ? (
+                                                sale.sale_products.map((saleProduct, index) => (
                                                     <tr key={index}>
                                                         <td>{saleProduct.product?.product_name || `Producto ID: ${saleProduct.product_id}`}</td>
-                                                        <td>{saleProduct.quantity_requested}/</td>
-                                                        <td>{saleProduct.product?.unit_price}</td>
-                                                        <td>{saleProduct.subtotal_price} </td>
+                                                        <td><NumberFormatter value={saleProduct.quantity_requested}/></td>
+                                                        <td><NumberFormatter prefix="$" suffix="COP" value={saleProduct.product?.unit_price}/></td>
+                                                        <td><NumberFormatter prefix="$" suffix="COP" value={saleProduct.subtotal_price}/></td>
                                                     </tr>
                                                 ))
                                             ) : (
@@ -119,7 +120,7 @@ function ShowSale({ show, onHide, saleId }) {
                                         <tfoot className="table-light">
                                             <tr>
                                                 <td colSpan="3" className="text-end fw-bold">Total:</td>
-                                                <td className="fw-bold">N{sale.sale_total}</td>
+                                                <td className="fw-bold"><NumberFormatter prefix="$" suffix="COP" value={sale.sale_total}/></td>
                                             </tr>
                                         </tfoot>
                                     </table>
